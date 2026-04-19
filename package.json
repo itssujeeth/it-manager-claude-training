@@ -1,0 +1,32 @@
+{
+  "name": "it-manager-claude-training",
+  "version": "1.0.0",
+  "description": "A 24-week, self-paced interactive learning plan that teaches IT Support Managers how to use Claude effectively across daily operations, people management, process improvement, and strategic AI adoption.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itssujeeth/it-manager-claude-training.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/itssujeeth/it-manager-claude-training/issues"
+  },
+  "homepage": "https://github.com/itssujeeth/it-manager-claude-training#readme",
+  "dependencies": {
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.1",
+    "vite": "^8.0.8"
+  }
+}
