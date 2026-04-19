@@ -1,0 +1,85 @@
+# ---------------------------------------
+# Node / React / Vite
+# ---------------------------------------
+node_modules/
+dist/
+build/
+.vite/
+coverage/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# ---------------------------------------
+# Environment / Secrets
+# ---------------------------------------
+.env
+.env.*
+!.env.example
+
+# ---------------------------------------
+# OS / Editor Files
+# ---------------------------------------
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+.history/
+
+# ---------------------------------------
+# Claude / Local Storage / Generated State
+# ---------------------------------------
+.claude/
+storage/
+progress-backups/
+*.local.json
+
+# ---------------------------------------
+# Obsidian Vault (choose one approach)
+# ---------------------------------------
+
+# Option A: Ignore everything in vault except markdown notes
+obsidian-vault/*
+!obsidian-vault/**/
+!obsidian-vault/**/*.md
+
+# Ignore Obsidian app metadata
+.obsidian/
+obsidian-vault/**/.obsidian/
+
+# ---------------------------------------
+# Temporary exports / generated docs
+# ---------------------------------------
+*.pdf
+*.pptx
+*.tmp
+*.bak
+
+# ---------------------------------------
+# Python (if you later add scripts)
+# ---------------------------------------
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ---------------------------------------
+# Terraform (if later used for hosting)
+# ---------------------------------------
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+
+# ---------------------------------------
+# Misc
+# ---------------------------------------
+.cache/
+temp/
+tmp/

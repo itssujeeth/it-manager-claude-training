@@ -2,189 +2,87 @@
 
 A 24-week, self-paced interactive learning plan that teaches IT Support Managers how to use Claude effectively across daily operations, people management, process improvement, and strategic AI adoption.
 
-Built as a single-file React component with persistent progress tracking.
+Built as a single-file React component with Vite, persistent progress tracking via localStorage, and dark mode support.
+
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
 
 ---
 
-## What's Inside
+## Curriculum Overview
 
-```
-claude-learning-plan/
-├── README.md
-├── claude-learning-plan-it-support-managers.jsx   # The app
-├── package.json                                    # Created during setup
-├── index.html                                      # Created during setup
-├── vault/                                          # Obsidian vault (optional)
-│   ├── Week 01 — What Claude Is & How It Thinks.md
-│   ├── Week 02 — Prompt Engineering Basics.md
-│   └── ...
-└── deliverables/                                   # Your weekly project outputs
-    ├── week-01-claude-brief.md
-    ├── week-05-triage-template.md
-    └── ...
-```
+| Month | Focus | Weeks | What You'll Learn |
+|-------|-------|-------|-------------------|
+| 1 | Claude Foundations | 1–4 | What Claude is, prompt engineering, daily comms, responsible AI use |
+| 2 | Ticket Ops & Incidents | 5–8 | AI-assisted triage, incident summarization, KB generation, data analysis |
+| 3 | People Management | 9–12 | 1:1 coaching prep, QA feedback, training content, meeting productivity |
+| 4 | Process Improvement | 13–16 | SOP generation, RCA with Claude, business cases, automation ideation |
+| 5 | Advanced Techniques | 17–20 | System prompts, Claude Projects, file analysis, AI tool landscape |
+| 6 | Strategy & Adoption | 21–24 | Adoption roadmaps, team training, governance, capstone operating model |
+
+Each week includes a learning checklist (4 items), a hands-on deliverable, a notes section, and skill tags. Progress is tracked per-item with visual completion rings.
 
 ---
 
-## Local Setup
+## Quick Start
 
 ### Prerequisites
 
-- **Node.js** 18+ — [download here](https://nodejs.org)
-- **npm** or **yarn** (comes with Node)
-- A modern browser (Chrome, Firefox, Edge, Safari)
+- [Node.js](https://nodejs.org) 18 or later (ships with npm)
 
-### 1. Clone the repo
+### Setup
 
 ```bash
-git clone <your-repo-url>
-cd claude-learning-plan
-```
-
-### 2. Initialize the project
-
-```bash
-npm init -y
-```
-
-### 3. Install Vite and React
-
-```bash
-npm install react react-dom
-npm install -D vite @vitejs/plugin-react
-```
-
-### 4. Create `vite.config.js`
-
-Create a file called `vite.config.js` in the project root:
-
-```js
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-
-export default defineConfig({
-  plugins: [react()],
-});
-```
-
-### 5. Create `index.html`
-
-Create `index.html` in the project root:
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Claude Learning Plan — IT Support Managers</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { background: #f5f4f0; min-height: 100vh; }
-      @media (prefers-color-scheme: dark) {
-        body { background: #141413; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/main.jsx"></script>
-  </body>
-</html>
-```
-
-### 6. Create `main.jsx`
-
-Create `main.jsx` in the project root:
-
-```jsx
-import React from "react";
-import ReactDOM from "react-dom/client";
-import LearningPlan from "./claude-learning-plan-it-support-managers.jsx";
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <LearningPlan />
-  </React.StrictMode>
-);
-```
-
-### 7. Handle the storage API
-
-The JSX file uses `window.storage` (a Claude artifact API). For local use, you need a localStorage shim. Create `storage-shim.js` in the project root:
-
-```js
-// Shim that maps window.storage calls to localStorage
-window.storage = {
-  async get(key) {
-    const value = localStorage.getItem(key);
-    return value !== null ? { key, value } : null;
-  },
-  async set(key, value) {
-    localStorage.setItem(key, value);
-    return { key, value };
-  },
-  async delete(key) {
-    localStorage.removeItem(key);
-    return { key, deleted: true };
-  },
-  async list(prefix) {
-    const keys = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i);
-      if (!prefix || k.startsWith(prefix)) keys.push(k);
-    }
-    return { keys };
-  },
-};
-```
-
-Then add the shim to `index.html` **before** the module script:
-
-```html
-    <script src="/storage-shim.js"></script>
-    <script type="module" src="/main.jsx"></script>
-```
-
-### 8. Add npm scripts
-
-Open `package.json` and add to the `"scripts"` block:
-
-```json
-{
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  }
-}
-```
-
-### 9. Run the app
-
-```bash
+git clone https://github.com/itssujeeth/it-manager-claude-training.git
+cd it-manager-claude-training
+npm install
 npm run dev
 ```
 
-Open the URL shown in terminal (typically `http://localhost:5173`). Your progress will persist in the browser's localStorage.
+Open the URL shown in terminal (typically `http://localhost:5173`).
 
-### 10. Build for production (optional)
+That's it — all configuration files are already in the repo.
+
+### Production Build
 
 ```bash
 npm run build
+npm run preview
 ```
 
-The output goes to `dist/` — you can serve it with any static file server or deploy to GitHub Pages, Netlify, or Vercel.
+The output goes to `dist/`. Deploy to GitHub Pages, Netlify, Vercel, or any static host.
+
+---
+
+## Repo Structure
+
+```
+it-manager-claude-training/
+├── index.html                                      # Entry point (loads storage shim + app)
+├── main.jsx                                        # React mount
+├── claude-learning-plan-it-support-managers.jsx     # The entire app (single-file component)
+├── storage-shim.js                                 # Maps window.storage → localStorage
+├── vite.config.js                                  # Vite + React plugin config
+├── package.json                                    # Dependencies & scripts
+├── package-lock.json
+├── LICENSE
+└── README.md
+```
+
+### How Storage Works
+
+The JSX component was originally built for Claude's artifact environment, which provides a `window.storage` API. The included `storage-shim.js` bridges this to the browser's `localStorage`, so your progress persists across browser sessions with no backend required.
 
 ---
 
 ## Obsidian Vault Integration
 
-The learning plan works great alongside an Obsidian vault where you keep deeper notes, deliverables, evidence, and reflections. Here's how to set it up.
+The React app handles quick checkbox tracking and visual progress. For deeper learning — prompt experiments, deliverable drafts, reflections — pair it with an Obsidian vault.
 
-### Vault Structure
+### Vault Setup
 
-Create a vault (or a folder inside an existing vault) with this layout:
+Create a vault (or folder in an existing vault) alongside the repo:
 
 ```
 vault/
@@ -225,8 +123,6 @@ vault/
 │   ├── Coaching Prompts.md
 │   └── Analysis Prompts.md
 ├── Deliverables/
-│   ├── Week 01 — Claude Brief.md
-│   ├── Week 05 — Triage Template.md
 │   └── ...
 └── Templates/
     ├── Weekly Note Template.md
@@ -235,9 +131,9 @@ vault/
 
 ### Weekly Note Template
 
-Use this template for each week's note. In Obsidian, save it to `Templates/Weekly Note Template.md` and use the Templater or Templates core plugin to insert it.
+Save to `Templates/Weekly Note Template.md` and use Obsidian's Templater plugin to insert it:
 
-```markdown
+````markdown
 ---
 week: {{week_number}}
 month: {{month_number}}
@@ -258,26 +154,17 @@ completed:
 ## Weekly Deliverable
 - [ ] {{deliverable_description}}
 
-**Deliverable:** [[Deliverables/Week {{week_number}} — Deliverable]]
+**Output:** [[Deliverables/Week {{week_number}} — Deliverable]]
 
 ## Prompt Experiments
 
-### Prompt 1
+### Experiment 1
 **Goal:**
-**Prompt used:**
+**Prompt:**
 ```
-(paste prompt here)
+(paste prompt)
 ```
-**Output quality:** ⭐⭐⭐⭐☆
-**Notes:**
-
-### Prompt 2
-**Goal:**
-**Prompt used:**
-```
-(paste prompt here)
-```
-**Output quality:** ⭐⭐⭐☆☆
+**Quality:** ⭐⭐⭐⭐☆
 **Notes:**
 
 ## Key Takeaways
@@ -288,16 +175,13 @@ completed:
 
 ## Questions / Follow-ups
 -
-
-## Links & References
--
-```
+````
 
 ### Prompt Experiment Template
 
-Save this to `Templates/Prompt Experiment Template.md` for logging individual prompt experiments in more detail:
+Save to `Templates/Prompt Experiment Template.md`:
 
-```markdown
+````markdown
 ---
 date: {{date}}
 week: {{week_number}}
@@ -312,34 +196,34 @@ What I was trying to accomplish:
 
 ## The Prompt
 ```
-(paste full prompt here)
+(paste full prompt)
 ```
 
 ## Claude's Output
-(paste or summarize output)
+(paste or summarize)
 
 ## Assessment
 - **Accuracy:** /5
 - **Usefulness:** /5
-- **Would I use this as-is?** Yes / Needs editing / No
+- **Usable as-is?** Yes / Needs editing / No
 
 ## Iterations
-Did I refine the prompt? What changed?
+What changed after refining:
 
-## Final Prompt (if iterated)
+## Final Prompt
 ```
 (paste refined version)
 ```
 
 ## Added to Prompt Library?
 - [ ] Yes → [[Prompt Library/{{category}} Prompts]]
-```
+````
 
-### Dashboard Note
+### Dashboard
 
-Create `00 — Dashboard.md` as your landing page:
+Create `00 — Dashboard.md`:
 
-```markdown
+````markdown
 # Claude Learning Plan — Dashboard
 
 ## Progress
@@ -352,23 +236,20 @@ Create `00 — Dashboard.md` as your landing page:
 | 5 | Advanced Techniques | 🔲 |
 | 6 | Strategy & Adoption | 🔲 |
 
-## Current Week
-![[Week XX — Title]]
-
 ## Prompt Library
 - [[Prompt Library/Triage Prompts]]
 - [[Prompt Library/Communication Prompts]]
 - [[Prompt Library/Coaching Prompts]]
 - [[Prompt Library/Analysis Prompts]]
 
-## Deliverables Index
+## Deliverables
 ```dataview
 TABLE status, completed
 FROM "Deliverables"
 SORT file.name ASC
 ```
 
-## Recent Prompt Experiments
+## Recent Experiments
 ```dataview
 TABLE category, rating, date
 FROM "Month 1" OR "Month 2" OR "Month 3" OR "Month 4" OR "Month 5" OR "Month 6"
@@ -376,62 +257,67 @@ WHERE contains(file.name, "Experiment")
 SORT date DESC
 LIMIT 10
 ```
-```
+````
 
 ### Recommended Obsidian Plugins
 
-These community plugins make the workflow smoother:
-
-| Plugin | Purpose |
-|--------|---------|
-| **Dataview** | Dashboard tables that auto-update from frontmatter |
-| **Templater** | Insert weekly note and prompt experiment templates with one shortcut |
-| **Kanban** | Visualize weeks as cards across Not Started → In Progress → Done |
+| Plugin | Why |
+|--------|-----|
+| **Dataview** | Auto-updating dashboard tables from frontmatter |
+| **Templater** | One-shortcut weekly note and experiment template insertion |
+| **Kanban** | Drag weeks across Not Started → In Progress → Done |
 | **Calendar** | Navigate weekly notes by date |
-| **Checklist** | Aggregate incomplete checklist items across all week notes |
+| **Checklist** | Aggregate open checklist items across all notes |
 
-### Workflow: Connecting the App and the Vault
+### How the App and Vault Work Together
 
-The React app and Obsidian vault serve different purposes and stay loosely coupled:
-
-| Concern | React App | Obsidian Vault |
-|---------|-----------|----------------|
-| Quick tracking | ✅ Checkboxes, progress % | — |
+| What | React App | Obsidian Vault |
+|------|-----------|----------------|
+| Quick tracking | ✅ Checkboxes, % rings | — |
 | Deep notes | — | ✅ Long-form writing |
 | Prompt library | — | ✅ Searchable, tagged |
 | Deliverables | — | ✅ Full documents |
-| Visual progress | ✅ Rings, month tabs | — |
+| Visual progress | ✅ Month tabs, stats | — |
 | Portability | ✅ Browser-based | ✅ Local markdown |
 
 **Daily workflow:**
 
-1. Open the React app to see what's next and check items off as you go
-2. Open the corresponding Obsidian weekly note to write detailed notes, paste prompt experiments, and draft deliverables
-3. When you complete a deliverable, save it in `Deliverables/` and link it from the weekly note
-4. Tested prompts that work well go into `Prompt Library/` for team reuse
-
-Both the app progress (localStorage) and the vault (markdown files) live in the same git repo, so everything is versioned together.
+1. Open the React app → see what's next, check off items as you go
+2. Open the matching Obsidian weekly note → write deeper notes, paste prompt experiments, draft deliverables
+3. Completed deliverables go in `Deliverables/` with a wiki-link from the weekly note
+4. Proven prompts go in `Prompt Library/` for team reuse
 
 ---
 
 ## Git Workflow
 
-```bash
-# Initial setup
-git init
-echo "node_modules/\ndist/\n.DS_Store" > .gitignore
-git add .
-git commit -m "Initial commit: Claude learning plan for IT support managers"
+The vault is plain markdown and diffs cleanly. App progress lives in localStorage (browser-side) and won't appear in git.
 
-# Weekly commits
-git add vault/ deliverables/
-git commit -m "Week 05: completed triage template + prompt experiments"
+```bash
+# After completing a week
+git add vault/
+git commit -m "Week 05: triage prompt template + experiments"
+
+# If you want to back up app progress
+# Open browser console → copy localStorage JSON → save to a file
 ```
 
-The Obsidian vault is plain markdown — it diffs cleanly and works well with git. The app's progress lives in localStorage (browser-side), so it won't appear in git. If you want to back up app progress too, you can export localStorage to a JSON file periodically.
+### Suggested `.gitignore` additions
+
+```
+node_modules/
+dist/
+.DS_Store
+```
+
+---
+
+## Contributing
+
+This is a personal learning tool. Feel free to fork, adapt the curriculum to your team's needs, or submit issues if you spot errors in the content.
 
 ---
 
 ## License
 
-Personal use. Adapt freely for your team or organization.
+[MIT](LICENSE)
