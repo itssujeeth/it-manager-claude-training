@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#faf9f6"/>
+
+  <!-- Cobalt accent bar (bottom-left) -->
+  <rect x="0" y="600" width="280" height="6" fill="#2e43ff"/>
+
+  <!-- Signal bars (decorative, bottom-right) -->
+  <g transform="translate(960, 390)">
+    <rect x="0"   y="90"  width="24" height="42"  rx="2" fill="#e3e1d8"/>
+    <rect x="33"  y="66"  width="24" height="66"  rx="2" fill="#e3e1d8"/>
+    <rect x="66"  y="42"  width="24" height="90"  rx="2" fill="#2e43ff"/>
+    <rect x="99"  y="18"  width="24" height="114" rx="2" fill="#2e43ff"/>
+    <rect x="132" y="0"   width="24" height="132" rx="2" fill="#2e43ff"/>
+  </g>
+
+  <!-- Eyebrow -->
+  <text x="80" y="120" font-family="monospace" font-size="22" fill="#6c7079" letter-spacing="1">training.itssujeeth.com — Sujith K. Surendran</text>
+
+  <!-- Heading line 1 -->
+  <text x="80" y="230" font-family="sans-serif" font-size="68" font-weight="700" fill="#16181d" letter-spacing="-1">Claude Learning Plan</text>
+
+  <!-- Heading line 2 -->
+  <text x="80" y="315" font-family="sans-serif" font-size="68" font-weight="700" fill="#2e43ff" letter-spacing="-1">IT Support Managers</text>
+
+  <!-- Subline -->
+  <text x="80" y="400" font-family="sans-serif" font-size="28" fill="#6c7079">24-week self-paced curriculum · hands-on · MIT licensed</text>
+
+  <!-- Domain -->
+  <text x="80" y="500" font-family="monospace" font-size="22" fill="#2e43ff">training.itssujeeth.com</text>
+</svg>
