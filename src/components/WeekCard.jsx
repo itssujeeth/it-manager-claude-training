@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { loadContent, hasContent } from "../content/index.js";
 import { QuizBlock } from "./QuizBlock.jsx";
+import { ReadingModal } from "./ReadingModal.jsx";
 
 // ── Icons ────────────────────────────────────────────────────────────────────
 
@@ -56,35 +57,6 @@ function SectionBadge({ type, color }) {
   );
 }
 
-// ── Minimal markdown renderer ─────────────────────────────────────────────────
-
-function ContentBlock({ markdown, accentColor }) {
-  const blocks = markdown.trim().split(/\n\n+/);
-  return (
-    <div className="reading-content">
-      {blocks.map((block, i) => {
-        if (block.startsWith("## ")) {
-          return (
-            <h4 key={i} className="reading-content-heading" style={{ color: accentColor }}>
-              {block.slice(3)}
-            </h4>
-          );
-        }
-        const parts = block.split(/(\*\*[^*]+\*\*)/g);
-        return (
-          <p key={i} className="reading-content-p">
-            {parts.map((part, j) =>
-              part.startsWith("**") && part.endsWith("**")
-                ? <strong key={j}>{part.slice(2, -2)}</strong>
-                : part
-            )}
-          </p>
-        );
-      })}
-    </div>
-  );
-}
-
 // ── Prompt pattern block ──────────────────────────────────────────────────────
 
 function PromptPattern({ pattern, accentColor }) {
@@ -132,18 +104,17 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
   const doneItems    = readingDone.filter(Boolean).length + (projectDone ? 1 : 0);
   const weekPercent  = Math.round((doneItems / totalItems) * 100);
 
-  const [expandedContent, setExpandedContent] = useState(new Set());
   const [loadedContent, setLoadedContent] = useState({});
+  const [readingModal, setReadingModal] = useState(null); // { item, contentKey }
 
-  const toggleContent = (i, contentKey) => {
-    setExpandedContent((prev) => {
-      const next = new Set(prev);
-      next.has(i) ? next.delete(i) : next.add(i);
-      return next;
-    });
-    if (contentKey && !loadedContent[contentKey]) {
+  const openReading = (item, contentKey) => {
+    setReadingModal({ item, content: loadedContent[contentKey] ?? null });
+    if (!loadedContent[contentKey]) {
       loadContent(contentKey).then((text) => {
-        if (text) setLoadedContent((p) => ({ ...p, [contentKey]: text }));
+        if (text) {
+          setLoadedContent((p) => ({ ...p, [contentKey]: text }));
+          setReadingModal((prev) => prev ? { ...prev, content: text } : prev);
+        }
       });
     }
   };
@@ -235,7 +206,6 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
               <span className="ws-section-title">Learning checklist</span>
             </div>
             {week.reading.map((r, i) => {
-              const contentOpen = expandedContent.has(i);
               return (
                 <div key={i} className="reading-item-wrap">
                   <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
@@ -271,21 +241,15 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
                       )}
                       {hasContent(r.contentKey) && (
                         <button
-                          onClick={(e) => { e.preventDefault(); toggleContent(i, r.contentKey); }}
+                          onClick={(e) => { e.preventDefault(); openReading(r, r.contentKey); }}
                           className="read-toggle"
                           style={{ color: monthColor, borderColor: `${monthColor}40` }}
-                          aria-expanded={contentOpen}
                         >
-                          {contentOpen ? "Close ↑" : "Read ↓"}
+                          Read →
                         </button>
                       )}
                     </label>
                   </div>
-                  {r.contentKey && contentOpen && loadedContent[r.contentKey] && (
-                    <div className="reading-content-panel" style={{ borderColor: `${monthColor}25` }}>
-                      <ContentBlock markdown={loadedContent[r.contentKey]} accentColor={monthColor} />
-                    </div>
-                  )}
                 </div>
               );
             })}
@@ -399,16 +363,44 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
           </div>
 
           {/* ── Knowledge check ────────────────────────────────────────────── */}
-          {week.quiz?.length > 0 && onSubmitQuiz && (
-            <QuizBlock
-              week={week}
-              monthColor={monthColor}
-              quizState={quizState}
-              onSubmit={onSubmitQuiz}
-            />
-          )}
+          {week.quiz?.length > 0 && onSubmitQuiz && (() => {
+            const readingsDone = readingDone.filter(Boolean).length;
+            const readingsTotal = week.reading.length;
+            const unlocked = readingsDone === readingsTotal || quizState?.submitted;
+
+            if (!unlocked) {
+              const remaining = readingsTotal - readingsDone;
+              return (
+                <div className="quiz-locked">
+                  <span className="quiz-locked-icon">🔒</span>
+                  <span className="quiz-locked-text">
+                    Complete {remaining} more reading{remaining !== 1 ? "s" : ""} to unlock the knowledge check
+                  </span>
+                </div>
+              );
+            }
+
+            return (
+              <QuizBlock
+                week={week}
+                monthColor={monthColor}
+                quizState={quizState}
+                onSubmit={onSubmitQuiz}
+              />
+            );
+          })()}
 
         </div>
+      )}
+
+      {/* ── Reading modal ───────────────────────────────────────────────── */}
+      {readingModal && (
+        <ReadingModal
+          item={readingModal.item}
+          content={readingModal.content}
+          accentColor={monthColor}
+          onClose={() => setReadingModal(null)}
+        />
       )}
     </div>
   );
