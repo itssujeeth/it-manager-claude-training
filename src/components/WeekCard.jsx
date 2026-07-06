@@ -107,9 +107,10 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
                         fontSize: 11, color: monthColor, textDecoration: "none",
                         fontFamily: "var(--font-mono)", fontWeight: 600, opacity: 0.85,
                         borderBottom: `1px dashed ${monthColor}50`, paddingBottom: 1,
+                        whiteSpace: "nowrap",
                       }}
                     >
-                      <LinkIcon /> Open
+                      <LinkIcon /> {r.urlLabel || "Open"}
                     </a>
                   )}
                 </label>

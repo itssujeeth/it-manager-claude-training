@@ -3,6 +3,7 @@ import { MONTHS, ALL_WEEKS } from "./data/curriculum.js";
 import { useProgress } from "./hooks/useProgress.js";
 import { Sidebar } from "./components/Sidebar.jsx";
 import { Hero } from "./components/Hero.jsx";
+import { Orientation } from "./components/Orientation.jsx";
 import { SearchBar } from "./components/SearchBar.jsx";
 import { WeekCard } from "./components/WeekCard.jsx";
 
@@ -128,6 +129,9 @@ export default function App() {
           {/* Hero — visible only on first visit (no progress made yet) */}
           <Hero stats={stats} onBegin={handleBeginWeek1} />
 
+          {/* Orientation — dismissible before-you-start panel */}
+          <Orientation />
+
           {/* Search */}
           <SearchBar
             query={searchQuery}
@@ -186,6 +190,15 @@ export default function App() {
                   </button>
                 </div>
               </div>
+
+              {activeMonth.objectives?.length > 0 && (
+                <div className="module-objectives">
+                  <div className="module-objectives-label">By the end of this module, you can</div>
+                  <ul className="module-objectives-list">
+                    {activeMonth.objectives.map((obj, i) => <li key={i}>{obj}</li>)}
+                  </ul>
+                </div>
+              )}
 
               {activeMonth.weeks.map((w) => (
                 <div key={w.week} id={`week-card-${w.week}`}>
