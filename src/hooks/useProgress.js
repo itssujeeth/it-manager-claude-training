@@ -43,6 +43,19 @@ export function useProgress() {
     saveProgress({ ...progress, [wn]: { ...wp, notes: note } });
   };
 
+  const toggleRubric = (wn, ri) => {
+    const wp = progress[wn] || { reading: [], projectDone: false, notes: "", rubric: [] };
+    const nr = [...(wp.rubric || [])];
+    nr[ri] = !nr[ri];
+    saveProgress({ ...progress, [wn]: { ...wp, rubric: nr } });
+  };
+
+  const submitQuiz = (weekNum, answers) => {
+    saveProgress({ ...progress, [`quiz_w${weekNum}`]: { answers, submitted: true } });
+  };
+
+  const getQuizState = (weekNum) => progress[`quiz_w${weekNum}`] || { answers: {}, submitted: false };
+
   const resetAll = async () => {
     setProgress({});
     try { await window.storage.delete(STORAGE_KEY); } catch (e) {}
@@ -98,7 +111,16 @@ export function useProgress() {
     const weeksCompleted     = ALL_WEEKS.filter((w) => getWeekDone(w) === getWeekTotal(w)).length;
     const totalStructured    = ALL_WEEKS.reduce((s, w) => s + w.reading.length, 0);
     const nextIncompleteWeek = ALL_WEEKS.find((w) => getWeekDone(w) < getWeekTotal(w));
-    return { totalItems, doneItems, overallPercent, weeksCompleted, totalStructured, nextIncompleteWeek };
+    const deliverablesCompleted = ALL_WEEKS.filter((w) => progress[w.week]?.projectDone).length;
+    const rubricsCompleted = ALL_WEEKS.filter((w) => {
+      if (!w.rubric?.length) return false;
+      const wp = progress[w.week] || {};
+      return (wp.rubric || []).filter(Boolean).length >= w.rubric.length;
+    }).length;
+    const totalRubrics = ALL_WEEKS.filter((w) => w.rubric?.length > 0).length;
+    const quizzesCompleted = ALL_WEEKS.filter((w) => w.quiz?.length > 0 && progress[`quiz_w${w.week}`]?.submitted).length;
+    const totalQuizzes = ALL_WEEKS.filter((w) => w.quiz?.length > 0).length;
+    return { totalItems, doneItems, overallPercent, weeksCompleted, totalStructured, nextIncompleteWeek, deliverablesCompleted, rubricsCompleted, totalRubrics, quizzesCompleted, totalQuizzes };
   })();
 
   return {
@@ -107,6 +129,9 @@ export function useProgress() {
     toggleReading,
     toggleProject,
     updateNote,
+    toggleRubric,
+    submitQuiz,
+    getQuizState,
     resetAll,
     exportProgress,
     importProgress,

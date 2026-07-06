@@ -1,11 +1,11 @@
 import { useRef } from "react";
+import { NavLink, Link } from "react-router-dom";
 import { ProgressRing } from "./ProgressRing.jsx";
 import { TOTAL_WEEKS } from "../data/curriculum.js";
 
 export function Sidebar({
   isOpen, onClose,
-  months, expandedMonth, onSelectMonth,
-  getMonthPercent, stats,
+  months, getMonthPercent, stats,
   onExport, onImport,
   confirmingReset, onReset, onCancelReset,
 }) {
@@ -24,11 +24,11 @@ export function Sidebar({
       {isOpen && <div className="sidebar-overlay" onClick={onClose} />}
 
       <aside className={`sidebar${isOpen ? " drawer-open" : ""}`} aria-label="Course navigation">
-        {/* Logo */}
-        <div className="sidebar-logo">
+        {/* Logo — links to cockpit */}
+        <Link to="/" className="sidebar-logo" style={{ textDecoration: "none" }}>
           <div className="sidebar-logo-icon">C</div>
           <div className="sidebar-logo-text">Claude Training</div>
-        </div>
+        </Link>
 
         {/* Overall progress */}
         <div className="sidebar-progress">
@@ -42,18 +42,30 @@ export function Sidebar({
           </div>
         </div>
 
+        {/* Primary nav */}
+        <nav className="sidebar-nav" aria-label="Primary">
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) => `sidebar-nav-item${isActive ? " active" : ""}`}
+          >
+            Dashboard
+          </NavLink>
+        </nav>
+
+        <div className="sidebar-section-label">Learning path</div>
+
         {/* Month navigation */}
         <nav className="sidebar-months" aria-label="Months">
           {months.map((m, i) => {
-            const pct      = getMonthPercent(m);
-            const isActive = expandedMonth === i;
+            const pct = getMonthPercent(m);
             return (
-              <button
+              <Link
                 key={i}
-                className={`month-item${isActive ? " active" : ""}`}
+                to={`/path?month=${i}`}
+                className="month-item"
                 style={{ "--mc": m.color }}
-                onClick={() => onSelectMonth(i)}
-                aria-current={isActive ? "true" : undefined}
+                onClick={onClose}
               >
                 <div className="month-item-row">
                   <div className="month-item-dot" style={{ background: m.color }} />
@@ -66,7 +78,7 @@ export function Sidebar({
                 <div className="month-item-bar">
                   <div className="month-item-fill" style={{ width: `${pct}%`, background: m.color }} />
                 </div>
-              </button>
+              </Link>
             );
           })}
         </nav>

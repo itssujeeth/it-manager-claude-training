@@ -1,4 +1,8 @@
 import { useState, useEffect, useRef } from "react";
+import { loadContent, hasContent } from "../content/index.js";
+import { QuizBlock } from "./QuizBlock.jsx";
+
+// ── Icons ────────────────────────────────────────────────────────────────────
 
 function LinkIcon() {
   return (
@@ -8,7 +12,52 @@ function LinkIcon() {
   );
 }
 
-// Minimal markdown renderer: ## headings, **bold**, paragraph breaks
+function CopyIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+      <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M3 11H2.5A1.5 1.5 0 0 1 1 9.5V2.5A1.5 1.5 0 0 1 2.5 1h7A1.5 1.5 0 0 1 11 2.5V3" stroke="currentColor" strokeWidth="1.3" />
+    </svg>
+  );
+}
+
+// ── Risk config ───────────────────────────────────────────────────────────────
+
+const RISK_CONFIG = {
+  Low:        { color: "#2EAD6B", bg: "#2EAD6B18" },
+  Medium:     { color: "#D4783C", bg: "#D4783C18" },
+  High:       { color: "#E04444", bg: "#E0444418" },
+  Restricted: { color: "#E04444", bg: "#E0444418" },
+};
+
+const DIFFICULTY_COLOR = {
+  Beginner:     "var(--text-secondary)",
+  Intermediate: "#D4783C",
+  Advanced:     "#E04444",
+};
+
+// ── Section badge ─────────────────────────────────────────────────────────────
+
+function SectionBadge({ type, color }) {
+  const BADGE = {
+    Learn:      { label: "Learn",      defaultColor: "#3A7BE8" },
+    Try:        { label: "Try",        defaultColor: "#9B5CF6" },
+    Validate:   { label: "Validate",   defaultColor: "#2EAD6B" },
+    Portfolio:  { label: "Portfolio",  defaultColor: "#D4783C" },
+    SafeData:   { label: "Safe Data",  defaultColor: "#E04444" },
+  };
+  const cfg = BADGE[type];
+  if (!cfg) return null;
+  const c = color || cfg.defaultColor;
+  return (
+    <span className="section-badge" style={{ color: c, borderColor: `${c}40`, background: `${c}10` }}>
+      {cfg.label}
+    </span>
+  );
+}
+
+// ── Minimal markdown renderer ─────────────────────────────────────────────────
+
 function ContentBlock({ markdown, accentColor }) {
   const blocks = markdown.trim().split(/\n\n+/);
   return (
@@ -21,7 +70,6 @@ function ContentBlock({ markdown, accentColor }) {
             </h4>
           );
         }
-        // inline **bold**
         const parts = block.split(/(\*\*[^*]+\*\*)/g);
         return (
           <p key={i} className="reading-content-p">
@@ -37,25 +85,69 @@ function ContentBlock({ markdown, accentColor }) {
   );
 }
 
-export function WeekCard({ week, monthColor, progress, onToggleReading, onToggleProject, onAddNote, isExpanded, onToggle, isNextUp }) {
-  const readingDone = progress?.reading || [];
-  const projectDone = progress?.projectDone || false;
-  const notes       = progress?.notes || "";
-  const totalItems  = week.reading.length + 1;
-  const doneItems   = readingDone.filter(Boolean).length + (projectDone ? 1 : 0);
-  const weekPercent = Math.round((doneItems / totalItems) * 100);
+// ── Prompt pattern block ──────────────────────────────────────────────────────
+
+function PromptPattern({ pattern, accentColor }) {
+  const [copied, setCopied] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(pattern).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    });
+  };
+
+  return (
+    <div className="prompt-pattern-wrap">
+      <button
+        className="prompt-pattern-toggle"
+        onClick={() => setExpanded((p) => !p)}
+        style={{ color: accentColor }}
+      >
+        <SectionBadge type="Try" color={accentColor} />
+        <span className="ws-section-title">Prompt pattern</span>
+        <span className="prompt-pattern-chevron" style={{ transform: expanded ? "rotate(180deg)" : "none" }}>▾</span>
+      </button>
+      {expanded && (
+        <div className="prompt-pattern-body" style={{ borderColor: `${accentColor}25` }}>
+          <pre className="prompt-pattern-pre">{pattern}</pre>
+          <button className="prompt-copy-btn" onClick={handleCopy} style={{ color: accentColor }}>
+            <CopyIcon /> {copied ? "Copied!" : "Copy"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── WeekCard ──────────────────────────────────────────────────────────────────
+
+export function WeekCard({ week, monthColor, progress, onToggleReading, onToggleProject, onAddNote, onToggleRubric, isExpanded, onToggle, isNextUp, quizState, onSubmitQuiz }) {
+  const readingDone  = progress?.reading || [];
+  const projectDone  = progress?.projectDone || false;
+  const notes        = progress?.notes || "";
+  const rubricDone   = progress?.rubric || [];
+  const totalItems   = week.reading.length + 1;
+  const doneItems    = readingDone.filter(Boolean).length + (projectDone ? 1 : 0);
+  const weekPercent  = Math.round((doneItems / totalItems) * 100);
 
   const [expandedContent, setExpandedContent] = useState(new Set());
+  const [loadedContent, setLoadedContent] = useState({});
 
-  const toggleContent = (i) => {
+  const toggleContent = (i, contentKey) => {
     setExpandedContent((prev) => {
       const next = new Set(prev);
       next.has(i) ? next.delete(i) : next.add(i);
       return next;
     });
+    if (contentKey && !loadedContent[contentKey]) {
+      loadContent(contentKey).then((text) => {
+        if (text) setLoadedContent((p) => ({ ...p, [contentKey]: text }));
+      });
+    }
   };
 
-  // Pulse animation on completion
   const [pulsing, setPulsing] = useState(false);
   const prevPct = useRef(weekPercent);
   useEffect(() => {
@@ -67,6 +159,7 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
     prevPct.current = weekPercent;
   }, [weekPercent]);
 
+  const riskCfg   = week.riskLevel ? RISK_CONFIG[week.riskLevel] : null;
   const cardClass = ["week-card", pulsing ? "week-card-pulse" : ""].filter(Boolean).join(" ");
 
   return (
@@ -81,6 +174,7 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
         transition: "border-color 0.2s",
       }}
     >
+      {/* ── Header ─────────────────────────────────────────────────────────── */}
       <button
         onClick={onToggle}
         aria-expanded={isExpanded}
@@ -100,9 +194,19 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
             {weekPercent === 100 ? "✓" : `W${week.week}`}
           </span>
           {isNextUp && <span className="next-up-badge">Next up</span>}
+          {riskCfg && (
+            <span className="risk-badge" style={{ color: riskCfg.color, background: riskCfg.bg }}>
+              {week.riskLevel}
+            </span>
+          )}
           <span style={{ fontWeight: 600, fontSize: 16, textAlign: "left" }}>{week.title}</span>
         </span>
         <span style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0, marginLeft: 8 }}>
+          {week.difficulty && (
+            <span className="difficulty-badge" style={{ color: DIFFICULTY_COLOR[week.difficulty] ?? "var(--text-secondary)" }}>
+              {week.difficulty}
+            </span>
+          )}
           <span className="week-time-est">~90 min</span>
           <span style={{
             fontSize: 11, fontFamily: "var(--font-mono)",
@@ -115,10 +219,20 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
 
       {isExpanded && (
         <div style={{ padding: "0 18px 18px" }}>
-          {/* Learning checklist */}
+
+          {/* ── Manager scenario ───────────────────────────────────────────── */}
+          {week.scenario && (
+            <div className="ws-scenario">
+              <div className="ws-scenario-label">Manager scenario</div>
+              <p className="ws-scenario-text">{week.scenario}</p>
+            </div>
+          )}
+
+          {/* ── Learning checklist ─────────────────────────────────────────── */}
           <div style={{ marginBottom: 14 }}>
-            <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 1.2, color: monthColor, fontWeight: 700, marginBottom: 8, fontFamily: "var(--font-mono)" }}>
-              Learning Checklist
+            <div className="ws-section-header">
+              <SectionBadge type="Learn" color={monthColor} />
+              <span className="ws-section-title">Learning checklist</span>
             </div>
             {week.reading.map((r, i) => {
               const contentOpen = expandedContent.has(i);
@@ -155,9 +269,9 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
                           <LinkIcon /> {r.urlLabel || "Open"}
                         </a>
                       )}
-                      {r.content && (
+                      {hasContent(r.contentKey) && (
                         <button
-                          onClick={(e) => { e.preventDefault(); toggleContent(i); }}
+                          onClick={(e) => { e.preventDefault(); toggleContent(i, r.contentKey); }}
                           className="read-toggle"
                           style={{ color: monthColor, borderColor: `${monthColor}40` }}
                           aria-expanded={contentOpen}
@@ -167,9 +281,9 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
                       )}
                     </label>
                   </div>
-                  {r.content && contentOpen && (
+                  {r.contentKey && contentOpen && loadedContent[r.contentKey] && (
                     <div className="reading-content-panel" style={{ borderColor: `${monthColor}25` }}>
-                      <ContentBlock markdown={r.content} accentColor={monthColor} />
+                      <ContentBlock markdown={loadedContent[r.contentKey]} accentColor={monthColor} />
                     </div>
                   )}
                 </div>
@@ -177,10 +291,31 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
             })}
           </div>
 
-          {/* Weekly deliverable */}
+          {/* ── Prompt pattern ─────────────────────────────────────────────── */}
+          {week.promptPattern && (
+            <div style={{ marginBottom: 14 }}>
+              <PromptPattern pattern={week.promptPattern} accentColor={monthColor} />
+            </div>
+          )}
+
+          {/* ── Safety gate ────────────────────────────────────────────────── */}
+          {week.safetyWarnings?.length > 0 && (
+            <div className="safety-gate">
+              <div className="safety-gate-label">
+                <SectionBadge type="SafeData" />
+                <span className="ws-section-title">Before using real workplace data</span>
+              </div>
+              <ul className="safety-gate-list">
+                {week.safetyWarnings.map((w, i) => <li key={i}>{w}</li>)}
+              </ul>
+            </div>
+          )}
+
+          {/* ── Weekly deliverable ─────────────────────────────────────────── */}
           <div style={{ marginBottom: 14 }}>
-            <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 1.2, color: monthColor, fontWeight: 700, marginBottom: 8, fontFamily: "var(--font-mono)" }}>
-              Weekly Deliverable
+            <div className="ws-section-header">
+              <SectionBadge type="Portfolio" color={monthColor} />
+              <span className="ws-section-title">Weekly deliverable</span>
             </div>
             <label
               htmlFor={`project-${week.week}`}
@@ -205,10 +340,42 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
             </label>
           </div>
 
-          {/* Notes */}
+          {/* ── Rubric ─────────────────────────────────────────────────────── */}
+          {week.rubric?.length > 0 && (
+            <div style={{ marginBottom: 14 }}>
+              <div className="ws-section-header">
+                <SectionBadge type="Validate" color={monthColor} />
+                <span className="ws-section-title">Quality rubric</span>
+                <span className="rubric-progress-label">
+                  {rubricDone.filter(Boolean).length}/{week.rubric.length} criteria met
+                </span>
+              </div>
+              <div className="rubric-table">
+                {week.rubric.map((row, i) => (
+                  <label
+                    key={i}
+                    htmlFor={`rubric-${week.week}-${i}`}
+                    className={`rubric-row${rubricDone[i] ? " rubric-row-done" : ""}`}
+                  >
+                    <input
+                      type="checkbox"
+                      id={`rubric-${week.week}-${i}`}
+                      checked={!!rubricDone[i]}
+                      onChange={() => onToggleRubric(i)}
+                      style={{ accentColor: "var(--green)", flexShrink: 0, cursor: "pointer" }}
+                    />
+                    <span className="rubric-criterion">{row.criterion}</span>
+                    <span className="rubric-pass">{row.passCondition}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── Notes ──────────────────────────────────────────────────────── */}
           <div style={{ marginBottom: 14 }}>
-            <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 1.2, color: monthColor, fontWeight: 700, marginBottom: 8, fontFamily: "var(--font-mono)" }}>
-              Notes & Evidence
+            <div className="ws-section-header">
+              <span className="ws-section-title" style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 1.2, color: monthColor, fontWeight: 700, fontFamily: "var(--font-mono)" }}>Notes &amp; evidence</span>
             </div>
             <textarea
               value={notes}
@@ -217,10 +384,10 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
             />
           </div>
 
-          {/* Skills */}
-          <div>
+          {/* ── Skills ─────────────────────────────────────────────────────── */}
+          <div style={{ marginBottom: week.quiz?.length > 0 ? 14 : 0 }}>
             <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 1.2, color: monthColor, fontWeight: 700, marginBottom: 6, fontFamily: "var(--font-mono)" }}>
-              Skills Built
+              Skills built
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
               {week.skills.map((s, i) => (
@@ -230,6 +397,17 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
               ))}
             </div>
           </div>
+
+          {/* ── Knowledge check ────────────────────────────────────────────── */}
+          {week.quiz?.length > 0 && onSubmitQuiz && (
+            <QuizBlock
+              week={week}
+              monthColor={monthColor}
+              quizState={quizState}
+              onSubmit={onSubmitQuiz}
+            />
+          )}
+
         </div>
       )}
     </div>
