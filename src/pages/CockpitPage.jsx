@@ -52,6 +52,7 @@ export function CockpitPage() {
           <span className="landing-pill">24 weeks</span>
           <span className="landing-pill">~90 min / week</span>
           <span className="landing-pill">Requires Claude Pro or Team</span>
+          <span className="landing-pill landing-pill-disclaimer">Not affiliated with Anthropic</span>
         </div>
 
         <h1 className="landing-title">Claude for IT Support Managers</h1>

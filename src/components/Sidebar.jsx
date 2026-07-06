@@ -105,6 +105,9 @@ export function Sidebar({
 
         {/* Footer */}
         <div className="sidebar-footer">
+          Not affiliated with or endorsed by Anthropic.{" "}
+          Independent community training resource.
+          <br /><br />
           Progress stored locally — nothing sent to a server. Never paste credentials or
           customer data into AI prompts.{" "}
           <a href="https://github.com/itssujeeth/it-manager-claude-training" target="_blank" rel="noopener noreferrer">

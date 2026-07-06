@@ -1431,6 +1431,17 @@ textarea:focus { border-color: var(--accent); }
   border: 1px solid rgba(212, 120, 60, 0.25);
 }
 
+.landing-pill-disclaimer {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+@media (prefers-color-scheme: dark) {
+  .landing-pill-disclaimer {
+    background: rgba(255, 255, 255, 0.04);
+  }
+}
+
 .landing-title {
   font-size: 28px;
   font-weight: 700;
