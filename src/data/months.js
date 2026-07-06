@@ -16,10 +16,52 @@ export const MONTHS = [
         week: 1,
         title: "What Claude Is & How It Thinks",
         reading: [
-          { text: "Understand what large language models are: prediction engines trained on text, not databases or search engines", url: "https://docs.anthropic.com/en/docs/overview", urlLabel: "Anthropic docs" },
-          { text: "Learn the difference between Claude and retrieval tools like Google or a knowledge base — base Claude generates responses from training data, it does not look things up. Important: Claude can also be configured with tools like web search, file upload, and Claude Projects, which do enable retrieval. Know which mode your org has enabled before making assumptions about what Claude can access", url: null, urlLabel: null },
-          { text: "Study Claude's strengths: drafting, summarizing, analyzing, brainstorming, rewriting, and structured reasoning", url: null, urlLabel: null },
-          { text: "Understand Claude's limitations in base chat mode: no real-time data, no memory between conversations, hallucination risk, knowledge cutoff. Many of these limitations change when Projects, web search, or tool-calling are enabled — so always verify which Claude configuration you are using", url: null, urlLabel: null },
+          { text: "Understand what large language models are: prediction engines trained on text, not databases or search engines", url: "https://docs.anthropic.com/en/docs/overview", urlLabel: "Anthropic docs", content: `## What Claude actually does under the hood
+
+Imagine your most experienced L2 analyst — they've read thousands of incident reports, runbooks, and vendor docs. When you describe a problem, they pattern-match against everything they've absorbed and generate a plausible response. That's the closest analogy to how Claude works.
+
+Claude was trained on a vast body of text. During training it learned statistical relationships between words, concepts, and structures. When you send it a prompt, it predicts the most useful continuation of that text — drawing on patterns from its training, not from a live database or the internet.
+
+This is why Claude can draft a solid post-incident report without ever seeing your ticketing system: it has seen enough incident reports to know what one looks like. It's also why it can hallucinate a plausible-sounding but wrong server name — it's completing a pattern, not looking something up.
+
+**Manager takeaway: treat Claude like a very well-read analyst who works entirely from memory — fast and capable, but you always verify the facts before they go into production.`},
+          { text: "Learn the difference between Claude and retrieval tools like Google or a knowledge base — base Claude generates responses from training data, it does not look things up. Important: Claude can also be configured with tools like web search, file upload, and Claude Projects, which do enable retrieval. Know which mode your org has enabled before making assumptions about what Claude can access", url: null, urlLabel: null, content: `## Claude vs your knowledge base: not the same tool
+
+Your Confluence or ServiceNow KB retrieves documents — you search, it returns what exists. Claude generates responses — there's no document it's pulling from, only patterns it learned during training.
+
+This distinction matters operationally. When an analyst searches your KB for "VPN error 691," they get your org's specific resolution steps. When they ask Claude the same question in base chat mode, Claude generates a plausible answer from general training data — which may not match your environment at all.
+
+However, Claude's operating mode changes everything. With file upload, Claude can read a document you paste in. With Claude Projects, it can reference a persistent set of your team's SOPs and definitions. With web search enabled, it can retrieve current information. The capabilities vary significantly depending on what your organisation has turned on.
+
+Before rolling Claude out to your team, confirm which mode is active. The question to ask your IT or vendor contact: "Is this base chat only, or does our instance have Projects, file upload, or web search enabled?"
+
+**Manager takeaway: base Claude generates — it does not retrieve. Know your org's configuration before making promises to your team about what Claude can access.`},
+          { text: "Study Claude's strengths: drafting, summarizing, analyzing, brainstorming, rewriting, and structured reasoning", url: null, urlLabel: null, content: `## Where Claude earns its keep in IT support
+
+Claude's strongest suits map directly onto the work that consumes most of a support manager's day.
+
+**Drafting** is where most managers see the fastest return. Outage communications, coaching scripts, SOP drafts, escalation emails — Claude produces a solid first draft in seconds. You edit, not write from scratch.
+
+**Summarizing** is the second high-value use. Paste a 40-message Slack thread from a P1 incident and ask Claude to extract a timeline, decisions made, and open actions. What took 20 minutes now takes two.
+
+**Analyzing** works well for structured text: ticket exports, survey responses, QA notes. Ask Claude to identify patterns, surface outliers, or compare two sets of data. It won't run SQL, but it reasons well over text-format data you paste in.
+
+**Rewriting** is underused. Your team's KB articles that are technically accurate but confusing to read? Claude can rewrite them for clarity without changing the content — faster than a documentation review cycle.
+
+**Manager takeaway: Claude's highest ROI in support ops is on written output — drafting, summarizing, and rewriting. Start there before exploring the more complex use cases.`},
+          { text: "Understand Claude's limitations in base chat mode: no real-time data, no memory between conversations, hallucination risk, knowledge cutoff. Many of these limitations change when Projects, web search, or tool-calling are enabled — so always verify which Claude configuration you are using", url: null, urlLabel: null, content: `## What Claude cannot do — and what to watch for
+
+Your team needs to understand Claude's failure modes before they rely on it. There are four that matter in IT support operations.
+
+**No real-time data.** In base chat mode, Claude has no access to the internet, your ticketing system, or any live data source. If an analyst asks "is there an active outage at AWS right now?" Claude will generate a plausible-sounding response — which could be entirely fabricated. This limitation is removed if your instance has web search enabled.
+
+**No memory between conversations.** Each new conversation starts completely fresh. Claude does not remember what you discussed yesterday, what your SLA thresholds are, or what your team decided in a previous session. This is addressed by Claude Projects, which lets you load persistent context — but only if your org has it enabled.
+
+**Hallucination.** Claude can confidently state something that is false. It doesn't know what it doesn't know. This is especially risky for technical specifics: version numbers, CLI syntax, vendor-specific configurations. Always verify technical output against official documentation before using it in a runbook or resolution step.
+
+**Knowledge cutoff.** Claude's training has a cutoff date. Guidance on newer tools, recent CVEs, or software releases after that date may be absent or wrong.
+
+**Manager takeaway: build verification steps into every Claude workflow your team uses — especially for anything that ends up in a runbook, a customer message, or a leadership report.`},
         ],
         project: "Write a one-page brief for your support team explaining what Claude can and cannot do, with 5 realistic use cases and 5 things it should never be trusted for without verification. Include a section on which Claude features your organization has approved (base chat, Projects, file upload, web search).",
         skills: ["AI literacy", "Capability scoping", "Risk awareness"],
@@ -28,8 +70,39 @@ export const MONTHS = [
         week: 2,
         title: "Prompt Engineering Basics for Managers",
         reading: [
-          { text: "Learn the anatomy of a good prompt: context, role, task, format, constraints, examples", url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview", urlLabel: "Anthropic docs" },
-          { text: "Study how specificity drives output quality — vague input produces vague output", url: null, urlLabel: null },
+          { text: "Learn the anatomy of a good prompt: context, role, task, format, constraints, examples", url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview", urlLabel: "Anthropic docs", content: `## The six parts of a prompt that actually works
+
+Think of prompting like briefing a new contractor. If you say "fix the network issue," you'll get a generic response. If you say "you're a senior network engineer, our VPN gateway is dropping connections after 4 hours of idle time, review these three log extracts and tell me the most likely cause in a numbered list with confidence levels," you get something useful.
+
+The six elements that separate good prompts from bad ones:
+
+**Role** — give Claude an identity relevant to the task. "You are an ITSM analyst" or "You are a senior support manager drafting a communication for a CTO" shapes the tone and depth of the response.
+
+**Context** — tell Claude what situation it's operating in. Background it doesn't have will result in generic output.
+
+**Task** — be explicit about what you want. "Draft," "Analyze," "Compare," "Summarize," "Identify gaps in" — verbs that specify the action.
+
+**Format** — specify the shape of the output. Bullet list, numbered steps, table, two-paragraph executive summary. If you don't specify, Claude will choose, and it may not match what you need.
+
+**Constraints** — add limits. "In under 150 words." "Use plain language, no jargon." "Do not include recommendations, analysis only."
+
+**Examples** — the most underused element. One example of what good output looks like cuts iteration time dramatically.
+
+**Manager takeaway: if Claude's output isn't useful, the problem is almost always a missing or vague element in your prompt — not Claude's capability.`},
+          { text: "Study how specificity drives output quality — vague input produces vague output", url: null, urlLabel: null, content: `## Why vague prompts produce vague answers
+
+Your support team will instinctively ask Claude questions the way they'd ask a search engine: "how do I handle an angry customer?" or "what's a good SLA?" These produce generic, surface-level responses that aren't useful in production.
+
+The fix is specificity at every layer. Compare:
+
+Vague: "Help me write a message about the outage."
+Specific: "Write a customer-facing status update for a payment processing outage affecting enterprise customers. The outage started at 14:32 UTC, root cause is a database failover that did not complete cleanly, estimated resolution is 60 minutes. Tone: professional, direct, no technical jargon. Format: three short paragraphs — current status, impact, next update time."
+
+The specific version gives Claude everything it needs to produce something you can almost send directly. The vague version forces you into multiple rounds of correction.
+
+The pattern to build into your team's habits: before hitting send, check whether Claude has the who, what, when, format, and constraints it needs. If any are missing, add them.
+
+**Manager takeaway: specificity in prompts is a learnable skill — the fastest way to improve your team's Claude outputs is to teach them to front-load context rather than iterate after the fact.`},
           { text: "Practice the difference between 'Tell me about incidents' vs 'You are an ITSM consultant. Analyze these 3 incident patterns and recommend process changes in bullet format'", url: null, urlLabel: null },
           { text: "Understand temperature, tone control, and format directives (tables, markdown, numbered steps)", url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/prompt-templates-and-variables", urlLabel: "Templates & variables" },
         ],
@@ -41,8 +114,32 @@ export const MONTHS = [
         title: "Using Claude for Daily Support Communications",
         reading: [
           { text: "Practice drafting executive outage updates with Claude by providing situation details and asking for structured status messages", url: "https://www.atlassian.com/incident-management/template", urlLabel: "Atlassian templates" },
-          { text: "Learn to use Claude to rewrite customer-facing messages for tone, clarity, and professionalism", url: null, urlLabel: null },
-          { text: "Study how Claude can generate shift handoff notes from a bullet-point brain dump", url: "https://www.atlassian.com/incident-management/handbook", urlLabel: "Atlassian handbook" },
+          { text: "Learn to use Claude to rewrite customer-facing messages for tone, clarity, and professionalism", url: null, urlLabel: null, content: `## Using Claude to fix the tone problem in support communications
+
+Every support team has the same challenge: technically accurate responses that land badly with customers. "The issue was caused by a misconfigured DNS record that propagated incorrectly following a routine maintenance window" is accurate. It's also impenetrable to a finance director who just lost an hour of access to their invoicing system.
+
+Claude is exceptionally good at rewriting for audience. The prompt pattern is simple: paste the original message, specify the audience and the desired tone, and ask Claude to rewrite.
+
+Example: "Rewrite this technical incident summary for a non-technical business stakeholder. Keep it under 100 words, avoid acronyms, focus on business impact and what was done to fix it, and close with a confidence statement about prevention."
+
+Claude will also flag when a message sounds defensive or shifts blame — useful for coaching analysts whose ticket closure notes come across poorly. Paste a note, ask Claude to assess the tone, and use its feedback as a coaching anchor.
+
+One caution: Claude will sometimes over-polish into corporate boilerplate. If the output sounds like a press release when it should sound like a helpful colleague, add a constraint: "Write in a direct, human tone — not corporate language."
+
+**Manager takeaway: Claude is a tone editor as much as a drafter — use it to bridge the gap between what your team knows technically and what your stakeholders need to hear.`},
+          { text: "Study how Claude can generate shift handoff notes from a bullet-point brain dump", url: "https://www.atlassian.com/incident-management/handbook", urlLabel: "Atlassian handbook", content: `## Turning a brain dump into a handoff your next shift can actually use
+
+Shift handoffs are where context gets lost. The outgoing analyst knows everything; the incoming analyst gets a two-line Slack message and a ticket queue. Claude can close that gap in about 60 seconds.
+
+The workflow: the outgoing analyst types a fast brain dump — whatever is in their head, in any order. Open issues, things they tried, who they spoke to, what's pending. No formatting required. Then Claude structures it into a standard handoff format.
+
+A prompt that works: "You are an IT support team lead. Turn these rough notes into a structured shift handoff note. Sections: Active Issues (with priority and status), Pending Actions (with owner and deadline), Escalations in Progress, and Anything to Watch. Keep each bullet under 25 words."
+
+The result is a handoff document the next shift can actually act on — without requiring the outgoing analyst to spend 20 minutes formatting notes at the end of a long shift.
+
+The key habit to build: get analysts to do the brain dump first, then run it through Claude. The friction is much lower than asking them to write a structured document from scratch when they're tired and eager to log off.
+
+**Manager takeaway: Claude's value in handoffs isn't perfection — it's converting unstructured knowledge into usable structure fast enough that analysts will actually do it.`},
           { text: "Explore generating team announcements, meeting summaries, and stakeholder emails with Claude", url: null, urlLabel: null },
         ],
         project: "Using Claude, generate a complete communications kit: executive outage update, customer status page message, team shift handoff, and post-incident summary. Compare Claude's drafts against your own and document specific improvements — this before/after comparison is your evidence artifact for this week.",
@@ -52,10 +149,68 @@ export const MONTHS = [
         week: 4,
         title: "Responsible AI Use in IT Operations",
         reading: [
-          { text: "Study data sensitivity: never paste PII, credentials, proprietary configs, or customer data into Claude without org approval", url: "https://www.anthropic.com/policy", urlLabel: "Anthropic usage policy" },
-          { text: "Learn the 'trust but verify' principle — always review Claude's output before sending or publishing", url: null, urlLabel: null },
-          { text: "Understand your organization's AI usage policy and how it applies to support operations", url: null, urlLabel: null },
-          { text: "Review common failure modes: confident-sounding wrong answers, outdated technical guidance, fabricated references", url: null, urlLabel: null },
+          { text: "Study data sensitivity: never paste PII, credentials, proprietary configs, or customer data into Claude without org approval", url: "https://www.anthropic.com/policy", urlLabel: "Anthropic usage policy", content: `## What not to paste into Claude — the practical rules for support ops
+
+Support teams handle sensitive data all day: customer records, authentication logs, employee notes, infrastructure configs. The rule of thumb is simple: if it would be a problem if it appeared in a screenshot shared externally, don't paste it into Claude.
+
+Specifically, keep these out of AI prompts unless your organisation has approved a data-processing agreement with Anthropic:
+
+**Customer PII** — names, email addresses, phone numbers, account IDs, ticket content that identifies a person. Anonymise before prompting. "A customer named Sarah Johnson at Acme Corp" becomes "a customer at a mid-size manufacturing company."
+
+**Credentials** — passwords, API keys, tokens, certificates. Never. Not even to ask Claude to help you rotate them.
+
+**Proprietary configs** — network diagrams, firewall rules, internal IP ranges, system architecture details. These are attack surface if exposed.
+
+**Employee data** — performance notes, HR records, salary information, disciplinary records. Use role descriptions and anonymised behaviour patterns when asking for coaching help.
+
+**Unapproved ticket data** — even a ticket number with a customer name attached may be out of bounds depending on your data classification policy.
+
+The test to run before pasting anything: "Would my CISO or data protection officer be comfortable if this exact text appeared in a public document?" If the answer is no, anonymise it first.
+
+**Manager takeaway: build a data classification habit into your team's AI workflow from day one — retrofitting it after a breach or complaint is significantly harder.`},
+          { text: "Learn the 'trust but verify' principle — always review Claude's output before sending or publishing", url: null, urlLabel: null, content: `## Why you always check Claude's work before it leaves your hands
+
+An analyst on your team sends an executive update with a metric Claude generated. The number is wrong — Claude misread the table format you pasted. The CTO asks about it in the next leadership call. This scenario plays out across organisations wherever AI output gets skipped past human review.
+
+The trust-but-verify principle is not about distrusting Claude. It's about recognising that Claude generates plausible output, not verified output. Those are different things.
+
+In practice, build a review step into every Claude-assisted workflow your team uses. For outage communications: write with Claude, read before sending. For ticket analysis: generate with Claude, spot-check three data points against the source. For runbooks: draft with Claude, have an L2 walk through the steps before publishing.
+
+The review burden varies by risk. A meeting agenda drafted with Claude? A quick read is enough. A security advisory or SLA performance report? Verify every number against the source data.
+
+The highest-risk failure mode is confident specificity — Claude stating a wrong fact with complete assurance. Teach your team to be especially sceptical of specific numbers, dates, version numbers, and named references in Claude's output. These are where hallucinations hide most effectively.
+
+**Manager takeaway: "Claude wrote it" is not a review — build explicit human sign-off into any Claude-assisted output that affects customers, leadership, or system changes.`},
+          { text: "Understand your organization's AI usage policy and how it applies to support operations", url: null, urlLabel: null, content: `## Your org's AI policy is not optional — here's how to find out what it says
+
+Most organisations are somewhere on a spectrum from "no formal AI policy yet" to "specific approved tools and use cases documented." As a support manager, you need to know where your organisation sits before you deploy Claude with your team.
+
+The questions to answer before going further:
+
+**Is Claude approved?** Check with IT, InfoSec, or whoever manages your software procurement. Anthropic offers a commercial API and enterprise agreements. The consumer product (claude.ai) and the enterprise product have different data handling terms.
+
+**What data can be processed?** Your data classification policy may explicitly prohibit sending certain categories to external AI services. If there is no policy yet, treat customer PII and credentials as prohibited until you get explicit sign-off.
+
+**Are outputs subject to any review requirement?** Some organisations require legal or compliance review before AI-generated content can be sent externally — particularly in regulated industries.
+
+**What's the incident process if something goes wrong?** If an analyst shares a Claude-generated response that contains sensitive data or a material error, who needs to know and how fast?
+
+If your organisation has no AI policy yet, this week's deliverable — drafting an acceptable-use policy — is the right starting point. Propose it as a draft, not a final document, and loop in your manager and legal or InfoSec contacts for input.
+
+**Manager takeaway: don't deploy Claude with your team until you can answer the four questions above — even partial answers are better than assuming everything is approved.`},
+          { text: "Review common failure modes: confident-sounding wrong answers, outdated technical guidance, fabricated references", url: null, urlLabel: null, content: `## The three failure modes your team will encounter most
+
+Claude fails in predictable ways. Knowing the patterns in advance means your team recognises them quickly rather than learning the hard way.
+
+**Confident wrong answers.** Claude presents incorrect information with the same tone and structure as correct information. There is no built-in signal that tells you it's wrong. This is most dangerous for technical specifics: CLI commands, version numbers, API parameters, vendor-specific settings. Always verify against primary sources before putting anything in a runbook or resolution step.
+
+**Outdated technical guidance.** Claude's training has a cutoff. If you're working with software that had a significant update, or a security advisory published recently, Claude's guidance may be based on an older version. A response about configuring a firewall rule may reference a UI that no longer exists. For anything where version matters, check the official current documentation.
+
+**Fabricated references.** Claude will sometimes cite studies, articles, or documentation that do not exist. The citation looks real — plausible author names, reasonable journal titles, believable URLs. If Claude references a specific document, verify the source exists before including it in any report or communication you're sending externally. Never trust a Claude-generated URL without checking it.
+
+A practical defence: for any Claude output that will be used in production — a customer message, a leadership report, a runbook — have the person who uses it answer: "Did I verify the key facts in this?" If the answer is no, that's the review step.
+
+**Manager takeaway: train your team on these three failure modes by name — once analysts can label the pattern, they're far less likely to let it slip through.`},
         ],
         project: "Draft an AI acceptable-use policy for your support team covering: approved use cases, prohibited data types (include a sample data classification table with rows for PII, credentials, customer data, internal configs, and publicly shareable data), review requirements, and escalation for uncertain outputs.",
         skills: ["AI governance", "Data sensitivity", "Policy design"],

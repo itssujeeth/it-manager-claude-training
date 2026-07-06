@@ -8,6 +8,35 @@ function LinkIcon() {
   );
 }
 
+// Minimal markdown renderer: ## headings, **bold**, paragraph breaks
+function ContentBlock({ markdown, accentColor }) {
+  const blocks = markdown.trim().split(/\n\n+/);
+  return (
+    <div className="reading-content">
+      {blocks.map((block, i) => {
+        if (block.startsWith("## ")) {
+          return (
+            <h4 key={i} className="reading-content-heading" style={{ color: accentColor }}>
+              {block.slice(3)}
+            </h4>
+          );
+        }
+        // inline **bold**
+        const parts = block.split(/(\*\*[^*]+\*\*)/g);
+        return (
+          <p key={i} className="reading-content-p">
+            {parts.map((part, j) =>
+              part.startsWith("**") && part.endsWith("**")
+                ? <strong key={j}>{part.slice(2, -2)}</strong>
+                : part
+            )}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
 export function WeekCard({ week, monthColor, progress, onToggleReading, onToggleProject, onAddNote, isExpanded, onToggle, isNextUp }) {
   const readingDone = progress?.reading || [];
   const projectDone = progress?.projectDone || false;
@@ -15,6 +44,16 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
   const totalItems  = week.reading.length + 1;
   const doneItems   = readingDone.filter(Boolean).length + (projectDone ? 1 : 0);
   const weekPercent = Math.round((doneItems / totalItems) * 100);
+
+  const [expandedContent, setExpandedContent] = useState(new Set());
+
+  const toggleContent = (i) => {
+    setExpandedContent((prev) => {
+      const next = new Set(prev);
+      next.has(i) ? next.delete(i) : next.add(i);
+      return next;
+    });
+  };
 
   // Pulse animation on completion
   const [pulsing, setPulsing] = useState(false);
@@ -81,41 +120,61 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
             <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 1.2, color: monthColor, fontWeight: 700, marginBottom: 8, fontFamily: "var(--font-mono)" }}>
               Learning Checklist
             </div>
-            {week.reading.map((r, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 8 }}>
-                <input
-                  type="checkbox"
-                  id={`reading-${week.week}-${i}`}
-                  checked={!!readingDone[i]}
-                  onChange={() => onToggleReading(i)}
-                  style={{ accentColor: monthColor, marginTop: 5, width: 16, height: 16, flexShrink: 0, cursor: "pointer" }}
-                />
-                <label htmlFor={`reading-${week.week}-${i}`} style={{ flex: 1, fontSize: 15, lineHeight: 1.7, cursor: "pointer" }}>
-                  <span style={{
-                    textDecoration: readingDone[i] ? "line-through" : "none",
-                    opacity: readingDone[i] ? 0.55 : 1,
-                    color: "var(--text)",
-                    transition: "opacity 0.2s",
-                  }}>
-                    {r.text}
-                  </span>
-                  {r.url && (
-                    <a
-                      href={r.url} target="_blank" rel="noopener noreferrer"
-                      style={{
-                        display: "inline-flex", alignItems: "center", gap: 4, marginLeft: 8,
-                        fontSize: 11, color: monthColor, textDecoration: "none",
-                        fontFamily: "var(--font-mono)", fontWeight: 600, opacity: 0.85,
-                        borderBottom: `1px dashed ${monthColor}50`, paddingBottom: 1,
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      <LinkIcon /> {r.urlLabel || "Open"}
-                    </a>
+            {week.reading.map((r, i) => {
+              const contentOpen = expandedContent.has(i);
+              return (
+                <div key={i} className="reading-item-wrap">
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                    <input
+                      type="checkbox"
+                      id={`reading-${week.week}-${i}`}
+                      checked={!!readingDone[i]}
+                      onChange={() => onToggleReading(i)}
+                      style={{ accentColor: monthColor, marginTop: 5, width: 16, height: 16, flexShrink: 0, cursor: "pointer" }}
+                    />
+                    <label htmlFor={`reading-${week.week}-${i}`} style={{ flex: 1, fontSize: 15, lineHeight: 1.7, cursor: "pointer" }}>
+                      <span style={{
+                        textDecoration: readingDone[i] ? "line-through" : "none",
+                        opacity: readingDone[i] ? 0.55 : 1,
+                        color: "var(--text)",
+                        transition: "opacity 0.2s",
+                      }}>
+                        {r.text}
+                      </span>
+                      {r.url && (
+                        <a
+                          href={r.url} target="_blank" rel="noopener noreferrer"
+                          style={{
+                            display: "inline-flex", alignItems: "center", gap: 4, marginLeft: 8,
+                            fontSize: 11, color: monthColor, textDecoration: "none",
+                            fontFamily: "var(--font-mono)", fontWeight: 600, opacity: 0.85,
+                            borderBottom: `1px dashed ${monthColor}50`, paddingBottom: 1,
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          <LinkIcon /> {r.urlLabel || "Open"}
+                        </a>
+                      )}
+                      {r.content && (
+                        <button
+                          onClick={(e) => { e.preventDefault(); toggleContent(i); }}
+                          className="read-toggle"
+                          style={{ color: monthColor, borderColor: `${monthColor}40` }}
+                          aria-expanded={contentOpen}
+                        >
+                          {contentOpen ? "Close ↑" : "Read ↓"}
+                        </button>
+                      )}
+                    </label>
+                  </div>
+                  {r.content && contentOpen && (
+                    <div className="reading-content-panel" style={{ borderColor: `${monthColor}25` }}>
+                      <ContentBlock markdown={r.content} accentColor={monthColor} />
+                    </div>
                   )}
-                </label>
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </div>
 
           {/* Weekly deliverable */}
