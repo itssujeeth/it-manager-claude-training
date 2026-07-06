@@ -4,6 +4,8 @@ A 24-week, self-paced training curriculum for IT Support Managers learning to us
 
 > **Not affiliated with or endorsed by Anthropic.** Independent community training resource.
 
+**[→ Open the training portal](https://training.itssujeeth.com)**
+
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
@@ -35,7 +37,17 @@ Progress is tracked per-item in `localStorage`. Nothing leaves the browser.
 
 ---
 
-## Quick Start
+## Using the Portal
+
+**The easiest way is the live site — no installation needed.**
+
+👉 **[training.itssujeeth.com](https://training.itssujeeth.com)**
+
+Progress is saved in your browser's `localStorage`. Nothing is sent to a server. Use the **Export progress** button in the sidebar to back up your progress as a JSON file.
+
+---
+
+## Running Locally (contributors / self-hosting)
 
 **Prerequisites:** [Node.js](https://nodejs.org) 18 or later
 
