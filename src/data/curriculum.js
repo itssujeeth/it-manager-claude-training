@@ -1,8 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
-
-const MONTHS = [
+export const MONTHS = [
   {
     month: 1,
+    shortTitle: "Foundations",
     title: "Claude Foundations for Support Leaders",
     subtitle: "Understanding AI as your operational co-pilot",
     color: "#D4783C",
@@ -59,6 +58,7 @@ const MONTHS = [
   },
   {
     month: 2,
+    shortTitle: "Ticket Ops",
     title: "Claude for Ticket Operations & Incident Response",
     subtitle: "Accelerating the support workflow with AI",
     color: "#3A7BE8",
@@ -115,6 +115,7 @@ const MONTHS = [
   },
   {
     month: 3,
+    shortTitle: "People & Coaching",
     title: "Claude for People Management & Coaching",
     subtitle: "Scaling your leadership with AI assistance",
     color: "#2EAD6B",
@@ -171,6 +172,7 @@ const MONTHS = [
   },
   {
     month: 4,
+    shortTitle: "Process & Service",
     title: "Claude for Process & Service Improvement",
     subtitle: "Using AI to think strategically about operations",
     color: "#9B59B6",
@@ -227,6 +229,7 @@ const MONTHS = [
   },
   {
     month: 5,
+    shortTitle: "Advanced",
     title: "Advanced Claude Techniques & Integration",
     subtitle: "Going beyond basic prompting",
     color: "#E67E22",
@@ -247,7 +250,7 @@ const MONTHS = [
         week: 18,
         title: "Claude Projects, Memory & Organizational Knowledge",
         reading: [
-          { text: "Study Claude Projects: how to create persistent workspaces with uploaded documents and custom instructions", url: "https://docs.claude.com" },
+          { text: "Study Claude Projects: how to create persistent workspaces with uploaded documents and custom instructions", url: "https://support.anthropic.com/en/articles/9517075-what-are-projects" },
           { text: "Learn how to upload SOPs, runbooks, and team standards into a Claude Project so it answers with your context", url: null },
           { text: "Practice building a support operations Project with your team's processes, metrics definitions, and templates", url: null },
           { text: "Understand memory features and how Claude can retain information across conversations when enabled", url: null },
@@ -283,6 +286,7 @@ const MONTHS = [
   },
   {
     month: 6,
+    shortTitle: "Strategy & Gov.",
     title: "AI Strategy, Governance & Team Adoption",
     subtitle: "Leading AI adoption for your support organization",
     color: "#C0392B",
@@ -338,258 +342,8 @@ const MONTHS = [
   },
 ];
 
-const ALL_WEEKS = MONTHS.flatMap((m) => m.weeks.map((w) => ({ ...w, monthColor: m.color, monthNum: m.month })));
-const TOTAL_WEEKS = ALL_WEEKS.length;
-const STORAGE_KEY = "claude-learning-it-support-mgr-v1";
-
-function ProgressRing({ percent, size = 48, stroke = 4, color }) {
-  const r = (size - stroke) / 2;
-  const circ = 2 * Math.PI * r;
-  const offset = circ - (percent / 100) * circ;
-  return (
-    <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }}>
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={`${color}20`} strokeWidth={stroke} />
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth={stroke} strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" style={{ transition: "stroke-dashoffset 0.4s ease" }} />
-    </svg>
-  );
-}
-
-function LinkIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0, marginTop: 5 }}>
-      <path d="M6.5 3.5H3.5C2.948 3.5 2.5 3.948 2.5 4.5V12.5C2.5 13.052 2.948 13.5 3.5 13.5H11.5C12.052 13.5 12.5 13.052 12.5 12.5V9.5M9.5 2.5H13.5M13.5 2.5V6.5M13.5 2.5L7 9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-  );
-}
-
-function WeekCard({ week, monthColor, progress, onToggleReading, onToggleProject, onAddNote, isExpanded, onToggle }) {
-  const readingDone = progress?.reading || [];
-  const projectDone = progress?.projectDone || false;
-  const notes = progress?.notes || "";
-  const totalItems = week.reading.length + 1;
-  const doneItems = readingDone.filter(Boolean).length + (projectDone ? 1 : 0);
-  const weekPercent = Math.round((doneItems / totalItems) * 100);
-
-  return (
-    <div style={{ background: "var(--card-bg)", borderRadius: 10, border: `1px solid ${isExpanded ? monthColor : "var(--border)"}`, marginBottom: 10, overflow: "hidden", transition: "border-color 0.2s" }}>
-      <button onClick={onToggle} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 18px", background: "none", border: "none", cursor: "pointer", color: "var(--text)", fontFamily: "'Source Serif 4', Georgia, serif" }}>
-        <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <span style={{ background: weekPercent === 100 ? "#2EAD6B" : monthColor, color: "#fff", borderRadius: 6, padding: "2px 10px", fontSize: 12, fontFamily: "'DM Mono', monospace", fontWeight: 600 }}>
-            {weekPercent === 100 ? "✓" : `W${week.week}`}
-          </span>
-          <span style={{ fontWeight: 600, fontSize: 15, textAlign: "left" }}>{week.title}</span>
-        </span>
-        <span style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
-          <span style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: weekPercent === 100 ? "#2EAD6B" : "var(--text-secondary)", fontWeight: 600 }}>{weekPercent}%</span>
-          <span style={{ transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", fontSize: 18, opacity: 0.5 }}>▾</span>
-        </span>
-      </button>
-      {isExpanded && (
-        <div style={{ padding: "0 18px 18px" }}>
-          <div style={{ marginBottom: 14 }}>
-            <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 1.2, color: monthColor, fontWeight: 700, marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>Learning Checklist</div>
-            {week.reading.map((r, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 8 }}>
-                <input
-                  type="checkbox"
-                  checked={!!readingDone[i]}
-                  onChange={() => onToggleReading(i)}
-                  style={{ accentColor: monthColor, marginTop: 5, width: 16, height: 16, flexShrink: 0, cursor: "pointer" }}
-                />
-                <div style={{ flex: 1, fontSize: 13, lineHeight: 1.6 }}>
-                  <span style={{
-                    textDecoration: readingDone[i] ? "line-through" : "none",
-                    opacity: readingDone[i] ? 0.6 : 1,
-                    color: "var(--text)",
-                    transition: "opacity 0.2s",
-                  }}>
-                    {r.text}
-                  </span>
-                  {r.url && (
-                    <a
-                      href={r.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 4,
-                        marginLeft: 8,
-                        fontSize: 11,
-                        color: monthColor,
-                        textDecoration: "none",
-                        fontFamily: "'DM Mono', monospace",
-                        fontWeight: 600,
-                        opacity: 0.85,
-                        borderBottom: `1px dashed ${monthColor}50`,
-                        paddingBottom: 1,
-                      }}
-                    >
-                      <LinkIcon /> Open
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ marginBottom: 14 }}>
-            <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 1.2, color: monthColor, fontWeight: 700, marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>Weekly Deliverable</div>
-            <label style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 13, lineHeight: 1.7, color: "var(--text)", background: projectDone ? "#2EAD6B15" : `${monthColor}10`, padding: "10px 14px", borderRadius: 8, cursor: "pointer", border: projectDone ? "1px solid #2EAD6B40" : "1px solid transparent", transition: "all 0.2s" }}>
-              <input type="checkbox" checked={projectDone} onChange={onToggleProject} style={{ accentColor: "#2EAD6B", marginTop: 4, width: 16, height: 16, flexShrink: 0, cursor: "pointer" }} />
-              <span style={{ textDecoration: projectDone ? "line-through" : "none", opacity: projectDone ? 0.7 : 1 }}>{week.project}</span>
-            </label>
-          </div>
-
-          <div style={{ marginBottom: 14 }}>
-            <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 1.2, color: monthColor, fontWeight: 700, marginBottom: 8, fontFamily: "'DM Mono', monospace" }}>Notes & Evidence</div>
-            <textarea value={notes} onChange={(e) => onAddNote(e.target.value)} placeholder="Add takeaways, prompt experiments, results, or reflections..." style={{ width: "100%", minHeight: 70, padding: "10px 12px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--card-bg)", color: "var(--text)", fontSize: 13, fontFamily: "'DM Mono', monospace", resize: "vertical", outline: "none", boxSizing: "border-box" }} />
-          </div>
-
-          <div>
-            <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 1.2, color: monthColor, fontWeight: 700, marginBottom: 6, fontFamily: "'DM Mono', monospace" }}>Skills Built</div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-              {week.skills.map((s, i) => (
-                <span key={i} style={{ fontSize: 11, background: `${monthColor}18`, color: monthColor, padding: "3px 10px", borderRadius: 20, fontWeight: 600, fontFamily: "'DM Mono', monospace" }}>{s}</span>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default function LearningPlan() {
-  const [expandedMonth, setExpandedMonth] = useState(0);
-  const [expandedWeeks, setExpandedWeeks] = useState({});
-  const [progress, setProgress] = useState({});
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const result = await window.storage.get(STORAGE_KEY);
-        if (result && result.value) setProgress(JSON.parse(result.value));
-      } catch (e) {}
-      setLoaded(true);
-    })();
-  }, []);
-
-  const saveProgress = useCallback(async (newProgress) => {
-    setProgress(newProgress);
-    try { await window.storage.set(STORAGE_KEY, JSON.stringify(newProgress)); } catch (e) { console.error("Save failed:", e); }
-  }, []);
-
-  const toggleWeek = (wn) => setExpandedWeeks((p) => ({ ...p, [wn]: !p[wn] }));
-  const toggleReading = (wn, ri) => {
-    const wp = progress[wn] || { reading: [], projectDone: false, notes: "" };
-    const nr = [...(wp.reading || [])]; nr[ri] = !nr[ri];
-    saveProgress({ ...progress, [wn]: { ...wp, reading: nr } });
-  };
-  const toggleProject = (wn) => {
-    const wp = progress[wn] || { reading: [], projectDone: false, notes: "" };
-    saveProgress({ ...progress, [wn]: { ...wp, projectDone: !wp.projectDone } });
-  };
-  const updateNote = (wn, note) => {
-    const wp = progress[wn] || { reading: [], projectDone: false, notes: "" };
-    saveProgress({ ...progress, [wn]: { ...wp, notes: note } });
-  };
-  const resetProgress = async () => {
-    if (confirm("Reset all progress? This cannot be undone.")) {
-      setProgress({});
-      try { await window.storage.delete(STORAGE_KEY); } catch (e) {}
-    }
-  };
-
-  const totalItems = ALL_WEEKS.reduce((s, w) => s + w.reading.length + 1, 0);
-  const doneItems = ALL_WEEKS.reduce((s, w) => {
-    const wp = progress[w.week] || {};
-    return s + (wp.reading || []).filter(Boolean).length + (wp.projectDone ? 1 : 0);
-  }, 0);
-  const overallPercent = totalItems > 0 ? Math.round((doneItems / totalItems) * 100) : 0;
-  const weeksCompleted = ALL_WEEKS.filter((w) => {
-    const wp = progress[w.week] || {};
-    return (wp.reading || []).filter(Boolean).length + (wp.projectDone ? 1 : 0) === w.reading.length + 1;
-  }).length;
-  const getMonthPercent = (m) => {
-    const mt = m.weeks.reduce((s, w) => s + w.reading.length + 1, 0);
-    const md = m.weeks.reduce((s, w) => { const wp = progress[w.week] || {}; return s + (wp.reading || []).filter(Boolean).length + (wp.projectDone ? 1 : 0); }, 0);
-    return mt > 0 ? Math.round((md / mt) * 100) : 0;
-  };
-  const totalStructuredTasks = ALL_WEEKS.reduce((s, w) => s + w.reading.length, 0);
-
-  if (!loaded) return <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 200, fontFamily: "'DM Mono', monospace", color: "#888" }}>Loading progress...</div>;
-
-  return (
-    <div style={{ maxWidth: 720, margin: "0 auto", padding: "24px 16px", fontFamily: "'Source Serif 4', Georgia, serif", color: "var(--text)", "--text": "#1a1a1a", "--text-secondary": "#555", "--card-bg": "#fafaf8", "--border": "#e5e3df" }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap');
-        @media (prefers-color-scheme: dark) { :root { --text: #e8e6e1; --text-secondary: #a8a5a0; --card-bg: #1e1e1c; --border: #333330; } }
-      `}</style>
-
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-          <div>
-            <h1 style={{ fontSize: 26, fontWeight: 700, margin: "0 0 6px", letterSpacing: -0.5 }}>Claude for IT Support Managers</h1>
-            <p style={{ fontSize: 14, color: "var(--text-secondary)", margin: 0, fontFamily: "'DM Mono', monospace" }}>6 months · AI skills track · 24 weeks · traceable progress</p>
-          </div>
-          <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <ProgressRing percent={overallPercent} size={56} stroke={5} color="#2EAD6B" />
-            <span style={{ position: "absolute", fontSize: 13, fontWeight: 700, fontFamily: "'DM Mono', monospace", color: "#2EAD6B" }}>{overallPercent}%</span>
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: 16, marginTop: 14, padding: "12px 16px", background: "var(--card-bg)", borderRadius: 10, border: "1px solid var(--border)" }}>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 20, fontWeight: 700 }}>{weeksCompleted}</div>
-            <div style={{ fontSize: 11, color: "var(--text-secondary)", fontFamily: "'DM Mono', monospace" }}>of {TOTAL_WEEKS} weeks</div>
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 20, fontWeight: 700 }}>{doneItems}</div>
-            <div style={{ fontSize: 11, color: "var(--text-secondary)", fontFamily: "'DM Mono', monospace" }}>of {totalItems} items</div>
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 20, fontWeight: 700 }}>{totalStructuredTasks}</div>
-            <div style={{ fontSize: 11, color: "var(--text-secondary)", fontFamily: "'DM Mono', monospace" }}>learning steps</div>
-          </div>
-          <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-            <button onClick={resetProgress} style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "#C0392B", background: "none", border: "1px solid #C0392B30", borderRadius: 6, padding: "4px 10px", cursor: "pointer" }}>Reset</button>
-          </div>
-        </div>
-      </div>
-
-      <div style={{ display: "flex", gap: 4, marginBottom: 28 }}>
-        {MONTHS.map((m, i) => {
-          const mp = getMonthPercent(m);
-          return (
-            <button key={i} onClick={() => setExpandedMonth(i)} style={{ flex: 1, padding: "8px 4px 10px", background: expandedMonth === i ? m.color : `${m.color}15`, color: expandedMonth === i ? "#fff" : m.color, border: "none", borderRadius: 8, cursor: "pointer", fontSize: 11, fontWeight: 700, fontFamily: "'DM Mono', monospace", transition: "all 0.2s", position: "relative", overflow: "hidden" }}>
-              <div>M{m.month}</div>
-              <div style={{ fontSize: 9, opacity: 0.8, marginTop: 2 }}>{mp}%</div>
-              <div style={{ position: "absolute", bottom: 0, left: 0, height: 3, width: `${mp}%`, background: expandedMonth === i ? "#fff" : m.color, opacity: 0.6, borderRadius: "0 2px 0 0", transition: "width 0.4s ease" }} />
-            </button>
-          );
-        })}
-      </div>
-
-      {MONTHS.map((m, i) => expandedMonth === i && (
-        <div key={i}>
-          <div style={{ marginBottom: 18 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-              <span style={{ fontSize: 12, fontFamily: "'DM Mono', monospace", color: m.color, fontWeight: 700 }}>MONTH {m.month}</span>
-              <span style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: "var(--text-secondary)" }}>{getMonthPercent(m)}% complete</span>
-            </div>
-            <h2 style={{ fontSize: 22, fontWeight: 700, margin: "0 0 2px" }}>{m.title}</h2>
-            <p style={{ fontSize: 14, color: "var(--text-secondary)", margin: 0, fontStyle: "italic" }}>{m.subtitle}</p>
-          </div>
-          {m.weeks.map((w) => (
-            <WeekCard key={w.week} week={w} monthColor={m.color} progress={progress[w.week]} onToggleReading={(idx) => toggleReading(w.week, idx)} onToggleProject={() => toggleProject(w.week)} onAddNote={(note) => updateNote(w.week, note)} isExpanded={!!expandedWeeks[w.week]} onToggle={() => toggleWeek(w.week)} />
-          ))}
-        </div>
-      ))}
-
-      <div style={{ marginTop: 24, padding: "14px 18px", background: "var(--card-bg)", borderRadius: 10, border: "1px solid var(--border)", fontSize: 13, lineHeight: 1.7, color: "var(--text-secondary)" }}>
-        <strong style={{ color: "var(--text)" }}>Progress saves automatically.</strong> This plan teaches IT Support Managers how to use Claude effectively across daily operations, people management, process improvement, and strategic AI adoption.
-      </div>
-    </div>
-  );
-}
+export const ALL_WEEKS = MONTHS.flatMap((m) =>
+  m.weeks.map((w) => ({ ...w, monthColor: m.color, monthNum: m.month }))
+);
+export const TOTAL_WEEKS = ALL_WEEKS.length;
+export const STORAGE_KEY = "claude-learning-it-support-mgr-v1";

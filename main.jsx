@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import LearningPlan from "./claude-learning-plan-it-support-managers.jsx";
+import "./src/index.css";
+import App from "./src/App.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <LearningPlan />
+    <App />
   </React.StrictMode>
 );

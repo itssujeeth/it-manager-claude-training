@@ -1,0 +1,21 @@
+{
+  "name": "Claude for IT Support Managers",
+  "short_name": "Claude Training",
+  "description": "A 24-week self-paced curriculum for IT Support Managers learning to use Claude.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f4f0",
+  "theme_color": "#D4783C",
+  "icons": [
+    {
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
