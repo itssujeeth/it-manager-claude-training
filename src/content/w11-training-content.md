@@ -1,60 +1,66 @@
-# Generating Training Content with Claude
+# Creating Training Content and Quiz Questions with Claude
 
-## Where Claude excels in training design
+## Familiar Scenario
 
-Creating training materials from scratch is time-intensive — most managers put it off until someone new joins and there's nothing ready. Claude can reduce the drafting time to a fraction and produce high-quality first drafts of most standard training formats.
+A new platform goes live in two weeks and you need to train eight analysts on it. There's no L&D team to lean on, no ready-made materials, and your own calendar is already full. You need scenario-based training and a knowledge check drafted fast — and it has to be accurate for your environment.
 
-**What Claude generates well:**
-- 30-60-90 day onboarding plans with specific milestones
-- Knowledge quizzes with answer keys and rationales
-- Role-play scenarios for common support situations
-- FAQ documents from a list of common questions
-- Step-by-step process guides for standard workflows
-- "Common mistakes" reference guides based on your team's real patterns
+## Core Question
 
-**What requires your input and review:**
-- Technical accuracy for your specific environment
-- Content that reflects your actual tools and processes (not generic examples)
-- Anything that will be used in formal onboarding or performance evaluation
+How do I produce usable training scenarios and quiz questions in days instead of weeks, without shipping content that's wrong for our tools and processes?
 
-## Prompting for different training formats
+## Why This Matters
 
-**30-60-90 day plan:**
+Training materials are the thing managers put off until someone new joins and there's nothing ready. When a platform launches, the cost of no training is real: inconsistent handling, more escalations, and analysts learning the wrong habits during their most formative weeks. Getting a solid first draft quickly is what makes it possible to train the team at all — as long as a human checks it for accuracy.
+
+## The Claude Capability
+
+Claude can draft the standard training formats quickly: scenario-based exercises, multiple-choice quizzes with answer keys and rationales, onboarding plans, FAQs, and process guides. It produces strong first drafts from general IT support knowledge. What it can't supply is accuracy for your specific environment — that needs a domain review before anything reaches the team.
+
+## Step-by-Step Workflow
+
+1. Decide the format and the specific learning objective.
+2. Give Claude your context: the platform, your tools, ticket types, and escalation path.
+3. Ask for a draft in a defined structure with an answer key where relevant.
+4. Send the draft to a senior analyst for a technical accuracy review.
+5. Incorporate corrections and version the document.
+6. Set a review date so it doesn't go stale after the next process change.
+
+## Example Prompt
+
 ```
-Role: You are an L&D designer creating an onboarding plan for IT support.
-New hire role: L1 support analyst
-Team context: [Size, ticket types, tools, team structure]
-Task: Create a 30-60-90 day onboarding plan with specific, measurable milestones for each phase.
-Format: Three sections (Days 1–30, 31–60, 61–90). Each section: 3–4 focus areas, specific activities, success criteria.
-Constraints: Week 1 should focus on observation, not independent work. Include shadowing, system access setup, and tool training. Milestones must be observable behaviors, not "understands X."
+Role: You are a training designer creating a knowledge assessment for IT support analysts.
+
+Topic: The new [platform name] going live in two weeks — focus on ticket handling and escalation for it.
+
+Audience: Experienced L1 analysts new to this specific platform.
+
+Context: Our tools are [list]. Escalation path is [L1 → L2 → L3 or your path].
+
+Task: Write 10 multiple-choice questions. For each: the question, four options (A–D), the correct answer labeled clearly, a rationale for why it's correct, and a brief note on why each wrong answer is wrong.
+
+Constraints: Test application, not recall. No trick questions. Mix of difficulty: roughly 40% straightforward, 40% moderate, 20% challenging.
+
+Verification: Flag any question where the correct answer depends on our specific configuration, so a senior analyst can confirm it.
 ```
 
-**Quiz with answer key:**
-```
-Role: You are a training designer creating a knowledge assessment.
-Topic: [Specific topic — e.g., ticket categorization, escalation criteria, tool usage]
-Audience: L1 analyst, no prior IT support experience
-Task: Write 10 multiple-choice questions. For each question include: the question, 4 options (A–D), the correct answer clearly labeled, a rationale explaining why it's correct, and a brief explanation of why each wrong answer is wrong.
-Constraints: Questions should test application of knowledge, not just recall. Avoid trick questions. Difficulty range: 40% straightforward, 40% moderate, 20% challenging.
-```
+## What Claude Is Doing
 
-## Getting technical accuracy right
+Claude is drafting training content from general support knowledge and the context you provided — it is not verifying that its answers match your actual platform configuration or processes. When you ask it to flag configuration-dependent questions, it marks exactly where its general knowledge might be wrong for you, which is where your senior analyst's review matters most.
 
-Claude generates training content based on general IT support knowledge, not your specific environment. Every piece of content needs a domain review before use.
+## Common Beginner Mistake
 
-The review process:
-1. Generate the content with Claude (fast)
-2. Send to a senior analyst for technical accuracy review (30–60 minutes)
-3. Incorporate corrections and version the document
-4. Use in onboarding
+Using a Claude-generated quiz with the answer key unchecked. A quiz with a wrong answer in the key is worse than no quiz — it teaches incorrect behavior to people during the weeks they're most likely to internalize it.
 
-The correction step is the most important. A quiz with wrong answers in the answer key is worse than no quiz — it teaches incorrect behavior to new hires during their most formative weeks.
+## Better Practice
 
-## Keeping training content current
+Always run the correction step: a senior analyst spends 30–60 minutes checking technical accuracy against your real environment before the content is used. Add your actual tool names, priority criteria, and escalation groups so scenarios teach your context rather than generic responses. Set a review date on every document so it gets refreshed when tools or processes change.
 
-Set a review date for every training document when you create it. Claude-generated content goes stale as your environment changes — tools are upgraded, processes are revised, escalation paths change.
+## Quick Recap
 
-A good cadence:
-- Onboarding materials: review when any major tool or process changes, at minimum annually
-- Quizzes: review whenever the underlying process or tool they test changes
-- Role-play scenarios: review annually or when team feedback indicates scenarios feel outdated
+- Claude drafts scenarios, quizzes, and onboarding plans fast from your context.
+- A senior analyst must review for technical accuracy before anything reaches the team.
+- Add your real tools and processes, and set a review date to keep it current.
+
+## Practice Activity
+
+Pick one topic your team needs to learn this month. Use the prompt above to draft a five-question quiz, then have a senior analyst check the answer key and mark any question that depends on your specific setup.

@@ -1,60 +1,81 @@
-# Post-Incident Reviews with Claude
+# Drafting Post-Incident Reviews with Claude
 
-## What a good PIR contains
+## Familiar Scenario
 
-A post-incident review (PIR) — sometimes called a postmortem — is the structured analysis of what happened, why, and how to prevent recurrence. Claude can help you structure and write one faster, but you must supply the facts.
+A Sev-1 authentication outage started at 1am and was finally resolved at 3am. Your team is drained. The post-incident review is due to leadership by end of day, and right now all you have is a messy Slack thread, a few scribbled timestamps, and everyone's fading memory. Writing a clean PIR from that, while exhausted, is exactly when mistakes creep in.
 
-A complete PIR has six components:
+## Core Question
+
+Can Claude turn my raw notes and timeline fragments into a structured PIR draft so my tired team edits instead of writing from a blank page?
+
+## Why This Matters
+
+A PIR captures what happened, why, and how to prevent recurrence — but it is most likely to be rushed or skipped precisely after a hard incident, when the team is worn out. Getting a solid structured draft quickly means the review actually gets done, gets done well, and produces the corrective actions that stop the next outage.
+
+## The Claude Capability
+
+Claude's most useful role in PIR writing is structure and language: taking your raw notes, chat excerpts, and rough timeline and turning them into coherent, organized prose. It can draft the same incident for different audiences from one set of notes. It is not generating root cause analysis — that requires your technical validation. A complete PIR has six components:
 
 | Component | Purpose |
 |-----------|---------|
 | **Timeline** | Sequence of events from first signal to resolution |
-| **Root cause** | Why the incident happened (hypothesis until validated) |
-| **Impact** | Who was affected, for how long, and at what cost |
-| **Detection gap** | How long between failure and first alert |
+| **Root cause** | Why it happened (a hypothesis until validated) |
+| **Impact** | Who was affected, for how long, at what cost |
+| **Detection gap** | Time between failure and first alert |
 | **Corrective actions** | Specific steps to fix the underlying cause |
-| **Prevention measures** | What changes reduce the likelihood of recurrence |
+| **Prevention measures** | Changes that reduce recurrence likelihood |
 
-## Using Claude for PIR drafting
+## Step-by-Step Workflow
 
-Claude's most useful role in PIR writing is **structure and language** — taking your raw notes, chat logs, and timeline fragments and turning them into coherent prose. It is not generating root cause analysis; that requires your technical validation.
+1. Gather your raw material: responder notes, cleaned chat excerpts, a rough timeline, your PIR template.
+2. Anonymize it — remove customer names and internal hostnames before pasting.
+3. Ask Claude to produce a structured draft matching your template.
+4. Label every cause statement as validated or hypothesis based on the evidence you actually have.
+5. Review, correct, and validate the root cause with an SME before publishing.
 
-**What to feed Claude:**
-- Raw notes from responders (anonymized — remove customer names, internal hostnames)
-- Slack or Teams thread excerpts (cleaned)
-- A rough timeline with approximate timestamps
-- Your team's standard PIR template (if you have one)
+## Example Prompt
 
-**What to ask Claude to produce:**
-- A structured draft matching your template
-- A plain-English executive summary (2–3 sentences)
-- A technical summary for your engineering team
-- A list of action items extracted from the notes
+```
+Role: You are helping draft a post-incident review from raw notes.
 
-## Labeling assumptions correctly
+Context: Sev-1 incident. Below are anonymized responder notes, chat excerpts,
+and a rough timeline. Approximate timestamps.
 
-When Claude produces a root cause statement, it is working from the text you provided — not from logs, monitoring data, or SME knowledge. Label any cause statement as a hypothesis until you have validated evidence.
+Task: Produce a structured PIR draft with these sections: Timeline, Root Cause,
+Impact, Detection Gap, Corrective Actions, Prevention Measures. Also produce:
+- A 2-3 sentence executive summary in plain English, no jargon
+- A list of action items extracted from the notes, each with a suggested owner
+  field marked [OWNER TBD] where the notes do not name one
 
-In the PIR:
+Notes and timeline:
+[PASTE ANONYMIZED MATERIAL]
+
+Constraint: Label any root cause as "Hypothesis (needs validation)" unless the
+notes state confirming evidence. Do not invent timestamps, causes, or actions
+not present in the notes. Flag gaps with [NEEDS INFO].
+```
+
+## What Claude Is Doing
+
+Claude is using patterns from the notes you provided to organize and phrase the review. When it writes a root cause statement, it is working from your text — not from logs, monitoring data, or SME knowledge. Claude is not verifying facts unless you provide source material. A confident-sounding root cause may look authoritative while being wrong, so it stays a hypothesis until you validate it. In the PIR, mark the difference explicitly:
+
 - **Validated:** "Database connection pool exhaustion confirmed by [engineer] via pg_stat_activity log at 14:22"
 - **Hypothesis:** "Probable cause: deployment at 13:45 introduced a connection leak — requires log analysis to confirm"
 
-Never publish a PIR with a confident root cause that has not been validated. It may look authoritative while being wrong.
+## Common Beginner Mistake
 
-## Multi-audience writing
+Publishing Claude's draft with its root cause statement intact because it reads well and everyone is tired. An unvalidated but confident root cause creates more problems than it solves — teams act on the wrong fix and the real cause recurs.
 
-A single incident requires different summaries for different readers:
+## Better Practice
 
-**Executive summary:** What broke, how long it was down, business impact, what is being done to prevent recurrence. No technical jargon. 2–3 sentences.
+Use Claude for the draft, then run a validation pass: confirm the timeline against Slack and alert history, validate the root cause with an SME, and assign real owners to every action item. Watch for implicit blame language — "failed to notice," "should have caught," "neglected to check" — and ask Claude to rewrite those sentences to focus on system and process gaps, not individuals.
 
-**Technical PIR:** Full timeline, root cause hypothesis with evidence, action items with owners and dates, what monitoring or alerting would have caught this sooner.
+## Quick Recap
 
-**Customer communication (if applicable):** What customers experienced, what was done, what is different now. No internal blame language or unvalidated root cause.
+- Claude drafts PIR structure and language fast from anonymized notes; you supply and validate the facts.
+- Every root cause is a hypothesis until you have confirming evidence — label it that way.
+- Keep it blame-free and have a human review all incident communications before they go out.
 
-Claude can draft all three from the same raw notes — specify the audience in your prompt.
+## Practice Activity
 
-## Blame-free language
-
-PIRs are most useful when they focus on system failures and process gaps, not individual failures. Claude generally produces blame-free language by default, but watch for phrases like "failed to notice," "should have caught," or "neglected to check" — these assign blame implicitly. Ask Claude to rewrite any sentence that attributes failure to a person.
-
-> All incident communications must be reviewed by you before sending. A PIR with an unvalidated root cause or incorrect timeline creates more problems than it solves.
+Take the notes from your most recent resolved incident, anonymize them, and generate a PIR draft plus a 2-3 sentence executive summary. Compare the draft to what you would have written by hand and note how much editing it needed on the root cause section specifically.

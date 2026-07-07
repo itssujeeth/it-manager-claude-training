@@ -1,42 +1,83 @@
-# Assessing AI Readiness in Your Support Team
+# Assessing Whether Your Team Is Ready for AI
 
-## Why readiness assessment prevents failed rollouts
+## Familiar Scenario
 
-Most AI adoption failures are not technology failures — they are readiness failures. The tool works fine; the team wasn't prepared to use it consistently, safely, or in a way that delivers measurable value. A readiness assessment surfaces the gaps before they become post-rollout problems.
+You are convinced Claude could help your support team, and you want to introduce it properly. But before you commit a rollout date to your director, you have a nagging question: is the team actually ready? You do not know whether the skills, the culture, the tooling, and the data handling are in place — or where the gaps are.
 
-## The four readiness dimensions
+## Core Question
 
-**Skills** — Can your analysts write a clear, specific prompt? Do they understand Claude's limits (no real-time data, approximate math, hallucination risk)? Do they know what not to paste? Skills gaps are the easiest to address: training resolves them in days.
+How do I honestly assess whether my team, our processes, and our governance are ready for AI tooling — before I stake my credibility on a rollout?
 
-**Culture** — Does your team view AI as a threat or a tool? Are analysts incentivized to experiment, or do they fear being wrong? A team with verification discipline and psychological safety will use AI more safely than a high-performing team with a "just ship it" culture.
+## Why This Matters
 
-**Tooling** — Does your team have access to Claude at the plan level they need (Pro, Team, API)? Are there IT policy or security restrictions on AI tool use? Does your ITSM platform support any AI integrations you're planning?
+Most AI adoption failures are not technology failures. The tool works fine; the team was not prepared to use it consistently, safely, or in a way that delivers measurable value. A readiness assessment surfaces those gaps while they are still cheap to fix — before they become post-rollout incidents and eroded trust.
 
-**Data maturity** — Is your ticket data clean enough to paste into Claude for analysis? Do you have anonymization processes in place? Do analysts know what data classification rules apply to your environment?
+## The Claude Capability
 
-## The readiness self-assessment
+Claude can help you structure a readiness assessment: it can draft a scored questionnaire across the dimensions that matter, suggest what different scores indicate, and help you interpret the results into a starting point. You supply the honest answers about your team; Claude gives you a consistent framework to capture them.
 
-Use Claude to generate a structured readiness questionnaire:
+## Step-by-Step Workflow
+
+1. Decide the dimensions to assess. A practical four: **skills, culture, tooling, data maturity**.
+2. Ask Claude to draft a scored questionnaire across those dimensions.
+3. Score your team honestly — resist the urge to inflate.
+4. Read low scores as *where to start*, not *whether to start*.
+5. Feed the results into your adoption plan as inputs to sequencing.
+
+What "ready" looks like on each dimension:
+
+- **Skills:** Most analysts can write a clear, specific prompt and know Claude's limits (no live data, approximate math, hallucination risk) and what not to paste.
+- **Culture:** The team treats Claude as a tool, not a threat; experimentation is safe and verification is expected.
+- **Tooling:** Licenses are in place, security has approved the tools in scope, and analysts can access Claude from work devices without workarounds.
+- **Data maturity:** An anonymization procedure exists and is practiced, and data classification rules have been communicated.
+
+## Example Prompt
 
 ```
-Generate a 20-question AI readiness assessment for an IT support team preparing to 
-expand Claude usage. Cover: analyst skills (5 questions), team culture (5 questions), 
-tooling and access (5 questions), and data maturity (5 questions). 
-For each question, include a scale and what different scores indicate.
+You are helping an IT support manager assess team readiness for expanding
+Claude usage.
+
+Context:
+- IT support team, 12 analysts, mixed experience
+- Introducing Claude for ticket triage, drafting, and summarization
+- No formal AI governance in place yet
+
+Task:
+Generate a 20-question readiness assessment covering four dimensions -
+analyst skills (5), team culture (5), tooling and access (5), and data
+maturity (5). For each question, give a 1-5 scale and a one-line note on
+what a low score versus a high score indicates.
+
+Output format:
+Group by dimension, numbered questions, in a table with columns:
+Question | Scale meaning (1) | Scale meaning (5).
+
+Constraints:
+Keep questions specific to IT support work, not generic AI hype.
+
+Verification:
+After the questionnaire, list which dimensions I should weight most heavily
+and briefly explain why, so I can sanity-check your reasoning.
 ```
 
-Score your team honestly. Low scores in any dimension are not reasons to stop the rollout — they are inputs to your adoption plan.
+## What Claude Is Doing
 
-## What good readiness looks like at each dimension
+Claude is using patterns from the context you provided to structure an assessment — it is drafting a framework, not evaluating your team. It cannot see your analysts, your licenses, or your data practices. The scores are yours to assign honestly; Claude only organizes the questions and offers interpretation you can accept or override.
 
-**Skills — ready:** Most analysts have completed at least basic prompt training. Team knows the "five things never to paste" rule. Someone has tested the verification process.
+## Common Beginner Mistake
 
-**Culture — ready:** Manager openly acknowledges that AI output needs checking. Team has a shared language for AI risk levels. Experimentation is encouraged; no analyst fears punishment for an AI mistake they caught themselves.
+Treating readiness as a pass/fail gate — deciding that because one dimension scores low, the rollout must wait until everything is perfect. Teams that wait for perfect readiness never start.
 
-**Tooling — ready:** Licenses are in place. Security team has reviewed and approved the tools in scope. Analysts can access Claude from their work devices without workarounds.
+## Better Practice
 
-**Data maturity — ready:** Anonymization procedure exists and is practiced. At least one person can quickly strip PII from a ticket export. Data classification rules have been communicated.
+Read readiness as a baseline that shapes sequencing. Low skills? Start with lower-risk, easy-to-verify use cases while training closes the gap. The assessment tells you *where to begin*, not *whether to begin*.
 
-## Readiness is a baseline, not a gate
+## Quick Recap
 
-A team doesn't need to be fully ready before starting. Low readiness in one area means starting with lower-risk use cases while you close the gap — not waiting until everything is perfect. The readiness assessment tells you where to start, not whether to start.
+- Most AI rollouts fail on readiness, not technology.
+- Assess skills, culture, tooling, and data maturity honestly.
+- Low scores set your starting point; they are not a stop sign.
+
+## Practice Activity
+
+This week, score your own team on the four dimensions using a quick 1-5 gut check for each. Identify the single lowest-scoring dimension — that is the one your adoption plan should address first.

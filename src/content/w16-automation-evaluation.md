@@ -1,40 +1,73 @@
-# Evaluating Automation Candidates by Effort, Value, and Risk
+# Evaluating an Automation Proposal Against Real Criteria
 
-## Why simple ROI misses the point
+## Familiar Scenario
 
-A process that saves 4 hours per week but breaks twice a month and requires 6 hours of manual recovery is not a good automation candidate. Effort × Value is the standard framework — but it ignores the third dimension that determines whether automation actually improves operations: risk.
+A vendor has pitched you an AI-powered ticket triage tool. The demo looked impressive and the sales deck promises to cut triage time in half. Leadership is interested and wants your recommendation by next week. The problem: you don't have a structured way to evaluate it, and "the demo looked good" is not a basis for a budget decision.
 
-## The three-dimension evaluation
+## Core Question
 
-**Value** — annualized time saved plus error reduction. Time saved: (hours per run × frequency per year). Error reduction: (error rate × average recovery time × frequency). Be honest about your estimates — Claude will accept whatever numbers you provide.
+"How do I evaluate this automation properly — beyond the sales pitch — so I can expose the hidden costs and risks before we commit?"
 
-**Effort** — development time plus ongoing maintenance. Development effort is usually underestimated by 50%. Ask Claude to flag automations that likely require infrastructure changes or developer resources beyond your team.
+## Why This Matters
 
-**Risk** — what breaks if the automation fails, and how hard is recovery? A low-risk failure is one a human can notice and fix in under 30 minutes. A high-risk failure is one that propagates silently, affects customers, or requires data cleanup.
+A process that saves four hours a week but breaks twice a month and needs six hours of recovery is a bad automation, no matter how good the demo looked. Simple ROI ignores the dimension that decides whether automation actually improves operations: risk. Evaluate on value alone and you buy tools that create more work than they remove.
 
-## Risk categories that disqualify easy automation
+## The Claude Capability
 
-**Data integrity risk** — automations that write to production systems without human review of the output. Any write operation to your ITSM platform, CMDB, or customer record system needs a review gate.
+Claude can structure an evaluation across value, effort, and risk, compute a priority score, and — most usefully — surface the assumptions a vendor pitch glosses over. It gives you a repeatable framework and a set of pointed questions. It does not know the vendor's real reliability; it evaluates the numbers and claims you give it.
 
-**Customer-visible risk** — automations that send communications or modify service status. The cost of a misfired customer notification is reputation damage, not just time.
+## Step-by-Step Workflow
 
-**Compliance risk** — automations that touch regulated data (PII, financial records, health information) without documented controls. These require security review before development.
+1. Gather the claim (value), the real implementation and maintenance cost (effort), and the failure impact (risk).
+2. Ask Claude to score all three on a common scale and compute a priority score.
+3. Have Claude flag high-risk candidates and name the control each would need.
+4. Ask Claude to list the assumptions behind the vendor's value claim so you can test them.
+5. Translate the result into a business case for leadership.
 
-**Cascading failure risk** — automations that trigger other automations. Each link in the chain amplifies failure.
-
-## Using Claude to evaluate your candidates
-
-Once you have your process inventory with data:
+## Example Prompt
 
 ```
-Evaluate these automation candidates across three dimensions: Value (time saved × frequency), 
-Effort (development complexity), and Risk (failure impact). 
+Role: You are helping me evaluate an automation proposal rigorously.
 
-Use a 1–5 scale for each. Calculate a priority score as (Value × 2) - (Effort + Risk).
-Flag any candidate with a Risk score of 4 or 5 — these require additional controls before proceeding.
-For the top 3 by priority score, note what the key risk is and what control would mitigate it.
+Context: A vendor proposes an AI ticket-triage tool. Here is what I know:
+Claimed value: [time saved, accuracy claims]
+Estimated effort: [integration work, ongoing maintenance]
+Failure impact: [what happens if it mis-triages or goes down]
+
+Task: Evaluate across three dimensions: Value (time saved x frequency),
+Effort (development and maintenance), and Risk (failure impact). Use a 1-5
+scale for each and calculate a priority score of (Value x 2) - (Effort +
+Risk).
+
+Output format: A scored table, then a short recommendation.
+
+Constraints: Use only the information I provided. Do not accept the vendor's
+value claim at face value — list the assumptions it depends on.
+
+Verification:
+- Flag any candidate with a Risk score of 4 or 5 and state the control
+  required before proceeding.
+- List the three questions I should ask the vendor before deciding.
 ```
 
-## The right output for a budget conversation
+## What Claude Is Doing
 
-When you take automation candidates to leadership, lead with annualized value and payback period — not the technical complexity. "This automation saves 208 hours per year (about 0.1 FTE) and requires 3 days of development" is a business case. "This is a ServiceNow workflow with conditional routing and API integration" is a technical description that belongs in the spec, not the pitch.
+Claude is using patterns from the information you provided to structure the evaluation and expose unstated assumptions. It is not verifying the vendor's claims and it has no independent knowledge of the product's real-world reliability. Its value here is discipline and structure — forcing the risk and assumption questions the pitch skipped.
+
+## Common Beginner Mistake
+
+Feeding Claude the vendor's own numbers and treating the resulting score as objective proof. If the claimed value is inflated and you enter it unquestioned, Claude will faithfully compute a high priority score from bad inputs. A tidy score built on a sales claim is still a sales claim.
+
+## Better Practice
+
+Interrogate the risk dimension explicitly. Disqualifying risks include: write operations to production systems without a human review gate, customer-visible actions like automated notifications or status changes, regulated data (PII, financial, health) without documented controls, and automations that trigger other automations. Have Claude flag these, then take a business case to leadership that leads with annualized value and payback period — "saves 208 hours a year, three days to build" — not the technical architecture.
+
+## Quick Recap
+
+- Evaluate value, effort, and risk together; ROI alone hides the failures that make automations net-negative.
+- Claude structures the scoring and exposes vendor assumptions, but it can't verify claims — challenge the inputs.
+- Flag write-access, customer-visible, compliance, and cascading risks as gates before any commitment.
+
+## Practice Activity
+
+This week, take one automation proposal — vendor or internal — and run it through the example prompt. Write down the three assumptions its value claim depends on, and identify at least one risk that would require a control before you'd approve it.

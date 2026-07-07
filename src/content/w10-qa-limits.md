@@ -1,46 +1,72 @@
-# The Limits of AI-Assisted QA
+# What Claude Cannot Reliably Judge in Quality Evaluation
 
-## What Claude cannot evaluate
+## Familiar Scenario
 
-The most important limitation to understand: **Claude cannot assess technical correctness without domain-specific context.**
+QA-assisted scoring is saving you hours, so you start letting Claude auto-pass or auto-fail tickets without reading them yourself. A few weeks later a ticket that Claude scored 4/5 turns out to be technically wrong — the writing was clean, but the fix addressed the wrong thing. Because no human reviewed it, that wrong approach got quietly validated and the analyst kept doing it.
 
-A ticket resolution note that says "Checked DNS settings, flushed cache, issue resolved" scores well on documentation quality — it's clear, structured, and concise. But Claude cannot tell you whether checking DNS was the right first step, whether a different resolution would have been faster, or whether the analyst missed an underlying infrastructure issue.
+## Core Question
 
-Technical correctness requires:
-- Knowledge of your specific environment (your DNS architecture, your VPN configuration)
-- Understanding of what good looks like for complex issue types
-- Context about what was happening in your infrastructure that week
+What can Claude reliably assess in a QA review, and what always requires a human?
 
-None of this is in the ticket text. Human review owns this dimension.
+## Why This Matters
 
-## The risk of AI overconfidence in QA
+A confident, well-written QA score can hide a technically wrong resolution. If you pass those scores to analysts without review, you're not just missing errors — you're endorsing them. Understanding where Claude's judgment ends protects your team from learning the wrong lesson and protects you from acting on assessments that were never verified.
 
-Claude may produce a confident 4/5 QA score for a resolution that was technically wrong. The writing is good; the solution was not. If you present that score to an analyst without technical review, you're inadvertently validating a wrong approach.
+## The Claude Capability
 
-The safeguard: Claude-assisted QA covers writing quality and process compliance. Technical accuracy review happens separately, by a human with the relevant domain knowledge. Both are required for a complete QA assessment.
+Claude can reliably evaluate the things that live in the text: writing clarity, communication tone, and whether required documentation is present. What it cannot evaluate is anything that depends on knowledge outside the ticket — and in QA, that's a lot.
 
-## When AI QA should not be the primary review mechanism
+## What Requires Human Judgment
 
-**Escalation decisions** — Whether an analyst made the right call to escalate or handle independently requires knowledge of their experience level, the complexity of the issue, and whether there were signals they couldn't have reasonably detected. Claude doesn't have this.
+- **Technical accuracy** — whether the fix was correct, the diagnosis sound, or a faster resolution existed. This needs knowledge of your specific environment, none of which is in the ticket text.
+- **Escalation decisions** — whether handling or escalating was the right call depends on the analyst's experience and signals they may not have been able to detect.
+- **Sensitive interactions** — frustrated customers, executive escalations, or emotionally charged tickets need nuanced review; a 5/5 tone score can still be the wrong approach for that customer.
+- **New-analyst development** — first-90-days assessment is about growth trajectory, which a snapshot score doesn't capture.
+- **Formal performance documentation** — anything feeding an HR or review process must be validated by a manager, not left as an AI-generated score.
 
-**Sensitive customer interactions** — Tickets involving frustrated customers, executive escalations, or emotionally charged situations require nuanced review. Communication tone at a 5/5 on a rubric can still be the wrong approach for the specific customer.
+## The Human Review Workflow
 
-**New analyst performance reviews** — During the first 90 days, you're assessing whether an analyst is developing correctly — a judgment that requires observing growth trajectory, not just snapshot quality. Claude's batch analysis doesn't capture trajectory.
+1. Claude reviews the batch and produces scores and improvement areas.
+2. You verify each score against your own knowledge, correct errors, and add technical context.
+3. You adapt the feedback for the specific analyst — relationship, development stage, current pressures.
+4. You deliver it in the right format (1:1, written summary, team note).
 
-**Formal performance documentation** — If QA data will be used in a formal performance review or HR process, it must be validated by a human manager, not AI-generated scores.
+Skipping steps 2 and 3 sends unvalidated AI assessments to your team. That's a management gap, not a tool limitation.
 
-## The human review requirement
+## Example Prompt
 
-This is non-negotiable: **no AI-generated QA feedback should reach an analyst without manager review.**
+```
+Role: You are a QA reviewer assisting a human manager, not replacing them.
 
-The workflow:
-1. Claude reviews batch → produces quality scores and improvement areas
-2. Manager reviews Claude's output → verifies against own knowledge, corrects errors, adds context
-3. Manager adapts feedback for the specific analyst → considers relationship, development stage, current pressures
-4. Manager delivers feedback in appropriate format (1:1, written summary, team communication)
+Rubric: [Paste your rubric and 1–5 scale]
 
-Skipping step 2 and 3 sends unvalidated AI assessments to your team. This is a management failure, not a technology limitation.
+Resolution note: [PASTE TEXT — no names or PII]
 
-## Using AI QA as a coverage tool, not a replacement
+Task: Score the rubric items you can assess from the text. For each item, give a short rationale.
 
-The right mental model: Claude-assisted QA is a coverage multiplier. You can review more tickets at the structural level, identify patterns sooner, and spend your human attention on the cases that actually need it. It doesn't replace your judgment — it extends your reach.
+Constraints: Do not score technical accuracy or whether the escalation decision was correct — flag these as "requires human review" instead.
+
+Verification: End with a short list of everything a human manager still needs to check before this score is used.
+```
+
+## What Claude Is Doing
+
+Claude is assessing the writing and process quality visible in the text — it is not verifying facts or judging technical decisions unless you provide the source material and environment context, which a single ticket doesn't contain. Asking it to flag items as "requires human review" keeps it from producing a confident score on something it can't actually see.
+
+## Common Beginner Mistake
+
+Treating a high QA score as a pass and sending it straight to the analyst. The score reflects how the ticket reads, not whether the work was right — and delivering it unverified can validate a wrong approach.
+
+## Better Practice
+
+Use Claude-assisted QA as a coverage multiplier, not a decision-maker. Let it handle structure and tone at scale so you can spend your attention on technical accuracy and the cases that need judgment. Treat human review as non-negotiable: no AI-generated QA feedback reaches an analyst without a manager checking it first.
+
+## Quick Recap
+
+- Claude judges what's in the text: clarity, tone, documentation completeness.
+- Technical accuracy, escalation calls, sensitive cases, and formal documentation need a human.
+- No AI QA score reaches an analyst without manager verification.
+
+## Practice Activity
+
+Take three tickets Claude has scored. For each, write one sentence identifying something the score could not have captured (a technical judgment, a customer nuance, or missing context), and confirm your review would have caught it.

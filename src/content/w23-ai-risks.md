@@ -1,39 +1,83 @@
-# AI Bias, Hallucination, and Quality Control in Operations
+# Naming the Risks of AI in IT Support
 
-## The three operational risks of AI tools
+## Familiar Scenario
 
-**Hallucination** — Claude produces information that is plausible, well-formatted, and wrong. This is the most discussed risk and the most manageable: verification habits and structured output requirements catch most hallucinations before they affect decisions.
+You have a slot on next week's security review to present your AI adoption plan to the CISO. You know the first question will not be "what can it do?" — it will be "what could go wrong, and how are you controlling it?" If you cannot name the risks clearly and show mitigations, the plan stalls, and rightly so.
 
-**Bias in recommendations** — Claude's training data reflects historical patterns. When you ask for recommendations about analyst performance, customer escalation handling, or process improvement, the output may reflect systemic patterns that your team should not replicate. This risk is harder to see because biased recommendations look like reasonable advice.
+## Core Question
 
-**Automation of errors** — when you use Claude to produce the same output repeatedly (weekly reports, QA reviews, training materials), any systematic error in your prompts or Claude's output gets replicated at scale. A single-use error is bounded. An automated error propagates.
+What operational and governance risks does using Claude in support introduce, and how do I present each one to the CISO with a credible mitigation?
 
-## Hallucination: what it looks like in practice
+## Why This Matters
 
-In IT support contexts, hallucinations typically appear as:
-- Invented statistics or benchmarks ("industry standard MTTR for P2 incidents is 4.2 hours" — this may not exist)
-- Incorrect regulatory details ("GDPR requires 48-hour breach notification" — the actual requirement is 72 hours)
-- Fabricated resolution steps that don't apply to your systems
-- Confident summaries that include details not in the source text
+A CISO evaluates AI the way they evaluate any new system in the environment: by its exposure surface, not its benefits. If you soften the risks, you lose credibility. If you name them precisely and pair each with a control, you demonstrate that AI use will be governed, auditable, and defensible. This conversation determines whether adoption proceeds on solid footing or gets blocked.
 
-The risk is not that hallucinations are common — for most tasks, they're not. The risk is that they're invisible unless you check.
+## The Claude Capability
 
-## Bias: where it shows up in support operations
+Claude can help you build the risk register — draft a structured list of risks, articulate the mechanism of each, and propose candidate mitigations to review with security. You supply your environment's realities and constraints; Claude helps you organize a thorough, specific briefing rather than a vague one.
 
-**Coaching language** — prompts about "underperforming analysts" can produce recommendations that reflect demographic patterns in management research rather than objective behavioral standards. Use behavior-specific language and review coaching outputs for implicit characterization.
+## Step-by-Step Workflow
 
-**Customer communication** — recommendations about how to handle "difficult customers" may reflect patterns that correlate with customer characteristics in ways that introduce bias. Review escalation communication templates for appropriate neutrality.
+Name each risk explicitly, with its mechanism and control:
 
-**Process recommendations** — recommendations that "most high-performing support teams" do something a specific way may reflect a selection bias in what teams produce public data about their practices.
+1. **Data exposure.** Analysts paste customer PII, credentials, or regulated data into a third-party system.
+   *Control:* a data classification policy, anonymization workflow, and clarity on what your org's plan/contract allows regarding data handling and retention.
+2. **Hallucination in operational decisions.** Claude produces a plausible, wrong fact — an invented benchmark, a wrong regulatory figure, a fabricated resolution step — that gets acted on.
+   *Control:* mandatory human verification against authoritative sources for any decision-bearing output.
+3. **Over-reliance and skill erosion.** Analysts stop exercising independent judgment and defer to the output.
+   *Control:* keep humans as the decision-maker on judgment calls; verification stays a human task, never delegated to Claude.
+4. **Audit-trail gaps.** AI-assisted decisions leave no record of what was generated, by whom, or whether it was checked.
+   *Control:* an incident log and, where relevant, records of AI-assisted outputs that fed into significant decisions.
+5. **Bias in recommendations.** Outputs about people or processes may reflect patterns in training data rather than objective standards.
+   *Control:* use behavior-specific language, and review outputs that affect people with more than one reviewer.
+6. **Automation of errors at scale.** A systematic flaw in a repeated prompt propagates across every output.
+   *Control:* periodic audits of recurring AI-assisted outputs and re-testing after any model change.
 
-The mitigation is not avoiding AI for these tasks — it is reviewing outputs for reasonableness and having a diverse set of reviewers when outputs affect people.
+## Example Prompt
 
-## Quality control at scale
+```
+You are helping an IT support manager prepare an AI risk briefing for a CISO.
 
-When Claude is producing the same type of output regularly (weekly reports, QA scores, training quizzes), build in periodic audits:
+Context:
+- Introducing Claude for triage, drafting, summarization across a support team
+- Using base Claude chat; org data-handling terms still being confirmed
+- CISO cares about data exposure, hallucination, over-reliance, audit trails
 
-- Monthly: compare 5 recent AI outputs to your own manual assessment of the same inputs
-- Quarterly: review whether the outputs have drifted in any systematic direction
-- After any model update: run your standard test inputs again and compare to previous outputs
+Task:
+Draft a risk register with columns: Risk | How it happens (mechanism) |
+Likelihood/impact note | Proposed mitigation | Residual risk after mitigation.
+Cover at least: data exposure, operational hallucination, over-reliance, audit
+gaps, bias, and scaled automation errors.
 
-Model updates happen without announcement. An output that was reliable before a model update may behave differently after.
+Output format:
+A table, followed by a 3-sentence executive summary I can open with.
+
+Constraints:
+Be specific and do not soften the risks. Where a mitigation depends on our org's
+data-handling terms, mark it [CONFIRM WITH SECURITY].
+
+Verification:
+List any risk you think I may be underestimating, with a one-line reason.
+```
+
+## What Claude Is Doing
+
+Claude is using patterns from the context you provided to structure a risk register — it is drafting a briefing, not certifying your control environment. It cannot confirm what your organization's contract permits, and it is not verifying facts unless you provide source material. Every `[CONFIRM WITH SECURITY]` marker is a point where a real answer must come from your security and compliance teams, not from Claude.
+
+## Common Beginner Mistake
+
+Presenting only the benefits and treating risks as something to downplay so the plan gets approved. A CISO reads that as either naivety or evasion, and it undermines everything else you say.
+
+## Better Practice
+
+Lead with the risks, named plainly, each paired with a control and an honest note on residual risk. Demonstrating that you see the exposure clearly is what earns the trust to proceed.
+
+## Quick Recap
+
+- The CISO evaluates exposure, not benefits — name every risk directly.
+- Pair each risk with a specific, verifiable control.
+- Data-handling and contractual questions must be confirmed with security, not assumed.
+
+## Practice Activity
+
+This week, draft your top three AI risks for your own environment, and for each write the one control you already have and the one you still need. Take the gaps to your security contact.

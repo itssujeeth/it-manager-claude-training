@@ -1,37 +1,72 @@
-# Claude Projects: Persistent Workspaces
+# Claude Projects: Shared Context Your Team Doesn't Re-Paste
 
-## What Projects change about how you work with Claude
+## Familiar Scenario
 
-In a standard Claude conversation, each session starts fresh. You re-establish context every time: "I'm an IT support manager, here's our process, here's our terminology." Projects change this: you upload your team's documents and set custom instructions once, and every conversation in that Project starts with that context already active.
+Your support team has a solid set of SOPs, an escalation matrix, and SLA definitions. But every time an analyst opens Claude, they start from scratch — pasting in the process, explaining the terminology, reminding Claude what your P2 SLA actually is. Some skip the setup and get generic ITIL answers instead of your team's real standards. You want Claude to reference the same documents consistently, without everyone re-pasting context every session.
 
-For IT support teams, this means Claude can answer "what's our SLA for P2 incidents?" with your actual SLA definition — not a generic answer based on ITIL standards.
+## Core Question
 
-## What Projects are designed for
+"Can our team give Claude our documents once and have every conversation start with that context already loaded?"
 
-**Knowledge base queries** — uploading your SOPs, escalation matrix, SLA definitions, and quality rubric so Claude answers questions using your team's actual standards.
+## Why This Matters
 
-**Consistent persona** — setting up a "support operations analyst" persona that applies to all conversations in the Project, so you don't rewrite the role instructions each time.
+When context is re-pasted by hand, it drifts. One analyst pastes the current escalation matrix, another pastes an old copy, a third forgets and gets a generic answer. Persistent shared context means everyone works from the same source of truth — and Claude answers "what's our SLA for P2?" with your definition, not a textbook one.
 
-**Template library** — storing your tested prompt templates as Project documents so analysts can reference them directly.
+## The Claude Capability
 
-**Team-wide access** — with Claude Team plans, Projects can be shared, so all analysts work from the same knowledge base.
+Claude Projects are persistent workspaces. You upload your team's documents and set custom instructions once, and every conversation inside that Project starts with that context already active. Projects are a paid or organization-configured feature — availability varies by plan, so confirm what your organization allows before planning around it.
 
-## What Projects are not
+Base Claude chat does not carry context between separate conversations. If your organization has enabled Projects, Claude may reference uploaded documents across every conversation in that Project. Always confirm which mode your org allows.
 
-Projects are not a database. Claude reads the uploaded documents and uses them as context — it does not perform structured queries against them like a search engine or database would. For large document sets, Claude may not recall every detail in every document. Test the coverage before deploying to your team.
+## Step-by-Step Workflow
 
-Projects do not guarantee that Claude will always prefer your documents over its general knowledge. Use your custom instructions to explicitly require this: "Always prioritize information from the uploaded documents. If the answer is not in our documents, say so rather than drawing on general knowledge."
+1. Confirm your plan includes Projects and, if needed, shared team access.
+2. Check your organization's data-handling policy for that plan before uploading anything.
+3. Create a Project and upload your reference documents (SOPs, escalation matrix, SLA definitions).
+4. Write custom instructions telling Claude to answer from those documents and to flag when the answer isn't in them.
+5. Test with questions that have known answers before giving the team access.
 
-## Availability and data handling
+## Example Prompt
 
-Claude Projects availability varies by plan — Claude Pro (individual), Claude Team (shared), and Claude API (developer). Before setting up a Project for your team:
+This goes in the Project's custom instructions field, where it applies to every conversation in the Project:
 
-- Verify your plan includes Projects and shared access
-- Check your organization's data handling policy for the plan you're using
-- Understand whether uploaded documents are used to train future models (varies by plan and data handling agreement)
+```
+Role: You are a support operations assistant for our team.
 
-When in doubt, check with your IT security team before uploading any operational documents.
+Context: The uploaded documents are our source of truth (SOPs, escalation
+matrix, SLA definitions).
 
-## The first Project to build
+Task: Answer questions using the uploaded documents.
 
-A good first Project for IT support: upload your escalation matrix, SLA definitions, and ticket triage criteria. Set the custom instruction to answer questions using these documents and flag when the answer is not in them. Test with 10 questions that have known answers in your documents — verify accuracy before rolling out to your team.
+Rules:
+- Always check the uploaded documents first and quote or cite the relevant
+  section.
+- If the answer is NOT in the documents, say so plainly. Do not substitute
+  general IT knowledge and present it as ours.
+- Never guess team-specific details (SLA times, escalation paths, approvers).
+
+Verification: When you cite a figure, name the document it came from so I can
+confirm it.
+```
+
+## What Claude Is Doing
+
+Claude is reading the uploaded documents and using them as context for its answers. It is not running a database query against them — it reads them as text, so with large document sets it may not recall every detail. Claude is not guaranteed to prefer your documents over its general knowledge unless your instructions require it. It uses patterns from what you provided; it does not independently verify that your documents are current.
+
+## Common Beginner Mistake
+
+Treating a Project as a search engine or database that will reliably pull the exact right line from a large pile of documents. Coverage gets less reliable as the document set grows, and Claude may miss details buried in long files.
+
+## Better Practice
+
+Keep the document set focused and test coverage before rollout. Run 10 questions with known answers and confirm Claude sources them correctly — including the cases where the honest answer is "not in our documents." Explicitly instruct Claude to prioritize your documents and to admit gaps.
+
+## Quick Recap
+
+- Projects give every conversation the same persistent context without re-pasting.
+- Projects are org/plan-dependent — confirm availability and data handling first.
+- Claude reads documents as context, not as a database — test coverage and require it to flag gaps.
+
+## Practice Activity
+
+If your organization has Projects enabled, create a test Project with just your escalation matrix and SLA definitions. Write 10 questions with known answers, run them, and note any case where Claude answered from general knowledge instead of your documents.

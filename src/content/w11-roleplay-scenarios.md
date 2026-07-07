@@ -1,61 +1,72 @@
-# Generating Role-Play Scenarios for Support Training
+# Practicing Difficult Conversations with Claude Roleplay
 
-## Why role-play scenarios work
+## Familiar Scenario
 
-Reading about handling an angry customer is not the same as practicing it. Role-play scenarios give analysts a safe environment to experience and respond to difficult situations — difficult customers, ambiguous tickets, high-pressure incidents — before encountering them live.
+Tomorrow you have to deliver critical feedback to an analyst, brief an executive on an incident, or hold the line on priority with a customer who insists their issue is a P1. You know roughly what to say, but you've never rehearsed it, and the first time you say the hard sentence out loud shouldn't be in the real conversation.
 
-Claude can generate realistic, varied scenarios quickly. The challenge is making them specific enough to your environment that analysts learn the right responses for your context.
+## Core Question
 
-## What makes a good role-play scenario
+How do I rehearse a difficult conversation realistically before I have to have it for real?
 
-A useful scenario has five elements:
+## Why This Matters
 
-1. **Setup** — The situation the analyst starts with (ticket text, initial user contact, alert)
-2. **User role guidance** — How the "customer" in the role-play should behave (frustrated, confused, technical, rushed)
-3. **Escalation trigger** — A specific point in the scenario where the analyst faces a decision: handle or escalate?
-4. **Success criteria** — What good handling looks like — specific behaviors, not just "resolved the issue"
-5. **Debrief questions** — What to discuss after the role-play to reinforce the learning
+Reading about handling a tense conversation is not the same as practicing one. Rehearsal is where you find out that your opening sounds accusatory, that you fold when pushed, or that you don't have a clear close. Practicing against realistic pushback — safely, before the stakes are real — is what lets you stay composed when the actual conversation goes sideways.
 
-## Prompting Claude for role-play scenarios
+## The Claude Capability
+
+Claude can play the other person in a structured roleplay: a frustrated customer, a skeptical executive, or an analyst receiving hard feedback. You set the scenario, the role it should play, and how challenging it should be, then practice your lines and get a debrief afterward. It's a rehearsal partner, not a script.
+
+## Step-by-Step Workflow
+
+1. Define the conversation, your goal, and who Claude should play.
+2. Tell Claude how the other person should behave (calm, defensive, escalating).
+3. Ask it to stay in character and respond one turn at a time so you can react.
+4. Run the conversation, saying your real lines.
+5. Ask for a debrief: what landed, what didn't, and what to try differently.
+6. Run it again with the harder version once the first pass feels comfortable.
+
+## Example Prompt
 
 ```
-Role: You are a training designer creating role-play scenarios for IT support analysts.
-Audience: L1 analysts, 0–6 months experience
-Scenario type: [Choose: difficult customer / ambiguous ticket / escalation decision / priority call under pressure]
-Context: Our team handles [ticket types]. Common tools: [list]. Escalation path: [L1 → L2 → L3 or relevant path].
-Task: Create a realistic role-play scenario with: situation setup, user role guidance (how they should behave), an escalation decision point, success criteria (3–5 specific behaviors), and 3 debrief questions.
-Constraints: Scenario should be realistic for our environment. Include one element that requires the analyst to make a judgment call rather than follow a defined process.
+Role: You are playing a support analyst receiving critical feedback in a 1:1. I am the manager practicing how I deliver it.
+
+Character: The analyst is a bit defensive at first and pushes back once, but is not hostile. No real names or records are used — this is a rehearsal.
+
+Scenario: I need to raise that resolution notes have been incomplete on several recent tickets and agree on a change.
+
+Instructions:
+- Respond one turn at a time and wait for my reply.
+- Stay in character until I say "pause".
+- When I say "debrief", step out of character and give me feedback on my clarity, tone, and whether I held to the behavior and impact.
+
+Verification: In the debrief, list two things I did well and one specific thing to change.
 ```
 
-## Scenario types to cover
+## What Claude Is Doing
 
-**The frustrated escalator** — A user who insists the issue is P1 when it is not. Analyst must hold the correct priority while managing the customer relationship.
+Claude is generating the other person's responses from patterns in the character and scenario you described — it is not modeling your actual analyst or predicting how the real conversation will go. Its value is giving you realistic pushback to practice against and a structured debrief, so the rehearsal builds your composure rather than a script you'll read.
 
-**The vague ticket** — Ticket with insufficient information to route or diagnose. Analyst must gather the right information without frustrating the user.
+## Scenario Types Worth Practicing
 
-**The repeat issue** — Same user, same issue, third time this month. Analyst must resolve the immediate issue and identify whether this should become a problem ticket.
+- **Critical feedback** — raising a performance concern and agreeing on a change without it becoming a character judgment.
+- **The frustrated escalator** — a customer insisting an issue is P1 when it isn't; holding the priority while managing the relationship.
+- **The executive briefing** — explaining an incident and its impact concisely to a leader who wants the bottom line first.
+- **The defensive reaction** — practicing your calm return to behavior and impact when someone gets defensive.
 
-**The cascading incident** — What looks like an individual user issue turns out to affect 20 people. Analyst must recognize the pattern and escalate appropriately.
+## Common Beginner Mistake
 
-**The over-eager senior** — An L1 scenario where the user is more technical than the analyst and tries to direct the troubleshooting. Analyst must stay in role while benefiting from the user's knowledge.
+Letting Claude play an unrealistically easy or unrealistically hostile counterpart, then feeling either falsely reassured or needlessly rattled. Both waste the rehearsal.
 
-## Making scenarios specific to your environment
+## Better Practice
 
-Generic scenarios teach generic responses. Add your specifics:
+Calibrate the difficulty deliberately: start with a realistic level of pushback, then raise it. Keep the scenario anonymized, run it more than once, and use the debrief to fix one specific thing each pass. Rehearse the moment you're most worried about — usually the opening line or the response to pushback — until it comes out cleanly.
 
-- Use your actual tool names (ServiceNow, not "the ticketing system")
-- Reference your actual priority criteria
-- Include your escalation groups by name
-- Use realistic ticket descriptions based on your actual ticket types
+## Quick Recap
 
-The more specific the scenario, the more directly transferable the learning.
+- Set the scenario, the role Claude plays, and the difficulty before you start.
+- Have Claude respond one turn at a time and give a structured debrief.
+- Rehearse the hard moment more than once, raising difficulty each pass.
 
-## Debrief questions that reinforce learning
+## Practice Activity
 
-The debrief after a role-play is where the learning gets consolidated. Claude can generate debrief questions, but the most useful ones target the specific decision points in the scenario:
-
-- "When did you decide to escalate? What made you make that call?"
-- "How did you handle the moment the customer pushed back on the priority? What else could you have said?"
-- "At what point did you realize this might be affecting more than one user? What were the signals?"
-
-These are harder to generate generically — add your own based on what you saw during the role-play.
+Pick one conversation you're dreading this week. Write a roleplay prompt casting Claude as the other person, run it once, and use the debrief to rewrite just your opening line before the real conversation.

@@ -1,7 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { loadContent, hasContent } from "../content/index.js";
 import { QuizBlock } from "./QuizBlock.jsx";
-import { ReadingModal } from "./ReadingModal.jsx";
+
+const ReadingModal = lazy(() =>
+  import("./ReadingModal.jsx").then((m) => ({ default: m.ReadingModal }))
+);
 
 // ── Icons ────────────────────────────────────────────────────────────────────
 
@@ -395,12 +398,14 @@ export function WeekCard({ week, monthColor, progress, onToggleReading, onToggle
 
       {/* ── Reading modal ───────────────────────────────────────────────── */}
       {readingModal && (
-        <ReadingModal
-          item={readingModal.item}
-          content={readingModal.content}
-          accentColor={monthColor}
-          onClose={() => setReadingModal(null)}
-        />
+        <Suspense fallback={null}>
+          <ReadingModal
+            item={readingModal.item}
+            content={readingModal.content}
+            accentColor={monthColor}
+            onClose={() => setReadingModal(null)}
+          />
+        </Suspense>
       )}
     </div>
   );

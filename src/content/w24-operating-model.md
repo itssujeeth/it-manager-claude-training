@@ -1,33 +1,79 @@
-# How Leading Support Organizations Use AI Without Over-Reliance
+# Designing an AI-Augmented Operating Model
 
-## The sustainable AI integration pattern
+## Familiar Scenario
 
-Organizations that successfully integrate AI into support operations share a consistent pattern: they define where AI helps and where humans must decide, they build verification into every AI-assisted workflow, and they treat AI as a tool that augments process rather than replaces judgment.
+Leadership has stopped asking whether AI works and started asking how it fits permanently. You have a slot to present "how we work with AI" — not a project with an end date, but a standing operating model: the roles, the rules, the review points, and how it all keeps improving. This is the moment the work shifts from a pilot to the way the team runs.
 
-Organizations that struggle share a different pattern: they deploy AI broadly without defining the human-in-the-loop, they skip or shortcut verification steps as the novelty wears off, and they measure adoption (usage volume) instead of value (outcome quality).
+## Core Question
 
-## What "AI-augmented" actually means operationally
+How do I define a sustainable operating model for AI-augmented support — roles, rules, review, and continuous improvement — that leadership can adopt as a permanent way of working?
 
-In a mature AI-augmented support team, the distinction is not which tasks use AI — it is how AI and human judgment divide responsibility within each task.
+## Why This Matters
 
-**Claude handles:** structuring, drafting, pattern identification, template population, summarization, initial classification
+Organizations that integrate AI successfully share one pattern: they define where AI helps and where humans must decide, they build verification into every AI-assisted workflow, and they treat AI as augmenting process rather than replacing judgment. Organizations that struggle deploy broadly without defining the human-in-the-loop, let verification lapse as novelty fades, and measure usage instead of value. An operating model is what makes the first pattern durable instead of dependent on your personal attention.
 
-**Human handles:** judgment calls, verification, customer-facing output approval, technical accuracy assessment, escalation decisions, anything with regulatory or HR implications
+## The Claude Capability
 
-The line between these is not fixed — it moves as confidence builds. But there is always a line, and it is always explicit.
+Claude can help you draft the operating model — structure the roles-and-responsibilities split, propose review cadences, and articulate the continuous-improvement loop. You bring how your team actually works and where the line between AI and human judgment sits; Claude helps turn it into a coherent, presentable document.
 
-## The patterns worth adopting
+## Step-by-Step Workflow
 
-**Prompt libraries, not individual prompts** — high-performing teams maintain a shared library of tested, approved prompts for common tasks. When an analyst needs to draft an incident summary, they start from a tested template, not from scratch. This improves quality and reduces the prompt design burden on each analyst.
+1. **Define the responsibility split within tasks**, not which tasks use AI.
+   - **Claude handles:** structuring, drafting, pattern identification, summarization, initial classification.
+   - **Humans handle:** judgment calls, verification, customer-facing approval, technical accuracy, escalation, anything with regulatory or HR implications.
+   The line moves as confidence builds — but there is always a line, and it is always explicit.
+2. **Adopt shared prompt libraries**, not individual prompts — tested, approved templates for common tasks.
+3. **Use tiered verification** — quick reads for low-stakes internal output, explicit fact-checking for customer- or executive-facing output — to prevent verification fatigue.
+4. **Schedule periodic calibration** — a monthly 30-minute review of 10–20 AI-assisted outputs to catch quality drift.
+5. **Close the feedback loop into training** — new effective prompts and caught errors flow back into the materials.
 
-**Tiered verification** — not all outputs need equal verification effort. Low-stakes, internally-consumed outputs (1:1 prep notes, draft meeting agendas) get a quick read. High-stakes, customer-facing or executive-facing outputs get explicit fact-checking. Tiered verification prevents verification fatigue.
+## Example Prompt
 
-**Periodic calibration** — monthly review of 10–20 AI-assisted outputs to check whether quality is stable, whether prompts are drifting from best practice, and whether any systematic issues are emerging. This is a 30-minute monthly practice that prevents gradual quality erosion.
+```
+You are helping an IT support manager draft a permanent AI-augmented operating
+model to present to leadership.
 
-**Feedback loops into training** — when analysts discover a new effective prompt or catch a meaningful AI error, that knowledge gets back into training materials. High-performing teams have a simple channel for this: a shared prompt or a standing agenda item in team meetings.
+Context:
+- Support team of 12, past the pilot stage
+- Use cases: triage, drafting, summarization, KB creation
+- Governance basics exist: data classification, verification norms, incident log
 
-## The two-year view
+Task:
+Draft an operating model covering four sections: (1) roles and responsibility
+split between Claude and humans, (2) rules (data governance and verification
+tiers), (3) review and calibration cadence, (4) continuous improvement loop.
+Add a one-paragraph purpose statement at the top.
 
-In two years, the support teams that maintained human judgment at the critical decision points will have well-documented AI governance, reliable output quality, and an evidence base for expanding AI use. The teams that let verification slip will have a series of AI-related incidents that reset their governance posture and reduce stakeholder trust.
+Output format:
+Four labeled sections plus the purpose statement. Use tables where a split or
+cadence is clearer as a table.
 
-The operating model you build in Week 24 is the foundation for the two-year path. The habits it encodes — verification, documentation, continuous improvement — determine which outcome you reach.
+Constraints:
+This is an operating change, not a project - avoid start/end-date framing.
+Where a detail depends on our tools or org policy, mark it [TAILOR].
+
+Verification:
+End with 3 questions leadership is likely to ask, so I can prepare answers.
+```
+
+## What Claude Is Doing
+
+Claude is using patterns from the context you provided to structure an operating model — it is drafting a framework, not deciding how your team should work. It cannot set where your human-judgment line belongs or what your leadership will accept. Every `[TAILOR]` marker is a place where your operational reality, not Claude's draft, governs.
+
+## Common Beginner Mistake
+
+Presenting AI as a project with a finish line. Framing it as "the rollout" implies it ends, which is exactly what lets verification and governance quietly lapse once the novelty fades.
+
+## Better Practice
+
+Frame it as a permanent operating change with built-in maintenance — calibration cadence, feedback loops, and clear ownership. The habits the model encodes (verification, documentation, continuous improvement) are what keep quality reliable long after the initial excitement passes.
+
+## Quick Recap
+
+- Define the AI/human split within each task, and keep the line explicit.
+- Build in tiered verification, shared prompt libraries, and monthly calibration.
+- Present it as a standing operating change, not a project that ends.
+
+## Practice Activity
+
+This week, write the responsibility-split section for one of your team's real workflows — list what Claude handles and what a human must own, and mark where the line currently sits.

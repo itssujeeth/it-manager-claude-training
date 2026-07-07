@@ -1,58 +1,81 @@
-# Behavior-Based Performance Talking Points
+# Drafting Talking Points for a Difficult Performance Conversation
 
-## Why behavior-based language works
+## Familiar Scenario
 
-Performance conversations fail when they feel like character judgments. "You're not paying attention to detail" triggers defensiveness. "The last 5 ticket resolutions did not include steps taken — here are the three tickets where that caused an L2 escalation to restart from scratch" triggers problem-solving.
+You need to open a performance improvement conversation with an analyst whose work has slipped. You've never initiated a PIP conversation before. You know what you want to change, but you're worried about coming across as accusatory, saying something you can't stand behind, or freezing when the analyst pushes back.
 
-Behavior-based language:
-- References observable actions, not inferred traits
-- Ties to specific events, not generalized patterns
-- Focuses on impact, not intention
-- Invites the analyst to respond to facts, not defend their identity
+## Core Question
 
-Claude helps you stay in this register, especially when you're frustrated with a situation and language naturally drifts toward characterization.
+How do I prepare clear, fair talking points for a performance conversation without putting words in my mouth that I haven't validated with HR?
 
-## The behavior-impact-ask structure
+## Why This Matters
 
-For any performance issue, structure your talking points in three parts:
+Performance conversations fail when they feel like character judgments. "You're not paying attention to detail" triggers defensiveness. A specific, observable behavior triggers problem-solving instead. For a first-time PIP conversation, being prepared is what keeps you composed and fair — and keeps the conversation focused on behavior and impact rather than personality. It also protects the analyst, who deserves a clear picture of what needs to change.
 
-**Behavior** — What specifically happened?  
-"In the past month, 6 out of 10 P2 ticket resolutions you handled did not include steps taken in the resolution notes."
+## The Claude Capability
 
-**Impact** — What did it cost?  
-"This means L2 can't see what was tried when tickets escalate, so they restart from scratch — adding 30–60 minutes to resolution time per escalation."
+Claude can help you structure talking points around observable behavior, and prepare calm responses to the reactions you're most likely to face. It can draft, reframe, and rehearse — but it should not supply the formal, HR-specific or legal language of a PIP, because that language has to come from your HR process and be validated by a human who owns it.
 
-**Ask** — What specific change are you requesting?  
-"Starting next week, I need every resolution note to include: what was tried, what the outcome was, and why the ticket was closed or escalated. Can you commit to that?"
+## Step-by-Step Workflow
 
-## Using Claude to draft these talking points
+1. Write down the specific behaviors and their impact, using anonymized language.
+2. Ask Claude to structure talking points using Behavior → Impact → Ask.
+3. Ask for a couple of variations (direct, empathetic-first) so you can pick the tone that fits.
+4. Prepare responses to the two or three most likely defensive reactions.
+5. Take the formal PIP wording, timelines, and consequences from your HR process — not from Claude.
+6. Have HR review your final talking points before the conversation.
+
+## The Behavior–Impact–Ask Structure
+
+- **Behavior** — what specifically happened: "In the past month, 6 of 10 P2 resolutions did not record the steps taken."
+- **Impact** — what it cost: "When these tickets escalate, L2 can't see what was tried and restart from scratch, adding 30–60 minutes each."
+- **Ask** — the specific change requested: "Starting next week, every resolution note should include what was tried, the outcome, and why it was closed or escalated."
+
+## Example Prompt
 
 ```
-Role: You are helping me prepare behavior-based performance talking points for a 1:1.
-Situation: [Describe the performance gap using specific observed behaviors — no names]
-Impact: [Describe what the gap costs — customers, team, SLA, quality]
-Task: Draft talking points using the Behavior-Impact-Ask structure. Three variations: direct, empathetic-first, and question-led.
-Constraints: Observable behaviors only — no personality language ("disengaged," "doesn't care," "lazy"). Assume the analyst wants to do a good job.
+Role: You are helping me prepare behavior-based talking points for a performance conversation.
+
+Context: A support analyst (no name, scores, or HR records included).
+
+Situation: Resolution notes have been incomplete on 6 of the last 10 P2 tickets — steps taken were not recorded.
+
+Impact: L2 cannot see what was tried when tickets escalate, adding roughly 30–60 minutes per escalation.
+
+Task: Draft talking points using Behavior → Impact → Ask, in two tones: direct, and empathetic-first. Add two calm responses for if the analyst becomes defensive.
+
+Constraints: Observable behavior only — no personality language and no formal HR, legal, or disciplinary wording. Assume the analyst wants to do good work.
+
+Verification: Flag anywhere I would need HR to supply official language or timelines.
 ```
 
-## Common language patterns to avoid (and what to use instead)
+## What Claude Is Doing
+
+Claude is drafting conversational language from the behavior and impact you described, using patterns from general management writing. It is not determining whether a PIP is warranted, and it is not producing validated HR or legal text. When you ask it to flag where official language is needed, it marks the places you must fill from your own HR process rather than trusting its wording.
+
+## Language Patterns To Avoid
 
 | Avoid | Use instead |
-|-------|------------|
-| "You're not detail-oriented" | "The last 4 resolutions were missing key steps" |
-| "You seem disengaged" | "You've missed the last 3 team huddles without flagging a conflict" |
-| "Your attitude is a problem" | "In Tuesday's team meeting, the response to [specific event] created tension with two colleagues" |
-| "You don't care about quality" | "QA scores for your tickets have dropped from 4.2 to 3.1 over the past 6 weeks" |
-| "Everyone else manages this" | "The team average for this metric is X — here's the data" |
+|-------|-------------|
+| "You're not detail-oriented" | "The last four resolutions were missing key steps" |
+| "You seem disengaged" | "You've missed the last three team huddles without flagging a conflict" |
+| "Your attitude is a problem" | "In Tuesday's meeting, the response to that change created tension" |
+| "You don't care about quality" | "QA scores on your tickets have dropped over the past six weeks" |
 
-## Handling defensiveness
+## Common Beginner Mistake
 
-When analysts become defensive, the most effective response is to return to the behavior and impact, not to escalate the emotional register.
+Asking Claude to "write the PIP" and using its language verbatim, including timelines, consequences, or legal-sounding phrases. That language hasn't been validated, may not match your policy, and can create real problems in a formal process.
 
-Claude can help you prepare responses for the most likely defensive reactions:
+## Better Practice
 
-- "I've never been told this before" → "You're right that I should have raised this sooner. I'm raising it now because I want to support you in getting back to strong performance."
-- "Other people do this too" → "I can only speak to your work in this 1:1. If there are team-wide issues, I'll address those separately."
-- "I disagree with your assessment" → "I'm open to hearing your perspective. Can you help me understand what happened in [specific ticket]?"
+Use Claude for the behavioral talking points and the rehearsal, then get the formal PIP wording from HR and have them review your final notes. When the analyst pushes back, return to the behavior and impact rather than escalating the emotional register — and rehearse that with Claude beforehand so it comes naturally.
 
-Preparing these responses before the meeting means you stay composed when they come up — and they will come up.
+## Quick Recap
+
+- Structure the conversation around Behavior → Impact → Ask, using observable facts.
+- Let Claude draft and rehearse; take all formal PIP and legal wording from HR.
+- Prepare calm, behavior-focused responses to likely pushback before you walk in.
+
+## Practice Activity
+
+Pick one behavior you'd need to raise in a performance conversation. Write it in Behavior → Impact → Ask form, ask Claude to draft two tones and two responses to defensiveness, then mark which lines you'd need HR to validate before using them.

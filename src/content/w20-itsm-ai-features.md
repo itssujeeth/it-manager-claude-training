@@ -1,43 +1,68 @@
-# AI Features Built into ITSM Platforms
+# Evaluating AI Features Built Into Your ITSM Platform
 
-## Why embedded AI is different from conversational AI
+## Familiar Scenario
 
-When you use Claude to categorize a ticket, you copy the ticket text, paste it in, read the output, and manually update the ticket. There are four human steps in that workflow.
+A sales rep from your ITSM vendor is demoing "AI triage" — tickets get categorized and routed automatically the moment they're created, no copy-paste, no manual step. It looks impressive in the demo. But you don't actually know what to ask. How accurate is it on *your* tickets? What happens when it's wrong? Is the human review step gone? You don't want to sign off on a slick demo without the right questions.
 
-When your ITSM platform's embedded AI categorizes a ticket, it reads the ticket automatically on creation, assigns a category suggestion, and optionally routes it — with zero manual copy-paste. The friction is gone. So is the human review step, unless you explicitly add one.
+## Core Question
 
-This is both the advantage and the risk of embedded AI.
+"When a vendor pitches AI built into the ticketing platform, what do I need to ask to know whether it's actually reliable enough to use — and where the risks are?"
 
-## What major platforms currently offer
+## Why This Matters
 
-Platform AI capabilities change with every release. At the time this content was written, the landscape included:
+Embedded AI runs on your live ticket data automatically, so the moment you enable it your data-handling obligations kick in and the manual review step disappears unless you deliberately add one back. A demo shows the best case. Real production accuracy on your taxonomy is what determines whether it helps or quietly misroutes tickets — and you only find that out by asking the right questions up front.
 
-**ServiceNow AI** — Virtual Agent for self-service deflection, automated ticket categorization, suggested resolution paths, case summarization. Most capabilities require specific ServiceNow SKUs.
+## The Claude Capability
 
-**Jira Service Management AI** — suggested assignees, auto-classification, suggested KB articles. Integrated with Atlassian Intelligence across the Atlassian suite.
+This lesson isn't about a Claude feature — it's about evaluation. But Claude can help you prepare: it can help structure your evaluation criteria, draft the vendor question list, and organize the pilot results afterward. It works from what you provide; it can't tell you how the vendor's AI performs on your data. That number comes from a pilot, not from the model.
 
-**Freshdesk Freddy AI** — ticket summarization, suggested responses, auto-categorization, tone detection in customer messages.
+## Step-by-Step Workflow
 
-**Zendesk AI** — content summarization, suggested macros, auto-tagging, intelligent triage.
+1. Establish what "good enough" means before the demo — your accuracy threshold for categorization and routing.
+2. Ask the vendor about out-of-box accuracy, configuration needs, and what data trains the feature.
+3. Ask where the human review step is and which suggestions analysts can act on automatically.
+4. Ask how you'll monitor and correct miscategorization once it's live.
+5. Run a time-boxed pilot on your own tickets before enabling it in production.
 
-**Microsoft Copilot for IT** — incident summarization, knowledge article drafting, integrated with M365 data.
+## Example Prompt
 
-Check your current platform version and licensing — many of these features are in higher-tier plans or require add-on licensing.
+```
+Role: You are helping an IT support manager prepare to evaluate an ITSM
+vendor's AI triage feature.
 
-## The accuracy problem with out-of-box AI
+Context: The vendor pitches automatic ticket categorization and routing on
+ticket creation.
 
-Every platform's embedded AI is trained on general IT support patterns. Your team's ticket taxonomy, escalation criteria, and terminology are specific to you. Out-of-box accuracy on categorization and routing is often 60–75% — good enough to be helpful, not good enough to be autonomous.
+Task: Produce a vendor question list covering: out-of-box accuracy on our
+own taxonomy, configuration and training-data needs, human review controls,
+data handling once enabled, and ongoing monitoring for miscategorization.
 
-Improving accuracy requires:
-- Training data from your own ticket history (usually 500–1000 labeled examples minimum)
-- Configuration time to map the AI's categories to yours
-- Ongoing monitoring as your ticket types evolve
+Constraints:
+- Frame questions to expose gaps, not to accept marketing claims.
+- Do not assume any accuracy figure — accuracy comes from our pilot.
 
-Plan for a 2–4 week configuration and testing period before embedded AI features are reliable enough to use in production workflows.
+Verification: Note which answers I should confirm with a pilot rather than
+take from the vendor.
+```
 
-## Governance for embedded AI
+## What Claude Is Doing
 
-Unlike conversational AI where a human pastes data and reviews output, embedded AI processes your live ticket data automatically. This means:
-- Your data handling obligations apply from the moment you enable the feature — not just when you use it
-- You need explicit policies about which AI-assisted suggestions analysts can act on automatically vs. must review
-- You need a monitoring process for when the AI miscategorizes — the feedback loop is less obvious than in conversational AI
+Claude can help structure your criteria and draft the question list using patterns from the context you provide. It is not evaluating the vendor's product or predicting its accuracy on your tickets — it has no access to your data or the vendor's model. Any accuracy expectation should come from your own pilot, not from Claude or the sales deck.
+
+## Common Beginner Mistake
+
+Trusting demo accuracy. Every platform's embedded AI is trained on general IT support patterns, but your taxonomy, escalation criteria, and terminology are specific to you. Out-of-box accuracy on categorization and routing is often only in the 60–75% range — helpful, but not good enough to run autonomously.
+
+## Better Practice
+
+Plan for configuration and a real pilot. Improving accuracy typically needs training data from your own ticket history (often 500–1000 labeled examples), time to map the AI's categories to yours, and ongoing monitoring as ticket types evolve — budget a 2–4 week configuration and testing period. Decide up front which AI suggestions analysts may act on automatically versus which must be reviewed, and build the miscategorization feedback loop before go-live, since it's less obvious than in a conversational tool.
+
+## Quick Recap
+
+- Embedded AI runs on live data automatically — data obligations start the moment you enable it.
+- Out-of-box accuracy is often 60–75%; demo performance isn't production performance.
+- Define your threshold, pilot on your own tickets, set review rules, and build a monitoring loop before going live.
+
+## Practice Activity
+
+Write five questions you'd ask an ITSM vendor about an AI triage feature — at least one each on accuracy, human review, and data handling. Note next to each whether the honest answer should come from the vendor or from a pilot.

@@ -1,51 +1,71 @@
-# Identifying Documentation Gaps with Claude
+# Finding the Gaps in Your Documentation with Claude
 
-## Why incident documentation has gaps
+## Familiar Scenario
 
-Incident documentation fails for predictable reasons: responders are focused on resolution, not writing; notes are captured in the moment and never cleaned up; PIRs are written days later from memory; and templates are vague enough to skip sections without noticing.
+A recurring database slowdown was finally resolved last night. The analyst pulled up the existing runbook mid-incident and found it nearly useless — it said "check the database" and "restart if needed," with no thresholds, no owners, and no escalation path. The incident is closed, but the documentation that failed you is still sitting in the knowledge base, ready to fail the next person.
 
-Claude can serve as a documentation reviewer — analyzing what you have and identifying what is missing.
+## Core Question
 
-## How to use Claude as a gap reviewer
+Can Claude review my incident notes or KB article and tell me what important information is missing before it fails someone again?
 
-Paste your draft PIR or incident notes into Claude and ask:
+## Why This Matters
+
+Documentation gaps are invisible until an incident exposes them, usually at the worst possible moment. Responders write notes while focused on resolution, PIRs get drafted days later from memory, and vague templates let whole sections get skipped without anyone noticing. A structured gap review catches these problems while it is calm, not during the next Sev-1.
+
+## The Claude Capability
+
+Claude can act as a documentation reviewer, reading what you have and flagging what is structurally missing — action items without owners, timelines with holes, root causes stated as fact without evidence, and vague impact statements. It checks internal consistency and completeness against a structure you define. It cannot confirm whether your facts are correct; it works only with the text you provide.
+
+## Step-by-Step Workflow
+
+1. Paste your draft PIR, incident notes, or KB article into Claude.
+2. Ask it to check against a specific list of gap types, not "review this."
+3. Have Claude name the section and describe what would fill each gap.
+4. Fill the flagged gaps with real information — check Slack history, alerts, or ask the responders.
+5. Route the completed draft to an SME for technical review.
+
+## Example Prompt
 
 ```
-Review this incident documentation and identify:
+Role: You are a documentation reviewer for an IT support team.
+
+Task: Review the incident documentation below and identify gaps in these areas:
 1. Timeline gaps — periods with no recorded events
-2. Missing owner assignments on corrective actions
-3. Unvalidated root cause claims presented as fact
-4. Impact statements that lack specifics (number of users affected, duration, SLA impact)
+2. Corrective actions with no named owner or deadline
+3. Root cause claims presented as fact without stated evidence
+4. Impact statements lacking specifics (users affected, duration, SLA impact)
 5. Prevention measures that are vague or not actionable
-6. Missing detection gap analysis (how long between failure and first alert?)
+6. Missing detection-gap analysis (time between failure and first alert)
 
-For each gap, note the section and describe what information would fill it.
+For each gap: name the section, describe what is missing, and state what
+information would fill it.
+
+Documentation:
+[PASTE DRAFT]
+
+Constraint: Only flag what is structurally missing or internally inconsistent.
+Do not assume facts that are not in the text. If you cannot tell whether
+something is missing, say so.
 ```
 
-## Common gaps Claude reliably catches
+## What Claude Is Doing
 
-**Action items without owners** — "Investigate connection pooling" is not an action item. "Engineer A to analyze pg_stat_activity and report findings to team by Friday" is. Claude will flag the difference when you ask it to.
+Claude is using patterns from the text you provided to check structure and internal consistency — it can see that a timeline jumps from 14:00 to 16:00, or that "the deployment caused the outage" is stated as fact with no evidence cited. Claude is not verifying whether your timestamps or root cause are actually correct. If your notes say resolution happened at 15:45 but it was really 16:20, Claude will not know. It also cannot judge whether a corrective action is technically sound — only whether it is structured with an owner, task, and deadline.
 
-**Root cause presented as fact** — "The deployment caused the outage" versus "The deployment is the probable cause pending log analysis." Claude can identify where certainty language is used for unvalidated claims.
+## Common Beginner Mistake
 
-**Timeline holes** — If your timeline jumps from 14:00 to 16:00 with nothing in between, Claude will note the gap. Filling it requires checking Slack history, monitoring alerts, or asking responders.
+Asking Claude "does this look complete?" and taking a yes at face value. A vague open-ended question gets a vague answer, and you learn nothing about the specific holes that will bite you later.
 
-**Vague impact statements** — "Many users were affected" tells leadership nothing useful. Claude will flag this and suggest replacing it with "approximately N users in [region/department] experienced [specific impact] for [duration]."
+## Better Practice
 
-## What Claude cannot catch
+Give Claude a concrete checklist of gap types and ask it to tie each finding to a section. Turn "many users were affected" into a flagged item with a suggested replacement: "approximately N users in [region] experienced [specific impact] for [duration]." Turn "investigate connection pooling" into a flagged action item that needs an owner and a deadline.
 
-Claude cannot verify whether your timeline is factually correct — it can only check internal consistency (no contradictions) and completeness (no obvious holes). If your notes say the resolution happened at 15:45 but it was actually 16:20, Claude will not know.
+## Quick Recap
 
-Claude also cannot assess whether corrective actions are technically sound — only whether they are structured correctly (owner, task, deadline) and whether they address the stated root cause on its face.
+- Claude can flag structural gaps: missing owners, timeline holes, unproven root causes, vague impact.
+- It checks completeness and consistency, not factual accuracy — you still verify the facts.
+- Use a specific gap checklist, not an open-ended "is this complete" question.
 
-## Building this into your PIR workflow
+## Practice Activity
 
-Make gap review a step in your standard PIR process:
-
-1. Draft PIR from raw notes (Claude assists)
-2. Gap review (Claude identifies structural gaps)
-3. Technical review (SME validates root cause and corrective actions)
-4. Leadership review (for major incidents)
-5. Publish
-
-The gap review step catches 80% of structural problems before they reach technical review, saving senior engineer time.
+Take one existing KB article or recent PIR and run it through the gap-review prompt. Make the gap review a standing step in your PIR process: draft, gap review (Claude), technical review (SME), leadership review for major incidents, then publish.

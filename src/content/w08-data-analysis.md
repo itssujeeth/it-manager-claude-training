@@ -1,57 +1,71 @@
 # Analyzing Ticket Data with Claude
 
-## What Claude can do with your data
+## Familiar Scenario
 
-Claude can process tabular or CSV ticket data pasted directly into the prompt and produce:
-- Category breakdowns and volume summaries
-- Trend analysis (volume by day, week, or shift)
-- SLA attainment calculations
-- Anomaly identification (unusual spikes or patterns)
-- Natural language narratives suitable for leadership reports
+Your director wants to know why last month's volume was up and where the team's time is going. You have a CSV export of 500 tickets sitting on your desktop. You do not write SQL, building the pivot tables will eat your afternoon, and you need something readable, not a spreadsheet, by tomorrow.
 
-This is faster than building a report in Excel and more useful than a raw pivot table — but it comes with constraints you must understand.
+## Core Question
 
-## Preparing your data
+Can Claude find the patterns in my ticket export and summarize them — without me writing queries — and what can it safely compute?
 
-Before pasting any ticket data into Claude:
+## Why This Matters
 
-**Anonymize it.** Replace customer names with generic labels (Customer A, User B, Account #12345). Remove email addresses, phone numbers, and internal system names that would be recognizable outside your organization.
+Managers sit on useful data they cannot easily interrogate. Getting from a raw export to "here's what's driving volume and here's what I'd do about it" usually requires spreadsheet skills or an analyst's time. Doing it faster means you can actually use your data to manage — but only if you understand what Claude computes reliably and what it does not, and if you protect the data properly first.
 
-**Clean the format.** CSV and tab-delimited tables work well. Remove merged cells, summary rows at the bottom, and color formatting (Claude can't see it). Keep column headers clear and consistent.
+## The Claude Capability
 
-**Limit to what you need.** Paste only the columns relevant to your analysis question. A 40-column export where you need 8 columns adds noise and increases the chance of errors.
+Claude can read tabular or CSV data pasted into the prompt and produce category breakdowns, volume summaries, trend analysis, and a readable narrative. It handles counting and distribution well. It is a language model, not a spreadsheet engine, so percentage and time-based calculations need verification against your source data. Base Claude chat does not access live systems; if your organization enables file upload or tools, Claude may work with those sources — confirm what your org allows.
 
-## How to structure your analysis prompt
+## Step-by-Step Workflow
+
+1. Anonymize the data — replace customer names, remove emails, phone numbers, and recognizable internal system names.
+2. Clean the format — remove merged cells, summary rows, and color formatting; keep clear headers.
+3. Limit to the columns your question needs — extra columns add noise and errors.
+4. Ask a specific analysis question and tell Claude to flag anything it cannot compute confidently.
+5. Verify the numbers against your source data before they go anywhere.
+
+## Example Prompt
 
 ```
-Context: This is anonymized ticket data from [date range]. Columns are: [list key columns].
+Context: This is anonymized ticket data from [date range]. Columns are:
+[list the key columns].
+
 Task: Analyze this data and produce:
 1. Total volume by [category / priority / team / day-of-week]
-2. Trend vs. prior period (I'll provide that data below)
+2. Trend vs. the prior period (data provided below)
 3. SLA attainment by priority tier
 4. Top 3 recurring issue types by ticket count
 5. Any anomalies — unusual spikes, drops, or patterns worth flagging
-Format: Bullet summary under each heading. Flag any calculation you cannot perform confidently.
-Data: [PASTE CSV]
+
+Format: A short bullet summary under each heading. For every number, note
+whether it is a direct count or a calculated percentage. Flag any calculation
+you cannot perform confidently rather than guessing.
+
+Data:
+[PASTE ANONYMIZED CSV]
 ```
 
-The "flag what you cannot calculate confidently" instruction is important — without it, Claude will attempt every calculation and may produce wrong numbers without flagging them.
+## What Claude Is Doing
 
-## Metric types Claude handles well
+Claude is using patterns from the data you pasted to count, group, and describe. For simple counts and distributions on clean data, it is usually accurate. For percentages, SLA attainment, and MTTR, it processes numbers as text tokens rather than running a calculation engine, so error rates rise on large or messy data. Claude is not connecting to your source system to check its own math — the numbers it returns are a draft until you verify them.
 
-- **Volume by category** — straightforward counting, reliable
-- **Day-of-week or hour-of-day distribution** — reliable with clean date/time columns
-- **Top N recurring types** — reliable
-- **Trend language** ("volume increased 12% vs. last week") — reliable if you provide both datasets
+## Common Beginner Mistake
 
-## Metric types to verify carefully
+Pasting a raw 40-column export with customer names still in it and asking "analyze this." That risks exposing data that should have been anonymized, and it buries the signal in noise, increasing the chance of parsing errors and wrong numbers.
 
-- **Percentage calculations** (SLA attainment, reopen rates) — Claude's arithmetic can be off by a few percent on large datasets
-- **MTTR calculations** — requires consistent timestamp formats; errors in source data produce wrong results
-- **Any metric you plan to report to leadership** — verify against your source data before using
+## Better Practice
 
-## The verification step
+Anonymize and trim first, then ask a focused question with the "flag what you cannot calculate confidently" instruction — without it, Claude will attempt every calculation and may return wrong numbers with no warning. Know which metrics to trust more and less:
 
-Every number in Claude's output should be verified against your source data before it goes into any report. This does not mean you need to recalculate everything manually — spot-check the largest numbers and the ones most likely to be cited.
+- **Reliable:** volume by category, day-of-week or hour distribution, top-N recurring types, trend language when you provide both datasets.
+- **Verify carefully:** percentage calculations (SLA attainment, reopen rates), MTTR, and anything you plan to report to leadership.
 
-A simple rule: if a metric will appear in a slide, a report, or an email to a senior stakeholder, you must verify it independently. Claude's number is a draft; your source data is the source of truth.
+## Quick Recap
+
+- Anonymize and trim the data before it goes into any prompt.
+- Claude is reliable for counts and distributions; verify percentages, MTTR, and SLA figures.
+- Ask a specific question and have Claude flag calculations it cannot do confidently.
+
+## Practice Activity
+
+Take a recent ticket export, anonymize it, trim it to the 6–8 columns you actually need, and run the example prompt. Then pick the two numbers most likely to end up in front of leadership and check them against your source data.

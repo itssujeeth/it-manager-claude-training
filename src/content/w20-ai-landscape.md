@@ -1,36 +1,71 @@
-# The AI Tool Landscape for IT Support
+# Positioning Claude in Your AI Tooling Strategy
 
-## A fast-moving field with a stable evaluation framework
+## Familiar Scenario
 
-The specific capabilities of any AI tool change every few months. New model releases, new integrations, revised pricing, and changed data policies make point-in-time comparisons go stale quickly. What doesn't change: the evaluation criteria you use to assess tools, and the questions you ask about data privacy and integration.
+Your CISO drops by: "Leadership wants a view on our AI tooling strategy for support. Where does Claude fit? Do we still need the AI features in our ITSM platform? What about the Copilot licenses?" You're expected to give a coherent answer that doesn't just list product names, and that still makes sense in six months when half the features have changed.
 
-This article focuses on the framework, not the current feature comparison — the features will have changed by the time you read this.
+## Core Question
 
-## The main tool categories
+"How do I position Claude against automation tools, ITSM-native AI, and standalone LLMs — in a way that survives the next round of product updates?"
 
-**Conversational AI** — general-purpose AI assistants you interact with via chat: Claude, ChatGPT, Gemini, Copilot Chat. Best for: drafting, analysis, summarization, coaching prep, ad-hoc questions. Requires: pasting content in manually or uploading files.
+## Why This Matters
 
-**Embedded ITSM AI** — AI features built directly into your ticketing platform: ServiceNow AI, Jira AI, Freshdesk Freddy, Zendesk AI. Best for: automated categorization, suggested responses, ticket routing within the platform's data. Advantage: no copy-paste; works on live ticket data with your existing access controls.
+AI procurement decisions are expensive and sticky, and specific features go stale within months. If your assessment is a snapshot of today's feature list, it's obsolete by the next release cycle. A strategy built on categories and evaluation criteria — not this quarter's feature grid — is one you can defend and reuse.
 
-**Productivity AI** — AI embedded in your existing productivity tools: Microsoft Copilot in M365, Google Gemini in Workspace. Best for: meeting summaries, email drafting, document generation within those tool ecosystems. Works on data already in those systems.
+## The Claude Capability
 
-**Specialized AI tools** — purpose-built for specific support functions: AI-powered QA platforms, automated knowledge base generators, chatbot builders. Higher implementation effort, higher specificity.
+Claude is a conversational, general-purpose assistant: you describe a task in text, it produces output, you review and use it. That flexibility is its strength for ad-hoc analysis, drafting, and summarization — and its limit, because it needs you to bring the data and act on the result. Positioning it well means knowing which category of tool it is and which it isn't.
 
-## Why conversational AI and embedded AI are complementary, not competing
+## Step-by-Step Workflow
 
-Conversational AI (Claude) is flexible and general — you can use it for anything you can describe in text. It requires manual data input and produces output you evaluate and use manually.
+1. Sort the tools on the table into categories, not brands.
+2. For each category, note what it's genuinely best at and what it requires to run.
+3. Identify where conversational AI (Claude) and embedded AI complement rather than compete.
+4. Apply a fixed set of evaluation criteria to each candidate.
+5. Present the framework, and flag that any evaluation over six months old needs a refresh.
 
-Embedded AI is specific and automated — it works directly on your live ticket data, triggers automatically, and produces output within your existing workflow. It requires integration work and configuration.
+## Example Prompt
 
-For most support teams, the right answer is both: conversational AI for manager and analyst ad-hoc work, embedded AI for automated workflow steps that have enough volume and predictability to justify configuration.
+```
+Role: You are helping an IT support manager prepare an AI tooling assessment
+for a CISO.
 
-## The evaluation criteria that matter most
+Context: We use [ITSM platform], [productivity suite], and are evaluating
+Claude for analyst and manager work.
 
-1. **Data privacy and residency** — where does your data go when you use this tool? Is it used to train models?
-2. **Integration** — does it connect to your existing ITSM platform? How much engineering is required?
-3. **Accuracy in your context** — general benchmarks are meaningless; test on your own tickets.
-4. **Cost model** — per-seat, per-use, or platform license? How does cost scale with your team size?
-5. **Adoption effort** — how much training do your analysts need? Is the interface familiar?
-6. **Update cadence** — how often does the tool change? How disruptive are those changes?
+Task: Produce a one-page assessment that:
+1. Groups our AI options into categories (conversational, embedded ITSM,
+   productivity-suite, specialized).
+2. States the best use and the main requirement for each category.
+3. Recommends where each fits in our workflow.
 
-> Any evaluation that is more than 6 months old should be revisited before a procurement decision. The AI landscape moves fast enough that last year's evaluation is often irrelevant today.
+Constraints:
+- Do not compare specific product features that change frequently — stay at
+  the category and criteria level.
+- Separate facts I gave you from your general assumptions.
+
+Verification: List assumptions you made about our environment that I should
+confirm before I present this.
+```
+
+## What Claude Is Doing
+
+Claude can help structure the assessment and organize the categories using patterns from the context you provided. It is not maintaining a live, accurate feature comparison of current AI products — its knowledge has a cutoff and product features move quickly. Treat its category framing as a useful scaffold, and confirm any current-state claim yourself.
+
+## Common Beginner Mistake
+
+Framing the whole thing as "Claude vs the ITSM AI vs Copilot," as if you must pick one winner. These categories mostly do different jobs — a general assistant, automation on live ticket data, and productivity-suite features — so a single-winner framing misrepresents the decision.
+
+## Better Practice
+
+Position them as complementary. For most support teams the answer is both: conversational AI for manager and analyst ad-hoc work, embedded AI for high-volume, predictable workflow steps that justify configuration. Anchor the assessment on stable criteria — data privacy and residency, integration effort, accuracy tested on your own tickets, cost model, adoption effort, update cadence — rather than a feature grid.
+
+## Quick Recap
+
+- Assess categories and criteria, not this quarter's feature list.
+- Conversational AI, embedded ITSM AI, and productivity AI mostly complement each other.
+- Evaluate on data privacy, integration, in-context accuracy, cost, adoption, and update cadence — and refresh any evaluation older than six months.
+
+## Practice Activity
+
+List the AI tools available to your team today and sort each into one of the four categories. For one category, write down its best use, its main requirement, and the one evaluation criterion you'd weight most heavily.

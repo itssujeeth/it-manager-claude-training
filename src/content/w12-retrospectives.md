@@ -1,56 +1,67 @@
-# Team Retrospectives with Claude
+# Documenting Retrospectives with Claude
 
-## What makes a retrospective worth the time
+## Familiar Scenario
 
-A retrospective is a structured look backward — what worked, what didn't, and what to change. The failure mode is a retrospective that produces a long list of observations and no decisions. Teams stop taking them seriously when nothing changes afterward.
+Your team runs a retro at the end of each sprint. People talk, good observations come up, and then... nothing. No summary gets written, no commitment gets tracked, and next sprint the same issues resurface. The team is starting to treat the retro as a box-ticking exercise because nothing ever changes.
 
-Claude can help you run tighter retrospectives and produce cleaner summaries and improvement proposals — but the decision to act has to come from you.
+## Core Question
 
-## Retrospective formats Claude can facilitate
+How do I turn what gets said in a retro into a short, usable output that actually drives one change — instead of a discussion everyone forgets?
 
-**Start-Stop-Continue** — The simplest format. What should the team start doing? Stop doing? Continue doing? Claude prompt: "Given these retrospective notes, produce a Start-Stop-Continue summary that prioritizes one item per category based on frequency and impact."
+## Why This Matters
 
-**Four Ls (Liked, Learned, Lacked, Longed For)** — Useful when you want to separate appreciation from improvement. Claude prompt: "Organize these retrospective inputs into the Four Ls and identify the top improvement theme."
+A retrospective is only worth the time if it produces a decision. The failure mode is a long list of observations and no action; when that repeats, the team stops taking retros seriously. The difference between a retro that improves the team and one that wastes an hour is whether the raw discussion gets turned into a clear, owned, trackable commitment.
 
-**Timeline retrospective** — For project retrospectives, walking through what happened week by week. Claude prompt: "Based on this project timeline and team feedback, generate a retrospective summary identifying the three decision points that most influenced the outcome."
+## The Claude Capability
 
-## Generating retrospective summaries
+Claude can take your rough retro notes and structure them into a clean summary: what went well, what didn't (framed as process rather than blame), and one specific commitment for the next period with a way to track it. It organizes and structures what was said — the decision to act, and the judgment about what matters, stay with you.
 
-After the meeting, paste your raw notes:
+## Step-by-Step Workflow
+
+1. Capture rough notes during the retro — you don't need them polished.
+2. Choose a format (Start-Stop-Continue, Four Ls, or a plain summary).
+3. Paste the anonymized notes and ask Claude to structure them.
+4. Ask for exactly one committed change, not five, with an owner and a way to track it.
+5. Review and adjust so the commitment is genuinely doable in the next period.
+6. Carry unmet commitments forward to the next retro's opening check-in.
+
+## Example Prompt
 
 ```
 Role: You are helping me write a team retrospective summary.
-Meeting type: [Monthly ops / Sprint / Post-project / Quarterly]
-Raw notes: [PASTE NOTES]
-Task: Produce a retrospective summary with:
+
+Meeting type: Sprint retrospective
+Raw notes: [PASTE NOTES — no names attached to criticism]
+
+Task: Produce a summary with:
 1. Three things that went well (with brief evidence)
-2. Three things that didn't go well (framed as system/process issues, not person issues)
-3. One team commitment for the next period — specific, measurable, owned
+2. Three things that didn't go well, framed as process or system issues, not people
+3. One team commitment for the next sprint — specific, measurable, and owned
 4. How we'll track whether the commitment was met
 
-Constraints: The "one team commitment" should be genuinely actionable in the next 30 days — not aspirational. Blame-free language throughout.
+Constraints: The one commitment must be genuinely achievable in the next 30 days, not aspirational. Blame-free language throughout.
+
+Verification: Flag any point that names or clearly points to an individual so I can reframe it before sharing.
 ```
 
-## Drafting improvement proposals
+## What Claude Is Doing
 
-When a retrospective surfaces a recurring issue, Claude can help you structure a formal improvement proposal:
+Claude is reorganizing the notes you provided into a structured summary, using patterns from how retrospectives are run — it is not verifying what actually happened in the sprint or deciding which change matters most. Asking it to flag anything that points at an individual keeps the summary blame-free, and the "one commitment" constraint stops the output from sprawling into a list no one owns.
 
-```
-Problem identified: [Describe the issue from the retrospective]
-Evidence: [How often does this happen? What does it cost?]
-Task: Draft a one-page improvement proposal with: problem statement, proposed solution, expected benefit, what success looks like in 30 days, and owner.
-Constraints: Solution should be implementable by the team without external resources or budget approval unless you flag it as requiring both.
-```
+## Common Beginner Mistake
 
-This turns a retrospective observation into something you can actually hand to your manager or put on the team board.
+Letting the retro produce five commitments and calling it thorough. Five commitments with no tracking is the same as zero — the team can't focus on all of them, so none of them happen, and the retro loses credibility.
 
-## Tracking commitments between retrospectives
+## Better Practice
 
-The most common failure: teams commit to something at a retrospective and no one tracks it. By next month, it's forgotten and the same issue appears again.
+Commit to one reliable change per sprint and track it. Start each retro with a five-minute check on last time's commitment before looking at anything new — Claude can draft that check-in question ("What did we commit to last time? Did we do it? If not, why, and is it still worth doing?"). A retro culture that lands one real change per period beats one that generates five commitments with no follow-through.
 
-Simple tracking approaches:
-- Keep a "team commitments" section at the top of each monthly retrospective doc — carry forward unmet commitments from the previous month
-- Start each retrospective with a 5-minute check-in on last month's commitment before looking at new issues
-- Claude can help you draft the check-in question: "What did we commit to last month? Did we do it? If not, why not — and is it still worth doing?"
+## Quick Recap
 
-A retrospective culture that produces one reliable change per month outperforms one that produces five commitments with zero follow-through.
+- Turn rough retro notes into a structured, blame-free summary with Claude.
+- Aim for one owned, trackable commitment — not a long list.
+- Open the next retro by checking whether the last commitment was met.
+
+## Practice Activity
+
+After your next retro, paste your rough notes into the prompt above and produce a summary with exactly one owned commitment and a way to track it — then add that commitment to the top of the doc so you can check it next time.

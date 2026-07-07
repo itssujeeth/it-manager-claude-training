@@ -1,60 +1,73 @@
-# Setting Up a Support Operations Claude Project
+# Setting Up a Support Team Project: What Goes In, What Stays Out
 
-## Before you upload anything
+## Familiar Scenario
 
-The most important question before uploading any document to a Claude Project is: "Would I be comfortable if this document appeared in a data incident report?" This is a more useful test than "is this internal?" — many internal documents should never go into an AI workspace.
+Your organization has enabled Claude Projects and you've been asked to set one up for the support team. You have a folder of useful material — SOPs, tone guidelines, the escalation matrix — but also plenty you're not sure about: ticket exports with customer names, a spreadsheet with an API key in it, last quarter's performance notes. You need to know what belongs in the Project, what must never go in, and how to keep it from going stale.
 
-**Safe to upload (typically):**
-- Anonymized SOPs and process guides
-- Escalation matrices with role names (not employee names)
-- SLA definitions and response time standards
-- Ticket category and priority criteria
-- QA rubrics and quality standards
-- Prompt templates and team standards
+## Core Question
 
-**Do not upload:**
-- Customer names, email addresses, or account data
-- Employee records, HR information, performance reviews
-- System credentials, API keys, or authentication details
-- Proprietary vendor contracts or confidential pricing
-- Financial records or budget details
-- Anything under NDA
-- Unapproved security configurations or architecture documents
+"What should I actually put into a shared Claude Project, what must I keep out, and how do I keep it trustworthy over time?"
 
-When in doubt, don't upload. You can always paste relevant text into a conversation instead.
+## Why This Matters
 
-## Custom instructions that make Projects reliable
+A Project is shared context your whole team draws on. Put the wrong thing in — customer data, credentials, HR records — and you've created a data exposure that's hard to undo. Put in an outdated SOP, and Claude answers questions incorrectly with the appearance of authority. Getting the contents and the maintenance right is what makes the Project safe to rely on.
 
-The custom instructions field is your system prompt — it applies to every conversation in the Project. For a support operations Project:
+## The Claude Capability
+
+A Project holds uploaded documents plus custom instructions that apply to every conversation in it. Base Claude chat keeps nothing between conversations. If your organization has enabled Projects, Claude may reference the uploaded documents across sessions — which is exactly why what you upload matters. Always confirm which mode your org allows.
+
+## Step-by-Step Workflow
+
+1. For each candidate document, ask: "Would I be comfortable if this appeared in a data incident report?" If not, don't upload it.
+2. Upload only safe reference material (anonymized SOPs, role-based escalation matrix, SLA and category definitions, QA rubrics, prompt templates).
+3. Keep out anything with PII, credentials, customer data, HR records, contracts, or financials.
+4. Write custom instructions that require Claude to answer from the documents and flag gaps.
+5. Set a recurring reminder to review and refresh the documents.
+
+## Example Prompt
+
+Custom instructions for the Project:
 
 ```
-You are a support operations assistant for [team name].
+Role: You are a support operations assistant for our team.
 
-When answering questions:
-1. Always check the uploaded documents first
-2. If the answer is in the documents, quote or summarize the relevant section
-3. If the answer is NOT in the documents, say "This is not covered in our team documents — 
-   here is general guidance, but verify against your actual process"
-4. Never guess at team-specific details (SLA times, escalation paths, approval authorities)
+Task: Answer questions using only the uploaded team documents.
 
-Data rules: Do not reproduce any personal information from documents in your responses.
+Rules:
+1. Check the uploaded documents first.
+2. If the answer is in them, quote or summarize the relevant section.
+3. If the answer is NOT in them, say: "This isn't covered in our team
+   documents — here is general guidance, but verify it against our actual
+   process."
+4. Never guess team-specific details (SLA times, escalation paths, approvers).
+
+Data rule: Do not reproduce personal information in your responses.
+
+Verification: Name the source document for any specific figure you cite.
 ```
 
-The third instruction is the most important — it prevents Claude from mixing your documented standards with generic IT knowledge in a way that looks authoritative but isn't yours.
+**Safe to upload (typically):** anonymized SOPs, escalation matrix with role names, SLA definitions, ticket category and priority criteria, QA rubrics, prompt templates.
 
-## Testing your Project before team deployment
+**Do not upload:** customer names or account data, employee or HR records, credentials or API keys, vendor contracts or pricing, financial or budget details, anything under NDA, unapproved security or architecture documents.
 
-Run 10 test questions before giving your team access:
+## What Claude Is Doing
 
-- 3 questions with clear answers in your documents
-- 3 questions with partial answers (requires synthesizing from multiple docs)
-- 2 questions where the answer is NOT in your documents
-- 2 questions where the correct answer contradicts common general knowledge
+Claude is using the uploaded documents as context and following the instructions you set. Rule 3 above is what keeps it from blending your documented standards with generic IT knowledge in a way that looks authoritative but isn't yours. Claude is not verifying that your documents are current or accurate — it treats whatever you uploaded as the source, so an outdated file produces confidently wrong answers.
 
-Check: Does Claude accurately source its answers from your documents? Does it correctly flag when information is missing? Does it resist substituting general knowledge when your documents have the answer?
+## Common Beginner Mistake
 
-If Claude fails the "not in documents" test — confidently answering a question that should be flagged as not covered — tighten your custom instructions.
+Uploading a raw ticket export or a spreadsheet "to be safe," without checking it for customer names, email addresses, or embedded credentials. Convenience at upload time becomes a data exposure that's shared across everyone with Project access.
 
-## Keeping the Project current
+## Better Practice
 
-Documents in a Project reflect the state of your processes when they were uploaded. When a process changes, update the document. Set a quarterly reminder to review uploaded documents and remove or update anything that is no longer current. An outdated SOP in a Project is worse than no SOP — it answers questions incorrectly with apparent authority.
+When in doubt, don't upload — paste the specific relevant text into a single conversation instead. And treat the Project as a living asset: when a process changes, update the document. An outdated SOP in a Project is worse than none, because it answers incorrectly with apparent authority.
+
+## Quick Recap
+
+- Upload only safe reference material; keep out PII, credentials, and confidential data.
+- Use custom instructions that force answers from your documents and flag gaps.
+- Schedule a quarterly review — stale documents produce confidently wrong answers.
+
+## Practice Activity
+
+Take five documents you might put in a team Project. Run each through the "data incident report" test and sort them into upload / don't upload. For anything you'd keep out, note what you'd paste into a single conversation instead.

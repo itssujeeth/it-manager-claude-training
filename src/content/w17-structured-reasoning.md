@@ -1,67 +1,74 @@
-# Structured Reasoning Techniques
+# Structured Reasoning: Making Claude's Analysis Auditable
 
-## Beyond "think step by step"
+## Familiar Scenario
 
-Earlier in this course, the term "chain-of-thought prompting" meant asking Claude to "think step by step." That phrasing still works for simple tasks but produces inconsistent, hard-to-audit output for complex operational work. Structured reasoning gives you more control: you define the reasoning structure, Claude fills it in.
+You have to present an analysis to leadership next week, and Claude produced a clean, convincing write-up. But when you read it closely, you can't tell which parts are grounded in the data you gave it and which parts Claude filled in on its own. If someone in the room asks "where did this number come from?" you won't have an answer — and that's a risk you can't take in front of leadership.
 
-## The structured output format approach
+## Core Question
 
-Instead of asking Claude to reason freely, provide an output format that requires structured reasoning:
+"How do I get Claude to show me what its analysis is actually based on, so I can stand behind every line of it?"
 
-```
-Analyze the following and produce your output in this structure:
-<context_summary>
-[2–3 sentences summarizing what you have been given]
-</context_summary>
-<assumptions>
-[List every assumption you are making that is not directly supported by the provided information]
-</assumptions>
-<analysis>
-[Your analysis with confidence levels: High / Medium / Low for each finding]
-</analysis>
-<risk_check>
-[What could make this analysis wrong? What information would change the conclusion?]
-</risk_check>
-<recommendation>
-[Your recommendation, linked to specific analysis findings]
-</recommendation>
-```
+## Why This Matters
 
-This format makes Claude's reasoning explicit, auditable, and reviewable at each section. You can read the assumptions section and immediately see what needs validation.
+Leadership decisions get made on the strength of your analysis. If you can't separate what the evidence supports from what Claude inferred, you're presenting guesses as facts without knowing it. Making the reasoning visible lets you validate the weak points before anyone else finds them.
 
-## XML-style tags for IT operations work
+## The Claude Capability
 
-XML-style tags work well for structured prompt inputs too — they tell Claude precisely what each piece of information is:
+Rather than letting Claude write freely, you give it an output structure that forces it to separate facts from inferences, list its assumptions, and flag a confidence level on each finding. You define the structure; Claude fills it in. This makes the analysis reviewable section by section.
+
+## Step-by-Step Workflow
+
+1. Provide your source material clearly labeled as the evidence.
+2. Ask Claude to separate facts (supported by that evidence) from inferences.
+3. Ask Claude to list every assumption it made that the evidence does not directly support.
+4. Ask Claude to flag a confidence level (High / Medium / Low) on each finding.
+5. Read the assumptions and low-confidence items first — those are what you validate before presenting.
+
+## Example Prompt
 
 ```
-<context>
-You are reviewing a recurring support issue for a post-incident analysis.
-</context>
-<evidence>
-[Paste your logs, notes, timeline]
-</evidence>
-<constraints>
-Lead with evidence. Label assumptions. Do not present hypotheses as conclusions.
-</constraints>
-<output_format>
-Section 1: Evidence summary
-Section 2: Hypotheses (each labeled with confidence level and assumptions)
-Section 3: Recommended next investigation steps
-</output_format>
+Role: You are an IT operations analyst preparing material I will present
+to leadership.
+
+Context: The section below labeled EVIDENCE is the only source material.
+Do not use outside knowledge as if it were from our data.
+
+Task: Analyze the evidence and produce the output in this structure:
+
+1. Evidence summary — 2 to 3 sentences on what you were given.
+2. Facts — statements directly supported by the evidence.
+3. Inferences — conclusions you drew that go beyond the evidence.
+4. Assumptions — anything you assumed that the evidence does not confirm.
+5. Findings — each with a confidence level: High / Medium / Low.
+6. What would change the conclusion — information that, if wrong or missing,
+   would alter your findings.
+
+Constraint: Do not present an inference as a fact. Keep any reasoning brief.
+
+Verification: For each finding, note what I would check it against.
+
+EVIDENCE:
+[paste logs, metrics, notes, timeline]
 ```
 
-## Confidence levels in practice
+## What Claude Is Doing
 
-For operational outputs that influence decisions, require explicit confidence levels:
-- **High** — directly supported by the evidence provided
-- **Medium** — supported by pattern or indirect evidence
-- **Low** — plausible but speculative; additional evidence needed
-- **Unknown** — insufficient information to assess
+Claude is organizing its response into the sections you required and labeling items against the evidence you provided. It is using patterns from that context to sort facts from inferences — but the labels reflect Claude's own judgment, not an external verification. Structured output makes the reasoning visible so you can catch errors; it does not make the underlying analysis independently correct.
 
-A recommendation built on Low-confidence findings should be treated differently than one built on High-confidence findings. Making this explicit protects you when the analysis is reviewed.
+## Common Beginner Mistake
 
-## The verification step
+Trusting the confidence labels as if they were measured certainty. A "High" from Claude means the statement fits the evidence it was given — not that the evidence itself is complete or that the conclusion is validated.
 
-For any output that will be acted on, include a verification instruction in your prompt: "For each metric or factual claim, note what you would need to verify it against." This prompts Claude to identify its own verification requirements — a useful checklist for your review step.
+## Better Practice
 
-> Structured reasoning does not make Claude more accurate — it makes its reasoning more visible, so you can catch errors before they reach a decision.
+Use the structure as a review checklist, not a verdict. Read the assumptions and Low-confidence findings first, confirm them against source data, and only then decide what goes in front of leadership. A recommendation resting on Low-confidence findings should be treated very differently from one resting on High-confidence findings.
+
+## Quick Recap
+
+- Ask Claude to separate facts from inferences and to list its assumptions.
+- Ask Claude to flag confidence levels and to explain its reasoning briefly.
+- The structure makes reasoning auditable — you still validate the weak points yourself.
+
+## Practice Activity
+
+Take one analysis you've already run through Claude. Re-run it with the structured format above. Look specifically at the Assumptions and Low-confidence sections, and pick one item from each to verify against your source data.

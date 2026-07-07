@@ -1,37 +1,72 @@
-# Multi-Step Prompt Chains
+# Multi-Step Prompting: Breaking a Big Task Into a Chain
 
-## Why single prompts hit a ceiling
+## Familiar Scenario
 
-A single prompt works well for contained tasks: summarize this, draft that, categorize this. It breaks down when the task has sequential dependencies — you need the output of step one before you can ask step two, and the quality of step three depends on how accurately steps one and two were done.
+It's Friday and your weekly ops report is due. You paste a week of ticket data into Claude and ask for "a full report with metrics, trends versus last week, and recommendations." What comes back looks polished but is subtly wrong: a metric is off, the trend compares against the wrong baseline, and the recommendations are built on both errors. You can't easily tell where it went sideways because everything happened in one step.
 
-Multi-step prompting makes Claude's reasoning transparent, auditable, and correctable at each stage. It also means errors stay isolated rather than propagating through to a final output you can't easily untangle.
+## Core Question
 
-## The four-step ops report chain
+"When a task has several stages that depend on each other, how do I stop errors in an early stage from quietly corrupting the final output?"
 
-A weekly ops report is a natural fit for multi-step prompting:
+## Why This Matters
 
-**Step 1 — Data quality check:**
-"Review this ticket data. Identify any formatting issues, missing fields, or rows that look anomalous. Do not analyze yet — just flag data quality concerns."
+A weekly report, a post-incident analysis, or a capacity review all have sequential dependencies: you need clean data before metrics, metrics before trends, trends before recommendations. When you ask for all of it at once, a mistake in stage one silently flows into every stage after it — and the confident final answer hides the original error.
 
-**Step 2 — Summary and metrics:**
-"Using the cleaned data from Step 1 (with the flagged rows excluded), compute: total volume, volume by category, top 5 issue types, SLA attainment by priority. Flag any metric you cannot compute precisely."
+## The Claude Capability
 
-**Step 3 — Trend analysis:**
-"Based on the metrics above, identify trends and anomalies versus last week's data [provide prior data]. Label each finding as EVIDENCE-BASED or ASSUMPTION. Assign confidence: High/Medium/Low."
+Claude works well on contained tasks: summarize this, categorize that. For layered work, you break the task into a chain of separate prompts and review each output before it becomes the input to the next. This keeps each stage transparent and correctable, and stops errors from compounding.
 
-**Step 4 — Narrative and recommendations:**
-"Convert the Step 3 analysis into an executive summary and 3 action recommendations. Each recommendation must reference a specific finding. Flag any confidence-Low findings in a separate section."
+## Step-by-Step Workflow
 
-## The critical rule: review before passing forward
+1. Break the task into stages where each stage produces something the next stage needs.
+2. Run stage one. Review its output before continuing.
+3. Feed the reviewed output into stage two. Review again.
+4. Continue through the chain, spot-checking the largest numbers and anything surprising at each step.
+5. Save the sequence of prompts as a reusable template for the next report.
 
-Each step's output must be reviewed before it becomes the input for the next step. If Step 2's metric calculation contains an error and you pass it to Step 3 without checking, Step 3's trend analysis is built on a wrong baseline, and Step 4's recommendations are built on wrong trends.
+## Example Prompt
 
-The review does not need to be exhaustive — spot-check the largest numbers and anything that looks surprising. The goal is catching errors before they compound.
+```
+Role: You are an IT operations analyst for our support team.
 
-## When chains produce inconsistent output
+This is Step 1 of a 4-step report. Do only Step 1.
 
-Multi-step chains can produce inconsistent output across runs because Claude generates probabilistically. If you need consistent output format for recurring reports, include explicit format specifications in each step prompt — headers, table structure, number of bullets — rather than leaving format to Claude's judgment.
+Step 1 — Data quality check:
+Review the ticket data below. Identify formatting issues, missing fields,
+or rows that look anomalous. Do NOT analyze or compute anything yet — only
+list data quality concerns.
 
-## Saving chain outputs
+Output format:
+- Table: row/field, issue, suggested handling.
+- End with: "Rows I would exclude and why."
 
-For recurring workflows (weekly report, monthly PIR), save your prompt chain as a template with placeholders for the variable parts (dates, specific data). The template is your process documentation; the outputs are your artifacts.
+Constraint: If the data looks clean, say so plainly. Do not invent issues.
+
+Verification: Flag anything I should confirm against the source export.
+
+[paste ticket data]
+```
+
+Later steps: (2) compute metrics on the cleaned data, (3) compare against last week's figures with confidence labels, (4) turn the analysis into an executive summary and three recommendations, each tied to a specific finding.
+
+## What Claude Is Doing
+
+At each step, Claude is working only with the context and instructions in front of it. It is using patterns from the data you provided — it is not independently confirming that your export is complete or correct. Because Claude generates probabilistically, running the same chain twice can produce slightly different wording or structure, which is why explicit format instructions at each step matter.
+
+## Common Beginner Mistake
+
+Passing an output forward without reviewing it. If step two's metric is wrong and you feed it straight into step three, the trend analysis is built on a bad baseline and the recommendations inherit the error.
+
+## Better Practice
+
+Treat each step's output as a draft to check, not a finished fact. The review doesn't need to be exhaustive — spot-check the biggest numbers and anything that looks off. Catch errors before they move to the next stage.
+
+## Quick Recap
+
+- Split tasks with dependent stages into a chain of separate prompts.
+- Review each output before it becomes the next step's input.
+- Save the chain as a template so recurring reports follow the same process.
+
+## Practice Activity
+
+Take one report you normally ask for in a single prompt. Rewrite it as a three-step chain (data check → metrics → narrative). Run it once, reviewing between steps, and note where the mid-chain review caught something the single prompt would have hidden.

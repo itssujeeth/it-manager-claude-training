@@ -1,41 +1,71 @@
-# File Handling Practicalities and Limits
+# File Analysis Limits: What Claude Will Miss
 
-## The context window constraint
+## Familiar Scenario
 
-Claude's context window is the total amount of text it can hold in one conversation — your messages, Claude's responses, and uploaded file contents all count toward this limit. When a session fills the context window, Claude may start losing earlier information, producing less coherent output, or refusing additional input.
+You upload a 50-page SOP and ask Claude to "find every error and inconsistency." It returns a tidy list of issues, and you're tempted to treat that list as complete. But a week later someone finds a contradiction on page 38 that Claude never mentioned — a section it effectively skimmed once the document got long. You assumed full coverage; you didn't get it.
 
-For file analysis, this means: the larger your file, the less room there is for back-and-forth conversation, and the more likely Claude is to make errors as context pressure increases.
+## Core Question
 
-## Practical size guidelines
+"What can Claude *not* reliably do with a large file, and where do I have to verify instead of trust?"
 
-These are working estimates, not hard limits — actual behavior varies:
+## Why This Matters
 
-**CSV files:** Under 500 rows generally works well for most analyses. 500–2000 rows may work but test with a sample first. Over 2000 rows: extract the relevant rows or columns before uploading.
+Acting on an incomplete review is worse than doing no review, because it feels thorough. If you present a 50-page SOP as "checked by Claude" and a gap surfaces later, the confidence you placed in the output becomes the problem. Knowing where file analysis degrades tells you exactly where your own verification is non-negotiable.
 
-**PDF documents:** Under 20 pages is reliable for most queries. Long documents (50+ pages) may produce incomplete summaries or miss later sections. For long documents, split into sections and summarize each separately.
+## The Claude Capability
 
-**Multiple files:** Uploading several files in one session reduces available context for each. If you need to analyze 5 reports, consider whether all 5 need to be in one conversation or whether you can split across sessions.
+Claude's context window is the total amount of text it can hold in one conversation — your messages, its replies, and the file contents all count against it. The bigger the file, the less room remains, and the more likely Claude is to lose detail, miss later sections, or produce less coherent output as the window fills.
 
-## The sample-first approach
+If your organization has enabled file upload, Claude may read files directly — but the context window limit still applies regardless of mode. Always confirm which mode your org allows.
 
-For any file you haven't uploaded to Claude before, test with a small sample before running the full analysis:
-1. Take 50 rows (or the first 5 pages of a PDF)
-2. Upload the sample and run one representative query
-3. Confirm the format is parsing correctly and the output looks right
-4. Then upload the full file
+## Step-by-Step Workflow
 
-This takes 5 minutes and avoids finding formatting errors after a 20-minute analysis run.
+1. Estimate the size — rows for CSVs, pages for PDFs.
+2. For large files, split into sections and analyze each separately rather than all at once.
+3. Ask a specific question per section instead of "review everything."
+4. Treat any "complete" list Claude gives as a starting point, not a full audit.
+5. Verify the sections that matter most by reading them yourself.
 
-## When Claude misreads a file
+## Example Prompt
 
-Common file parsing issues:
-- **CSV delimiter confusion** — semicolons or tabs instead of commas. Fix: export as standard comma-delimited CSV.
-- **Date format inconsistency** — mixed date formats in one column cause calculation errors. Fix: standardize dates before uploading.
-- **Merged cells in spreadsheets** — Claude cannot read merged cells correctly. Fix: unmerge and fill values before exporting to CSV.
-- **PDFs with tables as images** — scanned PDFs or tables embedded as images cannot be read as text. Fix: use the original document source or an OCR tool first.
+```
+Role: You are reviewing one section of a larger SOP.
 
-When Claude reports a metric that seems wrong, the first check is whether the input file parsed correctly.
+Context: This is Section 3 of 6 (pages 18-27). Do not comment on other
+sections.
 
-## AI-native vs. traditional analysis tools
+Task: Identify contradictions, unclear steps, and missing prerequisites in
+THIS section only.
 
-Claude is not a replacement for BI tools, SQL, or Python for large-scale data work. It excels at: natural language queries, narrative generation, small-medium dataset summarization, and pattern description. For anything requiring precise computation across large datasets, use your existing analytical tools and bring Claude in for the narrative layer.
+Constraints:
+- Quote the exact line for each issue you raise.
+- If a step references another section, flag it as "needs cross-check" rather
+  than assuming it is correct.
+
+Verification: List which pages you were and were not able to read clearly, so
+I know what still needs a manual pass.
+
+[paste section 3 text]
+```
+
+## What Claude Is Doing
+
+Claude is reading what fits in its context window and using patterns to spot issues in that text. It is not guaranteeing it examined every line — as the document grows, coverage of later sections weakens. Claude is not verifying facts or cross-references unless you provide the referenced material. A confident, well-formatted list can still be partial.
+
+## Common Beginner Mistake
+
+Reading "here are the issues I found" as "here are all the issues that exist." Claude reports what it surfaced from the text it processed — silence on a section isn't confirmation that the section is clean.
+
+## Better Practice
+
+Work with realistic size guidelines and split large jobs. As rough working estimates: CSVs under ~500 rows analyze well, 500–2000 need a sample test first, and above that you extract the relevant rows before uploading; PDFs under ~20 pages are reliable, while 50+ pages should be split and summarized in sections. And remember Claude is not a replacement for BI tools, SQL, or Python on large datasets — use those for precise computation and bring Claude in for the narrative layer.
+
+## Quick Recap
+
+- The context window caps how much Claude can hold — bigger files mean weaker coverage.
+- A "complete" list from Claude is a starting point, not a guaranteed full audit.
+- Split large files, verify the critical sections yourself, and use real analytical tools for precise large-scale computation.
+
+## Practice Activity
+
+Take a long document you'd want reviewed. Split it into two or three sections and run one section through Claude, asking it to report which pages it could read clearly. Note where its coverage claim tells you a manual pass is still needed.

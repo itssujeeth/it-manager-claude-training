@@ -1,56 +1,83 @@
-# Identifying Quality Patterns Across Tickets
+# Spotting Quality Patterns Across a Sample of Tickets
 
-## From individual reviews to systemic insight
+## Familiar Scenario
 
-Manual QA review tells you whether ticket #12345 was good. Pattern analysis tells you whether ticket documentation quality is declining, which ticket types have the worst resolution notes, and whether a recent process change improved quality across the board.
+Your QA reviews keep flagging incomplete documentation, but you can't tell whether it's one or two analysts or something the whole team is doing. Before you decide whether to coach an individual or change a process, you need to know: is this a systemic issue or an individual one?
 
-Pattern analysis is where Claude-assisted QA creates the most value for a manager — it turns individual data points into actionable team-level insight.
+## Core Question
 
-## How to structure a batch QA analysis
+How do I tell whether a quality problem is spread across the team or concentrated in a few people — without singling anyone out prematurely?
 
-Instead of reviewing tickets one at a time, collect 10–20 and review them together:
+## Why This Matters
+
+The fix for a systemic problem and an individual one are completely different. A team-wide documentation gap calls for a template or training; a single analyst's gap calls for a coaching conversation. Diagnosing the wrong one wastes effort and can feel unfair to the team. Reviewing a batch together, rather than one ticket at a time, is what makes the pattern visible.
+
+## The Claude Capability
+
+Given an anonymized batch of resolution notes, Claude can surface patterns that are hard to see one ticket at a time — the most common gap, which ticket types score lowest, and whether failures cluster by category, shift, or complexity. It analyzes the sample you give it; it doesn't reach into your ticketing system.
+
+## Step-by-Step Workflow
+
+1. Pull a sample of 10–20 resolution notes and strip all names and PII.
+2. Number them and paste them together with your rubric.
+3. Ask Claude to identify the most common gap and any clustering by type, shift, or complexity.
+4. For each pattern, diagnose the root cause (knowledge, process, time pressure, or individual).
+5. Ask Claude to draft improvement options once you've diagnosed the cause.
+6. Re-run the batch review after your change to see whether it worked.
+
+## Example Prompt
 
 ```
 Role: You are a QA analyst reviewing a batch of IT support ticket resolutions.
-Task: After reviewing all tickets below, identify:
-1. The most common documentation gap across this batch
-2. Any ticket types that consistently show lower quality than others
-3. Any patterns in the failures — are they concentrated in certain shifts, categories, or complexity levels?
-4. Two or three specific improvement recommendations for the team based on this batch
 
-Rubric: [Include your standard rubric]
-Tickets: [PASTE BATCH — numbered, no names or PII]
+Rubric: [Paste your standard rubric]
+
+Tickets: [PASTE 10–20, numbered, no names or PII]
+
+Task: After reviewing all tickets, identify:
+1. The most common documentation gap across the batch
+2. Any ticket types that consistently score lower than others
+3. Whether failures cluster by category, shift, or complexity level
+4. Two or three specific improvement recommendations for the team
+
+Verification: Note where the sample is too small to be confident, and show the checks you used to reach each pattern.
 ```
 
-## Pattern types worth tracking
+## What Claude Is Doing
 
-**Temporal patterns** — Do Monday morning tickets have worse documentation than Friday afternoon? (Common — Monday volume pressure vs. Friday rush.) Do night-shift resolutions differ from day-shift?
+Claude is identifying patterns using the tickets in the batch you provided — it is working only from that sample, not from your full ticket history, so its conclusions are as representative as your sample is. It is not deciding whether the problem is individual or systemic; it surfaces the pattern, and you supply the diagnosis using what you know about the team and workload.
 
-**Complexity patterns** — Do simple tickets (password resets) have better documentation than complex ones (multi-system issues)? If yes: analysts may be skipping steps when under cognitive load. The fix is a template, not coaching.
+## Patterns Worth Tracking
 
-**Category patterns** — Are VPN tickets consistently missing root cause documentation? Network tickets often are — because the resolution is often "it works now" and the underlying cause isn't investigated.
+- **Temporal** — do Monday-morning or night-shift tickets document worse than others? Often a volume or pressure signal.
+- **Complexity** — if simple tickets document better than complex ones, analysts may be skipping steps under load. The fix is a template, not coaching.
+- **Category** — are VPN or network tickets consistently missing root cause? Often the resolution is "it works now" and the cause isn't investigated.
+- **Cohort** — grouping by tenure (under 6 months vs. over 2 years), without naming anyone, tells you whether it's a training or an individual issue.
 
-**Analyst cohort patterns** — Without naming individuals, you can look at patterns by experience cohort (under 6 months vs. over 2 years) to identify whether it's a training issue or an individual issue.
+## Turning Patterns Into Action
 
-## Turning patterns into action
-
-A pattern is only useful if it drives a decision. For each pattern Claude identifies, ask:
-
-- **Is this a knowledge gap?** → Training or documentation
-- **Is this a process gap?** → Template or checklist
-- **Is this a time pressure issue?** → Staffing or workflow change
-- **Is this individual coaching?** → Specific 1:1 conversation
-
-Claude can help you draft the action plan once you've diagnosed the root cause. Provide the pattern and ask for improvement options:
+For each pattern, ask what kind of gap it is: a knowledge gap (training or documentation), a process gap (template or checklist), a time-pressure issue (staffing or workflow), or individual coaching (a specific 1:1). Then ask Claude for options:
 
 ```
 Pattern identified: 7 of 10 VPN tickets are missing root cause documentation.
-Context: Analysts resolve VPN issues but don't record why it happened.
-Task: Suggest 3 ways to address this — ranked by implementation effort.
+Context: Analysts resolve the issue but don't record why it happened.
+Task: Suggest three ways to address this, ranked by implementation effort.
 ```
 
-## Tracking improvement over time
+## Common Beginner Mistake
 
-Run batch QA monthly and compare patterns. If you implement a change (new template, additional training, process update), the next batch review tells you whether it worked.
+Reading one bad ticket and concluding the team has a systemic problem — or seeing a pattern in a tiny, unrepresentative sample and rolling out a team-wide change off it.
 
-Documenting this systematically — pattern identified, action taken, quality score before/after — gives you a feedback loop that makes each intervention more targeted than the last.
+## Better Practice
+
+Use a batch large enough to be representative, keep it anonymized, and treat Claude's patterns as a prompt for your diagnosis rather than the diagnosis itself. Run the batch review on a regular cadence so that after you make a change, the next sample tells you whether quality actually improved.
+
+## Quick Recap
+
+- Review an anonymized batch of 10–20 tickets, not one at a time, to see patterns.
+- Claude surfaces the pattern; you diagnose whether it's systemic or individual.
+- Re-run the batch after a change to confirm it worked.
+
+## Practice Activity
+
+Pull an anonymized sample of 10 recent resolution notes, run the batch prompt above, and write one sentence for the top pattern classifying it as a knowledge, process, time-pressure, or individual issue.

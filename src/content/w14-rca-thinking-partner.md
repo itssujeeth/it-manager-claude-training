@@ -1,45 +1,76 @@
-# Using Claude as a Thinking Partner for RCA
+# Using Claude as a Thinking Partner During Root Cause Analysis
 
-## The most important distinction
+## Familiar Scenario
 
-Claude is a thinking partner for RCA — not a root cause determiner. This is not a minor caveat; it is the foundation of how to use it correctly.
+The same P2 incident has recurred three times this quarter — an intermittent authentication failure that clears itself before anyone can catch it live. You suspect something in the infrastructure, but you're not sure. You have a frantic Slack thread, three engineers with three different theories, and a post-incident review due Friday. You're staring at a blank page.
 
-Claude can:
-- Structure your analysis
-- Generate hypotheses from the information you provide
-- Identify what evidence is missing
-- Produce fishbone diagrams, 5-Why frameworks, and timeline reconstructions
-- Ask useful clarifying questions
+## Core Question
 
-Claude cannot:
-- Access your logs, monitoring data, or system telemetry
-- Verify whether a hypothesis is correct
-- Determine root cause — that requires evidence and SME knowledge
+"I need to structure this analysis and pressure-test my thinking — but I don't want a tool that invents a root cause I'll have to walk back in front of leadership. How do I use Claude without it making things up?"
 
-If you paste an incident description into Claude and ask "what caused this?", Claude will produce a plausible, well-structured answer. That answer is a hypothesis. Its confidence and detail do not indicate that it is correct.
+## Why This Matters
 
-## Where Claude adds genuine value in RCA
+A recurring P2 that never gets a real root cause keeps costing you incidents and eroding trust in the RCA process. But a confidently wrong root cause is worse than none — it drives corrective actions that don't work and creates false certainty. You need structure without fabrication.
 
-**Structure under pressure.** During a post-incident review, you have raw notes, a frantic Slack thread, and three engineers with different theories. Claude can quickly organize this into a coherent timeline and extract the main hypothesis threads — giving you a structured starting point rather than a blank page.
+## The Claude Capability
 
-**Fishbone generation.** Ask Claude to populate a fishbone (Ishikawa) diagram from your incident description. It will propose causes across People, Process, Technology, and Environment. Treat each branch as a hypothesis to test, not a conclusion.
+Claude can act as a thinking partner for RCA: it organizes messy notes into a timeline, generates hypotheses from the information you provide, identifies what evidence is missing, and scaffolds frameworks like fishbone diagrams and 5-Why chains. What it cannot do is access your logs, verify a hypothesis, or determine the actual root cause. Everything it produces is a hypothesis to test — not a conclusion.
 
-**5-Why scaffolding.** Claude can walk you through a 5-Why chain, prompting "what caused that?" at each level. It also flags when a Why chain is hitting the limits of the information you provided — "this step requires log data to verify."
+## Step-by-Step Workflow
 
-**Gap identification.** After you describe what you know, Claude can tell you what's missing: "You have not described what monitoring was in place before the failure" or "The timeline has a 2-hour gap with no recorded events."
+1. Give Claude your raw incident material — notes, timeline fragments, the theories in play.
+2. Ask it to organize this into a timeline and a labeled hypothesis list.
+3. Ask it to flag what evidence is missing for each hypothesis.
+4. Take each hypothesis to the evidence — logs, telemetry, SME knowledge — and confirm or rule it out.
+5. Only validated hypotheses go into the published PIR.
 
-## How to frame RCA prompts
+## Example Prompt
 
-The framing determines how useful the output is:
+```
+Role: You are helping me structure a root cause analysis. You are a thinking
+partner, not a root cause determiner.
 
-Good framing:
-> "Based on the following incident notes, generate a structured hypothesis list for root cause. Label each hypothesis as evidence-based or assumed. For each assumed item, describe what evidence would confirm or rule it out."
+Context: Below are my incident notes for a recurring P2 authentication
+failure. This is the only information available to you.
 
-Weak framing:
-> "What caused our VPN outage last Tuesday?"
+Notes:
+[paste incident notes, timeline, and current theories]
 
-The first prompt produces hypotheses to test. The second produces a confident narrative that may be wrong.
+Task:
+1. Organize the notes into a chronological timeline, marking any gaps where
+   no events are recorded.
+2. Produce a hypothesis list for the root cause.
+3. Populate a fishbone across People, Process, Technology, Environment.
 
-## The SME validation requirement
+Output format: Timeline, then a hypothesis table with columns Hypothesis,
+Basis, Confidence (High/Medium/Low), Evidence Needed to Confirm.
 
-Every root cause hypothesis that will appear in a published PIR or corrective action plan needs a named SME who has validated it against actual evidence. Claude cannot perform this validation. The validation step keeps the RCA honest and prevents plausible fiction from becoming official record.
+Constraints: Use only the information in my notes. Do not generate root
+causes from general knowledge. Label every item as Evidence-Based or Assumed.
+For each Assumed item, state what evidence would confirm or rule it out.
+
+Verification: List what information is missing that you would need to raise
+any Medium or Low hypothesis to High confidence.
+```
+
+## What Claude Is Doing
+
+Claude is using patterns from the notes you provided to organize them and propose hypotheses. It is not verifying facts unless you give it source material, and it cannot see your logs or telemetry. A well-structured, confident-sounding answer is not evidence that the answer is correct — its polish reflects the format you asked for, not the truth of the cause.
+
+## Common Beginner Mistake
+
+Pasting the incident description and asking "what caused this?" Claude will produce a plausible, detailed narrative — and its fluency will tempt you to treat it as the answer. That narrative is a hypothesis with unknown accuracy, and shipping it as a root cause is how false certainty enters the official record.
+
+## Better Practice
+
+Frame prompts to produce hypotheses to test, not conclusions to accept. Require every claim to be labeled Evidence-Based or Assumed, and require a confidence level on each. Then assign a named SME to validate each hypothesis against actual evidence before it appears in a PIR or corrective action plan. That validation step is what keeps the RCA honest.
+
+## Quick Recap
+
+- Claude structures the analysis and generates hypotheses; it does not determine root cause.
+- It works only from what you provide — it has no access to logs, telemetry, or your systems.
+- Every hypothesis needs a confidence label and SME validation against real evidence before publication.
+
+## Practice Activity
+
+This week, take one recent incident and run your notes through the example prompt. For each hypothesis Claude produces, write down the specific piece of evidence you'd need to confirm it — and identify who on your team owns checking it.

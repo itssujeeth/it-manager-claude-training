@@ -1,56 +1,71 @@
-# Building Executive-Ready Presentations with Claude
+# Preparing an Executive Briefing Under Time Pressure
 
-## What "executive-ready" actually means
+## Familiar Scenario
 
-An executive presentation answers three questions in the first 30 seconds: what is the problem, what are you proposing, and what do you need from the audience. Everything else is supporting detail that may never be read.
+It's 11am. The CISO just asked for a five-minute operations briefing at 2pm — how the support team is handling the recent spike in security-related tickets. You have the raw data: ticket volumes, response times, a backlog trend. What you don't have is time to turn it into something a non-technical executive will absorb in five minutes.
 
-Claude can help you build presentations from operational data — but only if you brief it correctly on the audience.
+## Core Question
 
-## Audience-first prompting
+"I have the numbers but no time to shape them into a story. How do I get from raw operational data to a clear executive narrative that lands in the first 30 seconds?"
 
-Before writing a single slide, tell Claude who the reader is and what they care about:
+## Why This Matters
 
-- **CFO / Finance lead** — cost impact, ROI, payback period, budget required
-- **CTO / VP Engineering** — risk, technical feasibility, integration complexity
-- **COO / Operations lead** — efficiency gain, process change, team impact
-- **Board / CEO** — strategic alignment, competitive position, headline metrics only
+An executive briefing succeeds or fails on framing. Leadership decides in the first 30 seconds whether they understand what you're telling them — what the problem is, what you're proposing, and what you need from them. A data dump forces them to do that work themselves, and under time pressure they simply won't.
 
-The same data produces different slides for different audiences. Claude handles this well when you specify it explicitly.
+## The Claude Capability
 
-## Converting operational data into executive narrative
+Claude can convert your verified metrics into an audience-appropriate narrative — headlines, tight supporting points, and before/after comparisons — framed for the specific executive you're briefing. It shapes the content layer. It does not build slides and it does not produce the numbers; you supply verified figures and your own projections.
 
-Give Claude your verified metrics and ask for narrative, not bullet points:
+## Step-by-Step Workflow
+
+1. Confirm who you're briefing and their single primary concern.
+2. Assemble your verified metrics and any projected "after" figures you own.
+3. Ask Claude for a narrative — headline plus a few supporting points per topic — not a wall of bullets.
+4. Ask which single number makes the strongest case, and lead with it.
+5. Move the narrative into your slide template; use the full version as speaker notes.
+
+## Example Prompt
 
 ```
-Context: I am presenting to [role]. They care most about [primary concern].
-Data: [Your verified figures]
-Task: Convert this data into an executive slide narrative. Lead with the business impact.
-Format: One-sentence headline per topic, 2–3 supporting bullets, no more than 6 words per bullet.
+Role: You are helping me prepare a five-minute executive briefing.
+
+Context:
+Audience: [CISO / CFO / COO / CEO] — their primary concern is [risk / cost /
+efficiency / strategic position].
+Verified data: [paste your actual figures]
+
+Task: Convert this data into an executive slide narrative. Lead with the
+business impact for this audience.
+
+Output format: One-sentence headline per topic, then two to three supporting
+bullets of no more than six words each. Then a two-sentence spoken opening
+that states the problem, what I'm proposing, and what I need from them.
+
 Constraints: Use only the numbers I provided. No jargon. No passive voice.
+Do not project or estimate any figures I did not give you.
+
+Verification: Tell me which single number in this data makes the strongest
+case for the audience, and why.
 ```
 
-## Before/after comparisons
+## What Claude Is Doing
 
-A before/after comparison is the most persuasive structure for operational improvements: here is what it costs today, here is what it will cost after the change, here is the difference.
+Claude is using patterns from the verified data you provided to frame a narrative for your audience. It is not verifying the figures, and it will not invent the "after" numbers unless you provide them. The framing quality comes from how precisely you describe the audience and their concern — the same data produces a different briefing for a CFO than for a CISO.
 
-Claude can generate this structure cleanly:
+## Common Beginner Mistake
 
-```
-Current state: [metrics]
-Proposed state: [projected metrics based on your estimates]
-Task: Generate a before/after comparison table and a 2-sentence executive narrative of the delta.
-```
+Crowding the briefing with every metric you have. When a slide shows twelve numbers, the executive fixes on the one that surprises them — usually not the one you wanted to emphasize — and your narrative is gone. More numbers reduce clarity, not increase it.
 
-Do not ask Claude to project the "after" figures — you own those estimates. Provide them; Claude formats them.
+## Better Practice
 
-## Slide design vs. content
+Brief Claude on the audience first, lead each slide with one headline number, and let the before/after structure carry improvements: here is what it costs today, here is what it costs after, here is the difference. Provide the "after" figures yourself — you own those estimates; Claude only formats them. Keep the full narrative as your speaker notes and put only key phrases on the slides.
 
-Claude generates content — narrative, bullets, tables, talking points. It does not produce slides. Use Claude for the content layer, then apply your template in PowerPoint, Google Slides, or Keynote.
+## Quick Recap
 
-A useful workflow: generate the full narrative in Claude, extract the key phrases as slide bullets, then build the deck. The narrative becomes your speaker notes.
+- Executive briefings win or lose in the first 30 seconds — lead with the business impact.
+- Claude frames verified data into an audience-specific narrative; it does not build slides or invent figures.
+- One headline number per slide beats a dozen — ask Claude which number makes the strongest case.
 
-## One number per slide
+## Practice Activity
 
-The most common mistake in operational presentations: too many numbers. When a slide has 12 metrics, leadership focuses on the one that surprises them — usually not the one you wanted to emphasize.
-
-Ask Claude to help you identify the single most important metric per slide: "Given this data, which one number makes the strongest case for this proposal?" Then lead with that.
+This week, take a real set of ops metrics and run the example prompt for a specific executive audience. Identify the single strongest number, build a three-slide narrative around it, and time yourself delivering it in under five minutes.

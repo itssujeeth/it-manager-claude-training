@@ -1,57 +1,65 @@
-# Verifying Claude's Data Output
+# Verifying Claude's Metric Calculations
 
-## The core rule
+## Familiar Scenario
 
-Claude's arithmetic is approximate. On small, clean datasets it is often correct. On large, messy, real-world data it will sometimes produce plausible-looking numbers that are wrong. Never include a Claude-generated metric in a report or decision without checking it against your source data.
+You asked Claude to calculate SLA attainment from your ticket export for the board deck. It returned "SLA attainment: 94%" — clean, confident, no hedging. Something felt high, so you counted the breached tickets in your source data by hand. The real number was 87%. Had you not checked, a wrong figure would have gone in front of the board.
 
-This is not a failure of Claude — it is the correct way to use any AI for data work. The verification step is part of the workflow, not an edge case.
+## Core Question
 
-## Why Claude makes arithmetic errors
+Why can't I trust Claude's numbers as-is, and how do I verify them quickly without redoing all the math?
 
-Claude is a language model, not a spreadsheet engine. It processes numbers as tokens in text, not as values in a calculation engine. For simple counts and percentages on small datasets, it is usually accurate. For calculations involving many rows, conditional logic, or chained operations, error rates increase.
+## Why This Matters
 
-Common failure modes:
-- **Rounding errors accumulated across multiple calculations** — small errors compound
-- **Incorrect denominator in percentage calculations** — especially when some rows meet a filter and some don't
-- **Off-by-one errors** in date range calculations ("this week" vs. "last 7 days")
-- **Missing rows** if the pasted data has inconsistent formatting Claude misparses
+A wrong metric in a leadership report, an SLA figure, or a performance review does real damage — decisions get made on it, and your credibility rides on it. The difference between 94% and 87% attainment could change a staffing decision. Verification is not a sign Claude is unreliable; it is the standard operating procedure for any AI-assisted data work, and it protects you.
 
-## How to verify efficiently
+## The Claude Capability
 
-You don't need to recheck every number. Prioritize:
+Claude is a language model, not a spreadsheet engine. It processes numbers as tokens in text, not as values in a calculation engine. For simple counts and percentages on small, clean datasets it is usually accurate. For calculations across many rows, conditional logic, or chained operations, error rates rise — and the output looks just as confident whether it is right or wrong.
 
-**High-stakes numbers first** — anything going to leadership, anything tied to SLA reporting, anything tied to team performance reviews.
+## Step-by-Step Workflow
 
-**Cross-check key totals** — if Claude says total volume was 312 tickets, count your source rows. If the total is wrong, all derived metrics (percentages, averages) are also wrong.
+1. Keep your source data open in a second window while you review Claude's output.
+2. Cross-check key totals first — if the total is wrong, every derived percentage is wrong too.
+3. Spot-check a couple of proportions against the raw rows.
+4. Verify any number that surprises you — your intuition is a useful error detector.
+5. Use your source-data numbers, not Claude's, wherever they differ.
 
-**Spot-check proportions** — if Claude says P1 = 8% of volume, manually check a few rows to see if that looks right.
+## Example Prompt
 
-**Verify any metric you don't already have intuition about** — if a number surprises you, check it. Your intuition is a useful error-detection tool.
-
-## Making verification fast
-
-Structure your verification workflow so it takes 5 minutes, not 30:
-
-1. Keep your source data open in a second window
-2. Spot-check totals and key percentages first (2 minutes)
-3. Verify the one or two metrics that will be quoted most
-4. Note any discrepancies and use your source data numbers, not Claude's
-
-The goal is not perfect verification of everything — it is making sure the numbers that matter are right.
-
-## When to flag Claude's errors back into the prompt
-
-If Claude produces an error, you can correct it and ask for a revised output:
+When you find an error, correct it and ask for a revised output:
 
 ```
-Your total volume calculation was 312 but my source data shows 287 tickets. 
-Please recalculate the following metrics using 287 as the total volume: [list metrics].
+Your total volume calculation was 312 but my source data shows 287 tickets.
+Please recalculate the following metrics using 287 as the total volume:
+[list the metrics].
 ```
 
-Claude will usually produce a corrected version. Verify the revised numbers too — correction does not guarantee accuracy.
+Then verify the revised numbers too — a correction does not guarantee accuracy.
 
-## Building a verification culture
+## What Claude Is Doing
 
-If your team uses Claude for data reporting, they need to understand the verification step. It's not optional and it's not a sign that Claude is unreliable — it's the standard operating procedure for AI-assisted analysis.
+Claude is using patterns from the data you pasted to produce numbers that read as calculated results, but it is not running them through a verified calculation engine. Common failure modes include rounding errors compounding across chained calculations, an incorrect denominator in a percentage (especially when some rows meet a filter and some do not), off-by-one errors in date ranges ("this week" vs. "last 7 days"), and missed rows when the pasted data is formatted inconsistently. Claude is not verifying its own arithmetic against your source — that step is yours.
 
-> A verified number from Claude is as useful as any other verified number. An unverified number from Claude is a liability.
+## Common Beginner Mistake
+
+Trusting a number because it is specific and stated confidently. "94%" feels precise and authoritative, so it goes straight into the deck. Confidence and precision in the wording tell you nothing about whether the calculation was correct.
+
+## Better Practice
+
+Verify efficiently rather than exhaustively — aim for a 5-minute check, not a 30-minute recalculation:
+
+1. Spot-check totals and the key percentages first (about 2 minutes).
+2. Verify the one or two metrics that will be quoted most.
+3. Note discrepancies and use your source numbers.
+
+Prioritize high-stakes figures: anything going to leadership, tied to SLA reporting, or tied to team performance. A simple rule — if a metric will appear in a slide, a report, or an email to a senior stakeholder, verify it independently. Claude's number is a draft; your source data is the source of truth.
+
+## Quick Recap
+
+- Claude's arithmetic is approximate on large or messy data and looks confident either way.
+- Verify totals first, then key percentages; a wrong total invalidates everything downstream.
+- Any number headed for leadership or SLA reporting must be checked against source data.
+
+## Practice Activity
+
+Take one Claude-generated metric summary from a recent export and verify it in five minutes: cross-check the total against your source rows, spot-check two percentages, and note any discrepancy. If your team uses Claude for reporting, share the 5-minute verification routine so it becomes standard practice, not an afterthought.

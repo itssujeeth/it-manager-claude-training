@@ -1,10 +1,22 @@
-# Understanding Ticket Categories for AI-Assisted Triage
+# Categorizing Tickets Faster with Claude
 
-## Why categorization matters
+## Familiar Scenario
 
-When you ask Claude to categorize a ticket, it needs the same structured framework your team uses. Vague categories produce vague classifications. The ITIL 4 framework gives Claude — and your team — a shared vocabulary.
+It is Monday morning. Overnight and weekend submissions have piled up, and your queue holds around 80 mixed tickets — password resets, a VPN outage report, a new-hire laptop request, and a few vague "it's broken" messages. Your analysts are spending the first two hours of the week just reading and sorting before any real work starts.
 
-**The four core ticket types:**
+## Core Question
+
+Can Claude take a first pass at sorting these tickets into categories so my analysts start the week reviewing suggestions instead of sorting from scratch?
+
+## Why This Matters
+
+Manual triage is slow, and it is inconsistent between analysts. Two people reading the same ticket often file it differently, which distorts your reporting and sends work to the wrong queue. Speeding up the first-pass categorization frees analyst time for resolution and gives you cleaner category data to manage with.
+
+## The Claude Capability
+
+Claude can read the full text of a ticket and suggest a category based on the language in the description. It works from the framework and definitions you provide in the prompt. It does not decide routing on its own, and it does not act on your ticketing system — it produces a suggestion that a human confirms.
+
+The categories most IT teams use come from ITIL 4:
 
 | Type | Definition | Example |
 |------|-----------|---------|
@@ -13,32 +25,59 @@ When you ask Claude to categorize a ticket, it needs the same structured framewo
 | **Problem** | Root cause investigation of one or more incidents | "Why does VPN keep dropping for the Chicago office?" |
 | **Change** | Planned alteration to a service or infrastructure | "Deploy the new authentication module to production" |
 
-## How Claude uses these categories
+## Step-by-Step Workflow
 
-Claude classifies based on the language in the ticket description. This means your results improve when you:
+1. Copy the full ticket text, not just the subject line — subject lines are often ambiguous.
+2. Include your category definitions in the prompt so Claude matches against your framework, not assumed defaults.
+3. Ask Claude to suggest a category and give a one-line reason.
+4. Have an analyst review the suggestion and confirm or correct it before routing.
+5. Track corrections so you can see where the suggestions are weakest.
 
-1. **Feed Claude the full ticket text** — subject line alone is often ambiguous ("VPN issue" could be an incident or a service request)
-2. **Include your category definitions in the prompt** — Claude will match against what you specify, not assumed defaults
-3. **Ask Claude to explain its reasoning** — a short rationale lets you catch misclassifications before routing
+## Example Prompt
 
-## Common misclassification patterns
+```
+Role: You are an ITSM triage assistant helping a support desk sort incoming tickets.
 
-**Incidents logged as service requests** — users often write "please fix my VPN" (sounds like a request) when the service is actually down (incident). Prompt Claude to look for disruption language: "can't," "stopped working," "not loading," "down."
+Context: We use ITIL 4 categories. Definitions:
+- Incident: unplanned interruption or degradation of a service.
+- Service Request: a standard, pre-approved request.
+- Problem: root cause investigation of recurring incidents.
+- Change: planned alteration to a service or infrastructure.
 
-**Problems logged as incidents** — recurring issues are often re-opened as new incidents rather than escalated to problem management. Ask Claude to flag tickets where the description references prior occurrences.
+Task: For the ticket below, suggest one category. Give a one-sentence reason
+citing the specific words in the ticket that drove your choice. If the text is
+too vague to categorize confidently, say so and list what you would need.
 
-**Changes without change flags** — planned work sometimes arrives without a change ticket. Ask Claude to flag any description mentioning deployment, upgrade, migration, or rollback.
+Output format:
+- Suggested category:
+- Reason:
+- Confidence (high/medium/low):
+- Missing information (if any):
 
-## What to include in your prompt
+Ticket:
+[PASTE FULL TICKET TEXT]
 
-For consistent categorization, your prompt should specify:
-- The four category definitions
-- Your priority scale (P1–P4 with criteria)
-- Routing rules per category (which group handles what)
-- What to do when the ticket description is insufficient (ask Claude to request clarification rather than guess)
+Constraint: Do not assign a person or team. Suggest a category only.
+```
 
-## Accuracy baseline
+## What Claude Is Doing
 
-Before deploying a Claude-powered triage prompt to your team, establish an accuracy baseline: test on at least 20 labeled tickets and calculate category accuracy, priority accuracy, and routing accuracy separately. Category accuracy is typically highest; priority is often where misclassification happens most.
+Claude is using patterns from the definitions and ticket text you provided to match the wording against a category. It is not checking your CMDB, confirming whether a service is actually down, or looking up the user's history. Claude is not verifying facts unless you provide source material. The suggestion is a draft that reflects the language in the ticket, not a verified operational decision.
 
-> Claude cannot access your ticketing system. It works only with the text you paste. If a ticket requires system context to classify accurately (e.g., checking if a CI exists in your CMDB), that step requires a human.
+## Common Beginner Mistake
+
+Pasting only the subject line ("VPN issue") and accepting whatever category comes back. "VPN issue" could be an incident (service is down) or a service request (please grant VPN access). Without the body text, the suggestion is a guess.
+
+## Better Practice
+
+Feed Claude the full description and ask it to flag disruption language — "can't," "stopped working," "down," "not loading" — which usually signals an incident rather than a request. When the ticket references a prior occurrence, ask Claude to note it as a possible problem-management candidate.
+
+## Quick Recap
+
+- Claude can suggest ticket categories from the full text using definitions you supply.
+- It suggests; a human confirms and routes. Claude does not touch your ticketing system.
+- Provide full ticket text, your definitions, and ask for a short reason so you can catch errors.
+
+## Practice Activity
+
+Pick 20 tickets you have already categorized correctly. Run them through the example prompt and compare Claude's suggestions to your known answers. Note your category accuracy and write down the two ticket types it got wrong most often — that tells you where to tighten your definitions.

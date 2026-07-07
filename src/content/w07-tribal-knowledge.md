@@ -1,55 +1,80 @@
-# Converting Tribal Knowledge into Documentation
+# Capturing Tribal Knowledge Before It Walks Out the Door
 
-## What tribal knowledge costs you
+## Familiar Scenario
 
-Every time a senior analyst is out sick, on vacation, or leaves the team, their undocumented knowledge leaves with them. Resolution times increase. Mistakes get made. Newer analysts escalate unnecessarily because they don't know what to try first.
+Your most experienced L2 analyst gave notice last week. She is the person who knows that the Citrix server reboots at 3am on Sundays, that 80% of access issues are a missing AD group, and which back-channel gets payment-system problems fixed fastest. None of it is written down anywhere. In three weeks, it leaves with her.
 
-Tribal knowledge — process knowledge that lives only in people's heads — is one of the highest operational risks in a support team. Claude makes the extraction process fast enough that you can actually do it.
+## Core Question
 
-## The extraction interview
+Can Claude help me extract what lives in a senior analyst's head and turn it into structured documentation before they are gone?
 
-The most effective approach is a short interview: ask the senior analyst to walk you through the issue while you take notes or record the session, then use Claude to convert the notes into structured documentation.
+## Why This Matters
+
+Tribal knowledge — process know-how that exists only in people's heads — is one of the highest operational risks on a support team. When that person is sick, on vacation, or gone, resolution times climb, mistakes increase, and newer analysts escalate unnecessarily because they do not know what to try first. The window to capture it is short, and manual documentation is usually too slow to fit in that window. Claude makes the structuring step fast enough that the capture actually happens.
+
+## The Claude Capability
+
+Claude can take rough interview notes and convert them into structured documentation — a runbook, a checklist, an escalation guide. It organizes what you give it into a usable format and flags where information is missing. It does not know your environment, so it must not fill gaps with invented steps; you instruct it to mark gaps instead.
+
+## Step-by-Step Workflow
+
+1. Run a short interview with the senior analyst using specific questions.
+2. Take notes or record the session — rough notes are fine.
+3. Give the notes to Claude with a clear structure request and a no-inventing constraint.
+4. Review the draft, fill every `[NEEDS VERIFICATION]` flag with the analyst present.
+5. Set a review-by date so the captured knowledge stays current.
 
 Useful interview questions:
-- "Walk me through exactly what you check first when you see this symptom"
+
+- "Walk me through exactly what you check first when you see this symptom."
 - "What's the thing you always try that nobody else knows to try?"
 - "What do you check before you escalate, and what does that check look like?"
 - "What's the most common mistake analysts make with this issue?"
 - "What would you tell a new hire on their first day about this?"
 
-You get better raw material from specific questions than from asking "tell me everything you know."
-
-## Using Claude to structure the output
-
-Once you have notes (rough is fine), give them to Claude with a structure request:
+## Example Prompt
 
 ```
-Role: You are a technical writer converting informal notes into structured documentation.
+Role: You are a technical writer converting informal notes into structured
+documentation.
+
 Context: These notes describe how an experienced L2 analyst handles [issue type].
-Raw notes: [PASTE YOUR NOTES]
-Task: Convert these into a structured troubleshooting runbook with: trigger criteria, prerequisites, numbered steps with decision branches, escalation criteria, and a verification step.
-Constraints: Fill in structure only — do not invent steps, tools, or commands that are not mentioned in the notes. If information is missing, flag it with [NEEDS VERIFICATION] rather than guessing.
+
+Raw notes:
+[PASTE YOUR NOTES]
+
+Task: Convert these into a structured troubleshooting runbook with trigger
+criteria, prerequisites, numbered steps with decision branches, escalation
+criteria, and a verification step.
+
+Constraints: Structure only. Do not invent steps, tools, or commands that are
+not in the notes. Where information is missing, insert [NEEDS VERIFICATION]
+rather than guessing.
 ```
 
-The `[NEEDS VERIFICATION]` constraint is important. Claude will try to fill gaps plausibly — but plausible is not accurate. You want to see the gaps explicitly so you can fill them with real information.
+## What Claude Is Doing
 
-## Common tribal knowledge types
+Claude is using patterns from the notes you provided to organize them into a documentation format. It is not adding real knowledge about your systems, and it will try to make gaps read smoothly if you let it. Claude is not verifying facts unless you provide source material. The `[NEEDS VERIFICATION]` constraint forces the gaps into the open so you can fill them with the analyst's real knowledge while you still have access to them.
 
-**Resolution shortcuts** — "Before doing anything, check if the user is in the AD group — 80% of access issues are this." These never make it into formal documentation but save 15 minutes per ticket.
+## Common Beginner Mistake
 
-**Environment quirks** — "Our Citrix server reboots at 3am on Sundays — if a Monday morning ticket looks like a Citrix issue, check if the user logged in before 3am." This only exists in senior analysts' heads.
+Letting Claude "complete" the runbook by filling plausible-sounding gaps. The result looks finished but contains steps the analyst never actually described — which is worse than a visibly incomplete document, because no one knows which parts are real.
 
-**Escalation contacts** — "For payment system issues, skip the generic L2 queue and go directly to the payments platform team — they're faster and the generic queue doesn't triage it correctly."
+## Better Practice
 
-**Known-false alarms** — "The disk space alert on FILESERVER-01 fires at 85% but doesn't need action until 95% — we have a retention job that runs at 2am."
+Interview with specific questions rather than "tell me everything you know" — you get far better raw material. The knowledge worth capturing tends to fall into recognizable types:
 
-All of these are worth documenting. None of them are currently in any runbook.
+- **Resolution shortcuts:** "Check the AD group first — 80% of access issues are this."
+- **Environment quirks:** "Citrix reboots at 3am Sundays; if a Monday ticket looks like Citrix, check when the user logged in."
+- **Escalation contacts:** "For payment issues, skip the generic L2 queue and go straight to the payments platform team."
+- **Known false alarms:** "The FILESERVER-01 disk alert fires at 85% but doesn't need action until 95% — a retention job runs at 2am."
 
-## Maintaining extracted knowledge
+## Quick Recap
 
-Knowledge goes stale. Build a review cadence into your documentation process:
-- Mark each extracted article with a "review by" date (6 months for fast-changing systems, 12 months for stable ones)
-- When a senior analyst notices a step is outdated, update the article the same day
-- Use Claude to help rewrite sections when the underlying process changes
+- Tribal knowledge is a top operational risk; capture it before the person leaves.
+- Claude structures rough interview notes fast — but only structures, it does not invent.
+- Use `[NEEDS VERIFICATION]` for gaps and fill them with the expert present, then set a review date.
 
-The extraction effort is wasted if documents become inaccurate faster than they're read.
+## Practice Activity
+
+Book a 30-minute session with one senior analyst this week. Use the five interview questions on a single recurring issue, then run your notes through the example prompt. Fill the flagged gaps with the analyst before the meeting ends, and mark the article with a review-by date.

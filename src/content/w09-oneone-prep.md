@@ -1,53 +1,70 @@
-# Using Claude to Prepare for 1:1 Conversations
+# Preparing for 1:1 Conversations with Claude
 
-## Why preparation quality matters
+## Familiar Scenario
 
-Research consistently shows that the quality of a 1:1 is determined before the meeting starts. Managers who walk in without a clear purpose produce unfocused conversations. Claude can help you structure preparation in 10 minutes that would otherwise take 30 — or not happen at all.
+You have five 1:1s tomorrow. Three of them are high-stakes: one analyst has been missing documentation standards, one is quietly overloaded and at risk of burning out, and one is a strong performer you keep meaning to have a real career conversation with. It's 6 p.m., your calendar is full tomorrow, and you have no prep time carved out.
 
-The goal is not to script the conversation. It is to arrive with a clear purpose, the right questions, and a plan for the most likely responses.
+## Core Question
 
-## What Claude can help you prepare
+How do I walk into each of these conversations with a clear purpose and the right questions — without spending an hour per meeting I don't have?
 
-**Opening questions** — open-ended questions that invite the analyst to share their perspective before you share yours. "How are you feeling about your current workload?" lands differently than "I wanted to talk about your ticket volume."
+## Why This Matters
 
-**Behavior-based talking points** — if you need to address a performance issue, Claude can help you frame it in terms of specific observable behaviors rather than interpretations or personality judgments.
+The quality of a 1:1 is largely set before anyone sits down. A manager who walks in without a purpose produces an unfocused conversation that drifts, avoids the hard topic, and ends with no clear next step. That's especially costly in high-stakes conversations, where an unprepared opening can damage trust or make a performance issue worse. Good preparation is the difference between a conversation that changes behavior and one that both people forget by Friday.
 
-**Development conversation structure** — for high performers, Claude can generate career conversation frameworks: "What are your goals for the next 6 months? Where do you want to grow? What does success look like for you?"
+## The Claude Capability
 
-**Difficult conversation scaffolding** — if you're addressing a recurring issue, Claude can help you plan how to open, how to respond if the analyst gets defensive, and how to close with a clear action plan.
+Claude can help you structure a 1:1 in about ten minutes. It can draft opening questions, help you frame an observation in behavior-based language, and prepare responses for the most likely reactions. The point is not to script the meeting — it's to arrive with a clear purpose, the right questions, and a plan for how the conversation might go.
 
-## How to prompt for 1:1 preparation
+## Step-by-Step Workflow
 
-Keep your prompts behavioral and anonymized:
+1. Decide the single purpose of each 1:1 before you prompt (development, a specific performance gap, or a routine check-in).
+2. Strip out anything identifying. Use a role description ("a senior analyst with 18 months tenure"), never a name, score, or HR note.
+3. Describe the situation in terms of observable behavior, not judgment.
+4. Ask Claude to draft opening questions, a behavior-based framing, and a couple of responses to likely reactions.
+5. Rewrite the output in your own voice and adjust for what you actually know about the person.
+6. Keep the prep notes for you only — this is not a formal record.
+
+## Example Prompt
 
 ```
 Role: You are an experienced people manager helping me prepare for a 1:1.
-Context: L1 support analyst, 18 months with the team. 
-Situation: Documentation quality in ticket resolutions has been inconsistent — specifically, steps taken are often not recorded, making it hard for L2 to pick up escalations.
-Goal: Constructive conversation that results in a behavior change with clear accountability.
+
+Context: A senior support analyst with about 18 months on the team. No names, scores, or HR records are included here.
+
+Situation: Resolution notes have been inconsistent — steps taken are often not recorded, which makes it hard for L2 to pick up escalations.
+
+Goal: A constructive conversation that leads to a clear, agreed behavior change.
+
 Task: Help me prepare:
 1. Three opening questions that invite the analyst to reflect before I share my observations
-2. How to present the observation in behavior-based, non-accusatory language
-3. Two reframing responses if the analyst becomes defensive
-4. A concrete action plan structure for the close of the meeting
+2. A behavior-based, non-accusatory way to present the observation
+3. Two calm responses if the analyst becomes defensive
+4. A simple structure for agreeing on next steps at the close
 
 Constraints: Behavior-based language only. No personality assessments. Assume positive intent.
+
+Verification: After the draft, list any assumptions you made about the situation so I can correct them.
 ```
 
-## Adapting Claude's output
+## What Claude Is Doing
 
-Claude's output is a starting point, not a script. Before the meeting:
+Claude is drafting talking points using patterns from the context you provided and from general management writing — it is not assessing your analyst or deciding what the right outcome is. It has no knowledge of the person beyond the anonymized description you gave it. When you ask it to list its assumptions, you can see where its draft filled gaps with guesses, and correct them before the meeting.
 
-- Replace Claude's generic language with language that sounds like you
-- Adjust for your actual knowledge of the person — their communication style, what motivates them, what their current pressures are
-- Remove any talking point that doesn't feel right for this specific conversation
+## Common Beginner Mistake
 
-A 1:1 prep document that reads like a corporate HR template will undermine the trust you're trying to build.
+Pasting Claude's output into your notes and reading it aloud in the meeting. A 1:1 that sounds like a corporate template undermines the trust you're trying to build, and the analyst can tell when you're reading a script.
 
-## When 1:1 preparation should not involve Claude
+## Better Practice
 
-If the 1:1 involves anything that requires HR involvement, formal documentation, or disciplinary action, do not use Claude as the preparation tool. Use your HR process, your HR business partner, and your company's formal guidance.
+Treat the output as a starting point. Rewrite it so it sounds like you, cut any talking point that doesn't fit this specific person, and adjust for their communication style and current pressures. If the conversation involves formal discipline, written warnings, or anything requiring HR, stop using Claude and go through your HR process instead.
 
-Claude is useful for development conversations, performance coaching, and routine check-ins. It is not a substitute for formal HR process when that process applies.
+## Quick Recap
 
-> The best 1:1 prep using Claude produces talking points that help you show up more thoughtfully as a manager — not a script that makes the conversation feel scripted.
+- Set one clear purpose per 1:1 before you prompt.
+- Use anonymized role descriptions and observable behavior — never names, scores, or HR notes.
+- Rewrite Claude's draft in your own voice and use your HR process for anything formal.
+
+## Practice Activity
+
+Pick one upcoming 1:1 this week. Write a five-line anonymized prompt describing the situation in behavioral terms, ask Claude for three opening questions and a behavior-based framing, then rewrite the result in your own words before the meeting.

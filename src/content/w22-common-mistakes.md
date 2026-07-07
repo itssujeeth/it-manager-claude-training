@@ -1,45 +1,83 @@
-# Common Mistakes New AI Users Make
+# The Common Mistakes That Derail AI Adoption
 
-## Why these mistakes are predictable
+## Familiar Scenario
 
-The same mistakes appear in every team when analysts first use AI tools. They are not signs of poor judgment — they are the natural result of using a tool whose failure modes are less visible than traditional software. A spreadsheet formula that breaks produces an error message. Claude that confabulates produces confident prose.
+Three months into the rollout, the picture is mixed. Some analysts lean on Claude constantly; others avoid it. A couple of outputs have gone out with errors in them. In your last team meeting, someone said, "Honestly, I don't trust what it gives me." The tool works — but the adoption is wobbling, and trust is starting to erode.
 
-Understanding these mistakes before the team encounters them lets you design against them.
+## Core Question
 
-## Mistake 1: Over-trusting output
+What are the predictable failure patterns in AI adoption, and how do I get ahead of them before they cost me the team's trust?
 
-The most common and most consequential mistake. Analysts read Claude's output and act on it without verification because it looks authoritative — well-structured, confident, detailed.
+## Why This Matters
 
-**Fix:** Build in a mandatory review step. Make it structural, not voluntary. "Never send a customer communication based on Claude output without reading it first" is a policy, not a suggestion.
+The same mistakes appear in nearly every team the first time analysts use AI. They are not signs of poor judgment — they are the natural result of a tool whose failure modes are less visible than traditional software. A broken spreadsheet formula throws an error. Claude, when it confabulates, produces confident, well-formatted prose. Knowing the patterns lets you design against them instead of reacting to each incident.
 
-## Mistake 2: Writing vague prompts and accepting vague output
+## The Claude Capability
 
-"Summarize this ticket" produces a generic summary. "Summarize this ticket for an L2 engineer who needs to understand what was tried and what was not tried, in 3 bullet points" produces something useful.
+Claude can help you turn these known failure patterns into concrete guardrails — draft prompt templates for your common tasks, a "good for / not good for" reference card, and a short list of team norms. You know your team's specific weak spots; Claude helps you build the materials that address them.
 
-Analysts who write vague prompts conclude that Claude is not useful for their work. The problem is the prompt, not the tool.
+## Step-by-Step Workflow
 
-**Fix:** Provide prompt templates for the 5 most common use cases. A template with placeholders is 80% of the way to a good prompt.
+Design against the six recurring mistakes:
 
-## Mistake 3: Pasting sensitive data without thinking
+1. **Over-trusting output.** It looks authoritative, so analysts act on it unread.
+   *Fix:* a mandatory, structural review step for anything customer-facing.
+2. **Vague prompts, vague output.** "Summarize this ticket" returns something generic, and the analyst concludes Claude is useless.
+   *Fix:* provide templates for the five most common use cases.
+3. **Pasting sensitive data under time pressure.** The fast path wins when it is easier.
+   *Fix:* make anonymization easier than not anonymizing.
+4. **Skipping verification.** "Claude checked it" is not verification — Claude cannot verify its own output.
+   *Fix:* make the human check explicit and show what an error looks like.
+5. **Wrong task for the tool.** Asking for live status or real-time facts gets a refusal or a confident wrong answer.
+   *Fix:* a "good for / not good for" reference card.
+6. **Treating every output as equally reliable.** A short email draft is far safer than a calculation across 500 rows.
+   *Fix:* match verification effort to the stakes and the output type.
 
-Analysts working fast reach for efficiency. If copying the full ticket into Claude is faster than anonymizing it first, some analysts will copy the full ticket.
+## Example Prompt
 
-**Fix:** Make anonymization easier than not anonymizing. A one-click anonymization script, a simple text filter, or a cheat sheet of "replace these types of data" makes the right behavior the easy behavior.
+```
+You are helping an IT support manager prevent common AI-adoption mistakes.
 
-## Mistake 4: Ignoring the verification step
+Context:
+- 12 analysts, 3 months into using Claude
+- Symptoms: inconsistent use, a few wrong outputs sent out, eroding trust
+- Common tasks: ticket triage, customer email drafts, KB articles
 
-"Claude checked it" is not a verification step. Claude cannot verify its own output. The verification step is a human, checking the facts Claude produced against an authoritative source.
+Task:
+Produce a one-page "Claude working norms" card that directly counters these
+patterns: over-trusting output, vague prompts, unsafe data pasting, skipped
+verification, wrong-task use, and uniform trust in all outputs.
 
-**Fix:** Make the verification habit explicit in training. Show the team what a Claude error looks like before they encounter one in the wild.
+Output format:
+Two columns - "Good for" / "Not good for" - plus a short numbered list of
+5 team norms written as clear rules.
 
-## Mistake 5: Using Claude for the wrong task
+Constraints:
+Keep it to one page. Use plain language an analyst reads in 60 seconds.
 
-Claude is not a search engine, a ticketing system query tool, or a source of live information. Analysts who ask "what is the current status of ticket #12345?" or "is AWS down right now?" will get either a refusal or a confident wrong answer.
+Verification:
+Flag any norm that depends on our specific tools or data policy so I can
+tailor it.
+```
 
-**Fix:** Train on the categories of tasks Claude is and is not suitable for. The quick reference card is the right place for this — "Claude is good for / Claude is not good for" as two explicit columns.
+## What Claude Is Doing
 
-## Mistake 6: Treating every output as equally reliable
+Claude is using patterns from the context you provided to draft guardrail materials — it is not diagnosing your specific team. It cannot see which analysts are struggling or which outputs went wrong. And it is worth noting the deeper point: Claude is not verifying facts unless you provide source material, which is precisely why the over-trust and skipped-verification mistakes are so common.
 
-Not all Claude outputs are equally reliable. A 200-word email draft is much more reliable than a calculation across 500 data rows. A structured summary of text you provided is more reliable than a recommendation based on information Claude may or may not have been trained on.
+## Common Beginner Mistake
 
-**Fix:** Calibrate verification effort to output type. High-stakes, numerical, or time-sensitive outputs get verified. Low-stakes drafts get read and edited.
+Treating each bad output as a one-off to be corrected quietly, rather than a symptom of a missing control. Fixing the individual email does nothing to stop the next one.
+
+## Better Practice
+
+Fix the control, not just the instance. When an output goes wrong, ask which of the six patterns produced it and add the guardrail — a template, a review gate, a reference card — that would have caught it.
+
+## Quick Recap
+
+- The failure patterns are predictable; design against them up front.
+- Over-trust and skipped verification are the most consequential.
+- Fix the missing control, not just the individual bad output.
+
+## Practice Activity
+
+This week, look back at one Claude output on your team that was wrong or nearly wrong. Identify which of the six patterns caused it, and write the one guardrail that would have prevented it.

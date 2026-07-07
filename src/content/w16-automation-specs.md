@@ -1,51 +1,75 @@
-# Writing Automation Specifications with Claude
+# Writing a Requirements Spec to Brief the Dev Team
 
-## Why automation specs fail
+## Familiar Scenario
 
-Most automation failures are specification failures. The automation was built exactly to spec — the spec just didn't account for what happens when a ticket arrives with a missing field, when a downstream system is down, or when the logic applies to 95% of cases and the other 5% need human handling.
+Leadership approved your automation — auto-routing P1 incidents to the on-call queue and paging the right team. Now the dev team wants a spec. You have it clear in your head, but "route P1s to on-call automatically" is not something a developer can build reliably. The gap between your plain-language idea and a buildable specification is where automation projects quietly go wrong.
 
-Claude can generate automation specs quickly. Your job is to make sure the spec is complete before development starts.
+## Core Question
 
-## The required sections of every automation spec
+"I know what I want this automation to do. How do I turn that into a structured spec the dev team can build from — one that actually accounts for the exceptions?"
 
-**Trigger** — what event or condition starts the automation. Be specific: "A ticket is created with Category = Incident and Priority = P1" is a trigger. "A high-priority incident comes in" is not.
+## Why This Matters
 
-**Preconditions** — what must be true for the automation to run. If a precondition is not met, the automation should not run — not fail silently.
+Most automation failures are specification failures. The automation gets built exactly to spec — the spec just didn't say what happens when a ticket arrives with a missing field, when a downstream system is down, or when the logic fits 95% of cases and the other 5% need a human. A complete spec is where those failures get prevented, for the price of 30 minutes now instead of days of cleanup later.
 
-**Steps** — the sequential actions the automation takes. Number them. Each step must reference a specific system, field, or data element.
+## The Claude Capability
 
-**Output** — what the automation produces or changes. What is the state of the world after it runs?
+Claude can turn a plain-language process description into a structured specification with the sections developers need — trigger, preconditions, steps, output, exception handling, data touched, human oversight, and rollback. It organizes and prompts for completeness. It cannot know your environment's edge cases; you supply those, and your job is to confirm the spec is complete before development starts.
 
-**Exception handling** — what happens when a step fails, when a required field is missing, when a downstream system is unavailable. This section is the hardest to write and the most important.
+## Step-by-Step Workflow
 
-**Data touched** — what systems and data types the automation reads or writes. This is required for security review.
+1. Describe the automation in one sentence and the manual process it replaces.
+2. List the systems involved and every edge case you know of.
+3. Ask Claude to produce the full spec structure and to force an exception path for every system that could be unavailable.
+4. Review the draft against a completeness checklist.
+5. Route the data-touched section to security before development.
 
-**Human oversight points** — where a human must review before the automation proceeds, review the output, or be notified of a failure. Every automation that touches customer data, employee data, or production systems needs at least one.
-
-**Rollback procedure** — how to undo the automation's effect if it produces wrong output. Not all automations are reversible — note this explicitly if true.
-
-## Prompting Claude for a spec
+## Example Prompt
 
 ```
-Generate an automation specification for: [describe what the automation does in one sentence]
-Use this structure: Trigger, Preconditions, Steps (numbered), Output, Exception handling, 
-Data touched, Human oversight points, Rollback procedure.
+Role: You are a systems analyst writing an automation specification for a
+development team.
 
-Process description: [describe the manual process the automation replaces]
+Context:
+Automation (one sentence): [what it does]
+Manual process it replaces: [describe the current process]
 Systems involved: [list systems]
-Known edge cases: [list any cases where the standard logic doesn't apply]
+Known edge cases: [cases where the standard logic does not apply]
 
-Constraints: Include an exception handling step for every system that could be unavailable. 
-Flag any step where the failure mode is not recoverable without manual intervention.
+Task: Produce a specification with these sections: Trigger, Preconditions,
+Steps (numbered, each referencing a specific system/field/data element),
+Output, Exception Handling, Data Touched, Human Oversight Points, and
+Rollback Procedure.
+
+Output format: Headed sections, numbered steps.
+
+Constraints: Include an exception-handling entry for every system that could
+be unavailable. Base the spec only on what I described; where a detail is
+missing, mark it [NEEDS INPUT] rather than assuming.
+
+Verification: Flag any step whose failure mode is not recoverable without
+manual intervention, and confirm each known edge case I listed appears in
+the spec.
 ```
 
-## Before development starts
+## What Claude Is Doing
 
-Review the spec against this checklist:
-- [ ] Every exception path has a named owner for manual handling
-- [ ] Data touched section reviewed by your security team
-- [ ] Human oversight points explicitly listed — no implicit assumptions
-- [ ] Rollback procedure documented if automation writes to production systems
-- [ ] Edge cases from the prompt actually appear in the spec
+Claude is using patterns from your description to structure a complete-looking spec and prompt for the sections people usually forget. It is not verifying that the steps are technically correct for your systems, and it cannot know edge cases you didn't tell it. The exception-handling and `[NEEDS INPUT]` instructions are what keep the gaps visible instead of hidden.
 
-If any item is missing, the spec is not ready for development. A spec review takes 30 minutes. A failed automation in production takes days to clean up.
+## Common Beginner Mistake
+
+Accepting the spec because it looks thorough and handing it straight to the dev team. A spec that reads as complete can still omit your real edge cases — the VIP exception, the month-end freeze, the field that's optional in theory but mandatory in practice. Thoroughness of format is not thoroughness of coverage.
+
+## Better Practice
+
+Review every spec against a hard checklist before development: every exception path has a named owner for manual handling; the data-touched section has been reviewed by security; human oversight points are explicit, not implied; a rollback procedure is documented if the automation writes to production; and every edge case you listed actually appears in the spec. If any item is missing, the spec isn't ready. Not all automations are reversible — say so explicitly when they aren't.
+
+## Quick Recap
+
+- Most automation failures trace back to incomplete specs, especially around exceptions.
+- Claude structures a plain-language description into a full spec and prompts for the sections people skip.
+- Claude can't know your edge cases — you supply them, and you verify completeness against a checklist before dev starts.
+
+## Practice Activity
+
+This week, take one approved or planned automation and use the example prompt to draft its spec. Resolve every `[NEEDS INPUT]` flag, confirm each known edge case appears, and run the finished draft past the completeness checklist before it reaches a developer.

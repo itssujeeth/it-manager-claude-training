@@ -1,51 +1,75 @@
-# Identifying Automation Opportunities with Claude
+# Finding Automation Candidates in an Overwhelmed Support Queue
 
-## Why manual process lists are a poor starting point
+## Familiar Scenario
 
-Most teams start automation conversations with a wishlist — the things people hate doing manually. Wishlist automation prioritizes frustration, not value. The highest-value automation candidates are often the unexciting ones: the Monday morning report that takes 90 minutes, the ticket routing step that causes 20% of misroutes, the notification that goes out 3 hours late every time.
+Your team is drowning in repetitive tickets. Password resets, access requests, the same three how-to questions, a Monday report that eats 90 minutes every week. Everyone agrees "we should automate something," but the conversation always drifts to whatever people hate most that day — not to what would actually save the most time.
 
-Claude helps you move from wishlist to structured prioritization.
+## Core Question
 
-## The inventory first approach
+"Everything feels automatable and nothing feels prioritized. How do I look at what my team actually does and systematically find the highest-value automation candidates?"
 
-Before asking Claude to rank automation candidates, list every significant manual process your team runs. Don't filter yet — include everything that takes more than 15 minutes per week or happens more than 5 times per week.
+## Why This Matters
 
-For each process, collect:
-- **Frequency** — how often it runs
-- **Time per run** — how long it takes a person
-- **Error rate** — how often it goes wrong
-- **Downstream impact** — what breaks or slows when this process is late or wrong
+Wishlist automation prioritizes frustration, not value. The highest-value candidates are often unexciting — the routing step causing 20% of misroutes, the notification that goes out three hours late every time. If you automate by irritation, you spend effort where it feels good rather than where it moves your SLAs and frees real hours.
 
-This data is the input. Claude then helps you analyze it.
+## The Claude Capability
 
-## Structuring the prioritization prompt
+Claude can take a structured inventory of your manual processes — with frequency, time, and error data — and score each for automation potential across repetition, value, and risk, then rank them. It moves you from a wishlist to a defensible prioritization. The quality of the ranking depends entirely on the quality of the data you feed it.
+
+## Step-by-Step Workflow
+
+1. List every significant manual process — anything over 15 minutes a week or more than five times a week. Don't filter yet.
+2. For each, capture frequency, time per run, error rate, and downstream impact.
+3. Give the list to Claude and ask it to score and rank by value against risk.
+4. Have Claude flag candidates where risk makes automation unsuitable without extra controls.
+5. For each strong candidate, answer "what happens when this fails?" before any development.
+
+## Example Prompt
 
 ```
-Here is a list of manual processes my support team runs. For each, I've noted frequency, 
-time per run, and typical errors.
+Role: You are an automation analyst for an IT support team.
 
-[Paste your list with data]
+Context: Below is a list of manual processes my team runs. For each I've
+noted frequency, time per run, typical errors, and downstream impact.
 
-Task: Score each process for automation potential using these criteria:
-- Repetition score (High/Medium/Low): how rule-based and repetitive is this?
-- Value score (High/Medium/Low): time saved × frequency
-- Risk score (Low/Medium/High): what breaks if automation fails?
-- Approach: what type of automation is most suitable (ITSM workflow / AI-assisted / scripted / no-code)?
+Processes:
+[paste your inventory with data]
 
-Rank by (Value - Risk) as a starting prioritization. Flag any process where the risk score 
-makes it unsuitable for automation without additional controls.
+Task: Score each process on:
+- Repetition (High/Medium/Low): how rule-based and repetitive it is
+- Value (High/Medium/Low): time saved x frequency
+- Risk (Low/Medium/High): what breaks if the automation fails
+- Suggested approach: ITSM workflow / no-code / scripted / AI-assisted
+
+Then rank the processes by (Value minus Risk) as a starting prioritization.
+
+Output format: A ranked table, highest priority first.
+
+Constraints: Base scores only on the data I provided. Do not assume figures
+I did not give you; if data is missing for a process, note it as a gap.
+
+Verification: Flag any process where the risk score makes it unsuitable for
+automation without additional controls, and say what control is needed.
 ```
 
-## The automation approach categories
+## What Claude Is Doing
 
-**ITSM native workflows** — built into ServiceNow, Jira, Freshdesk. Low development effort, low risk, limited flexibility. Best for: standard ticket routing, SLA notifications, approval chains.
+Claude is using patterns from the inventory you provided to score and rank candidates. It is not measuring your processes — it accepts whatever frequency and error numbers you supply. The ranking is only as trustworthy as your data; garbage estimates in, confident-looking prioritization out.
 
-**No-code platforms** — Zapier, Power Automate, Make. Medium effort, medium flexibility. Best for: cross-system notifications, data syncing, report scheduling.
+## Common Beginner Mistake
 
-**Scripted automation** — Python, PowerShell. Higher effort, high flexibility, requires developer time. Best for: data transformation, complex conditional logic, bulk operations.
+Starting the conversation with "what should we automate?" and letting Claude suggest candidates from thin air, or feeding it a bare wishlist with no data. Without frequency, time, and error figures, any ranking Claude produces is guesswork wearing a table.
 
-**AI-assisted** — Claude in the loop for content generation, classification, or summarization. Best for: triage suggestions, communication drafting, QA review. Not for: autonomous decision-making without human review.
+## Better Practice
 
-## The question Claude always asks that matters most
+Do the inventory first, with real numbers, and treat Claude as the analysis layer on top of it. Match each candidate to a sensible approach — ITSM-native workflows for standard routing and SLA notifications, no-code for cross-system syncing, scripted for complex logic, AI-assisted for triage suggestions and drafting with a human in the loop. And answer the failure question before you build anything.
 
-"What happens when this automation fails?" That is the question that turns a promising automation into a reliable one. Get the answer before development starts.
+## Quick Recap
+
+- Automate by value and risk, not by whatever frustrates the team most.
+- Build a real inventory with frequency, time, and error data before asking Claude to rank.
+- Claude ranks the candidates you give it; it doesn't measure your processes — always ask what happens when the automation fails.
+
+## Practice Activity
+
+This week, inventory five manual processes your team runs, capturing frequency, time per run, and error rate for each. Run them through the example prompt and identify your single highest-value, acceptable-risk candidate — then write one sentence on what happens if it fails.

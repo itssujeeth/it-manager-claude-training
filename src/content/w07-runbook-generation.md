@@ -1,68 +1,82 @@
-# Generating Troubleshooting Runbooks with Claude
+# Generating First-Draft Runbooks with Claude
 
-## What makes a runbook useful
+## Familiar Scenario
 
-A runbook is only as useful as its accuracy and completeness. Claude can generate a well-structured runbook quickly — but the structure means nothing if the steps are wrong or skip context that an L1 analyst needs.
+The same printer-authentication failure has hit your team four times this month. Each time, a different analyst rediscovers the fix, and each time it takes 30 minutes. Everyone agrees a runbook would help. No one has an afternoon free to write one from scratch, so it never gets written and the issue keeps costing time.
 
-A useful runbook has:
-- **Trigger criteria** — what symptom tells an analyst to use this runbook
-- **Prerequisites** — access, tools, or information needed before starting
-- **Numbered steps** with decision branches at each fork
-- **Escalation criteria** — when to stop and escalate rather than continue
-- **Verification step** — how the analyst confirms the issue is resolved
+## Core Question
 
-## Prompting Claude for runbooks
+Can Claude turn my incident notes into a structured first-draft runbook so writing it becomes an edit-and-validate task instead of a blank-page project?
 
-The more context you give Claude, the fewer corrections you make afterward. A useful runbook prompt includes:
+## Why This Matters
+
+Runbooks turn a repeated 30-minute rediscovery into a repeatable 5-minute fix, and they let L1 handle issues that would otherwise escalate. But a runbook only helps if the steps are correct and complete for the person using it. The blank page is what stops most runbooks from ever existing — removing that barrier is where Claude helps most.
+
+## The Claude Capability
+
+Claude can generate a well-structured runbook draft quickly from the notes and context you provide, including the sections analysts actually need. It writes to the audience level you specify and includes decision branches when you ask for them. It does not know whether the steps are correct for your environment — the structure is a starting point that you must validate. A useful runbook has trigger criteria, prerequisites, numbered steps with decision branches, escalation criteria, and a verification step.
+
+## Step-by-Step Workflow
+
+1. Gather your incident notes and environment details for the recurring issue.
+2. Specify the audience level (L1 vs. L2) so Claude matches the language.
+3. Ask for decision branches explicitly at each fork.
+4. Review the draft for accuracy against what your team actually does.
+5. Have someone unfamiliar with the issue test-follow the runbook before you publish it.
+
+## Example Prompt
 
 ```
 Role: You are a technical writer creating an IT support runbook.
-Audience: L1 support analysts with basic IT knowledge but no advanced system administration experience.
-Issue: [Describe the problem — what symptoms the user reports, what system is involved]
-Environment: [OS, application versions, authentication method, any relevant integrations]
-Expected outcome: [What resolved state looks like]
+
+Audience: L1 support analysts with basic IT knowledge but no advanced system
+administration experience.
+
+Issue: [Symptoms the user reports, the system involved]
+Environment: [OS, application versions, authentication method, integrations]
+Expected outcome: [What the resolved state looks like]
 
 Task: Generate a complete troubleshooting runbook with:
 - Trigger criteria
-- Prerequisites (access/tools needed)
-- Numbered troubleshooting steps with decision branches
+- Prerequisites (access and tools needed)
+- Numbered troubleshooting steps, each with decision branches (what to do if
+  the step succeeds and if it fails)
 - Escalation criteria (when to stop and escalate to L2)
-- Verification step to confirm resolution
+- A verification step to confirm resolution
 - Related knowledge articles
 
-Constraints: Write for someone who has never seen this issue before. Flag any step requiring elevated privileges.
+Constraints: Write for someone who has never seen this issue. Flag any step
+requiring elevated privileges. If a detail is not provided, mark it
+[NEEDS VERIFICATION] rather than inventing it.
 ```
 
-## Decision branches are critical
+## What Claude Is Doing
 
-Linear runbooks fail when the first step doesn't fix the issue. Analysts need to know what to do when step 3 doesn't work. Ask Claude to include explicit branches:
+Claude is using patterns from the notes and context you provided to organize a runbook in a proven structure. It is not confirming that "restart the print spooler service" actually fixes your issue, or that the menu path is correct in your environment. Claude is not verifying facts unless you provide source material. Where you leave gaps, it may fill them plausibly — plausible is not the same as accurate, which is why the `[NEEDS VERIFICATION]` flag and a test-follow matter.
+
+## Common Beginner Mistake
+
+Publishing the draft because it looks complete and well-organized. A linear runbook with confident wording can still send an analyst down the wrong path when step 3 does not fix the issue — costing more time during an incident than having no runbook at all.
+
+## Better Practice
+
+Ask for explicit decision branches so analysts know what to do when a step fails:
 
 ```
 Step 3: Check if the VPN service is running.
-  → If running: continue to Step 4.
-  → If not running: restart the service (see Step 3a).
-  → If restart fails: escalate to Network Engineering with error message.
+  -> If running: continue to Step 4.
+  -> If not running: restart the service (see Step 3a).
+  -> If restart fails: escalate to Network Engineering with the error message.
 ```
 
-Claude generates branches well when you ask for them explicitly — include "decision branches at each step" in your prompt.
+Then validate before deployment: have someone unfamiliar with the issue follow the runbook exactly as written, note every point where they hesitated or had to ask a question, and fix those steps. If the validator had questions, the runbook is not ready.
 
-## Matching the audience level
+## Quick Recap
 
-Claude defaults to intermediate technical language. For L1 analysts, be explicit:
-- "Write as if the reader has never seen a command line"
-- "Spell out menu paths completely (Settings > Network & Internet > VPN)"
-- "Do not abbreviate system names or use internal jargon"
+- Claude drafts a structured runbook fast; you validate accuracy and completeness.
+- Ask for decision branches explicitly and specify L1 vs. L2 language.
+- Never deploy a Claude-generated runbook without a test-follow by someone new to the issue.
 
-For L2 runbooks, you can request more technical depth — include system-level commands, log paths, and diagnostic tools.
+## Practice Activity
 
-## Validation is required
-
-Claude-generated runbooks must be test-followed before deployment. The validation process:
-
-1. Have someone unfamiliar with the issue follow the runbook exactly as written
-2. Note every point where they hesitated, got confused, or had to ask a question
-3. Correct those steps before publishing
-
-The goal is a runbook that works without the author in the room. If the validator had questions, the runbook is not ready.
-
-> Never deploy a Claude-generated runbook without validation. A runbook that sends analysts down the wrong path during an incident costs more time than no runbook at all.
+Pick one recurring issue your team keeps rediscovering. Generate a first-draft runbook with the example prompt, then have a colleague who has not handled that issue try to follow it. Mark every point of confusion and correct those steps before you publish.

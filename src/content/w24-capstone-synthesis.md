@@ -1,48 +1,77 @@
-# Synthesizing 23 Weeks into an Operating Model
+# Synthesizing 24 Weeks Into Your AI Leadership Practice
 
-## What the capstone is and is not
+## Familiar Scenario
 
-The capstone is not a reflection exercise. It is a deliverable — a document that describes how your support team will operate with AI assistance, specific enough that someone new to the team could read it and know what tools to use, what rules to follow, and what to do when something goes wrong.
+You have reached the end of the course. Over 24 weeks you have written prompts, built workflows, drafted governance, planned rollouts, and handled incidents. It worked — but it is scattered across notes, chats, and half-remembered lessons. In a month, under pressure, most of it will fade unless you consolidate it into something you will actually reach for: a personal framework for leading AI-augmented support.
 
-The test: could a new manager take this operating model and run your team's AI operations without asking you for clarification? If not, it is not done.
+## Core Question
 
-## The synthesis process
+How do I turn everything I have learned across 24 weeks into a compact, personal AI leadership practice I will genuinely use — not a document I file and forget?
 
-You have built artifacts across 23 weeks. The capstone is not starting from scratch — it is assembling and connecting what you've built:
+## Why This Matters
 
-**Week 4 → Governance foundation:** Your acceptable-use policy becomes the data governance section of the operating model.
+Knowledge that stays scattered does not survive a busy quarter. The managers who keep improving are the ones who distilled their learning into a small set of principles and habits they can apply without looking them up. This synthesis is not a reflection exercise for its own sake — it is the difference between having taken a course and having changed how you lead.
 
-**Weeks 5–12 → Use case catalog:** Every workflow you built a prompt for is a use case. Document each with: use case name, tool used, prompt template (or reference), data rules, human review requirement, metric tracked.
+## The Claude Capability
 
-**Week 14 → RCA process:** Your AI-assisted RCA workflow becomes a documented sub-process in problem management.
+Claude can help you synthesize — take the artifacts and lessons you have accumulated and help organize them into a coherent personal framework, draft the connective structure, and surface gaps where a section is thin. You bring the raw material and the judgment about what mattered most; Claude helps you assemble it into something usable.
 
-**Weeks 17–18 → Advanced prompting standards:** Your system prompts and multi-step chains become the prompt library section.
+## Step-by-Step Workflow
 
-**Week 21 → Adoption roadmap:** The phased plan becomes the implementation section.
+1. **Gather your artifacts.** Prompt templates, your data classification table, your adoption plan, your incident runbook, your operating model.
+2. **Extract your principles.** From all of it, name the handful of convictions you now hold — for example: *verification is a human act, never delegated; governance is a habit, not a document; measure value, not usage.*
+3. **Define your practices.** The recurring habits that enact those principles — the monthly calibration, the "what not to paste" reflex, the incident log.
+4. **Ask Claude to assemble** the principles and practices into a one- to two-page personal framework.
+5. **Add your forward view.** Where you want your team's AI maturity to be in a year, and the next capability you will build.
 
-**Week 22 → Training program:** The workshop design becomes the onboarding and training section.
-
-**Week 23 → Governance framework:** The data classification table, approved/prohibited use cases, and incident response plan complete the governance section.
-
-## Using Claude for synthesis
-
-Claude can help assemble disparate artifacts into a coherent document structure:
+## Example Prompt
 
 ```
-I have the following artifacts from a 23-week AI training program. 
-Help me organize them into a single operating model document.
-Artifacts: [list what you have]
-Task: Suggest a document structure that flows logically from governance → use cases → 
-processes → training → measurement → risk management. 
-Then help me draft the executive summary and section transitions.
-Constraints: Do not invent content — if a section requires data I haven't provided, 
-flag it as [TO COMPLETE].
+You are helping an IT support manager synthesize 24 weeks of AI leadership
+learning into a personal framework.
+
+Context:
+I have built: prompt templates, a data classification table, a phased adoption
+plan, an incident runbook, and an AI-augmented operating model. Key convictions
+I hold now:
+[list 4-6 of your own principles here]
+
+Task:
+Help me assemble a 1-2 page personal AI leadership framework with three parts:
+(1) Principles - what I believe about leading AI-augmented support,
+(2) Practices - the recurring habits that enact each principle,
+(3) Forward view - where I want my team in 12 months and my next step.
+
+Output format:
+Three labeled sections. Keep it tight enough to reread in 5 minutes.
+
+Constraints:
+Do not invent principles I did not provide - build only on what I gave you.
+Where a section needs my input, mark it [MY INPUT].
+
+Verification:
+End by naming any principle that lacks a matching practice, so I can close
+the gap.
 ```
 
-The `[TO COMPLETE]` flags become your final checklist.
+## What Claude Is Doing
 
-## The leadership brief
+Claude is using patterns from the context you provided to organize your framework — it is synthesizing your material, not generating your convictions. The principles have to be yours; Claude cannot know what 24 weeks taught you unless you tell it. The `[MY INPUT]` markers and the gap check exist because this document is only valuable if it reflects what you actually believe and will actually do.
 
-Every operating model needs a 1-page leadership brief that answers: what is this, why does it matter, what does it require from leadership, and what does success look like in 6 months? Claude drafts this well once you've assembled the underlying document — the brief summarizes a complete model, not a concept.
+## Common Beginner Mistake
 
-Write the full model first, the brief last.
+Letting Claude write the whole framework from a generic prompt, ending up with a polished document that sounds right but is not yours — and that you never open again because none of it came from your own experience.
+
+## Better Practice
+
+Do the thinking first, then use Claude to structure it. Write your principles in your own words before you prompt. The framework you will return to is the one built from convictions you earned, organized into something clear enough to keep.
+
+## Quick Recap
+
+- Distill 24 weeks into a short, personal framework you will actually use.
+- Build it from your own principles and the practices that enact them.
+- Claude organizes your material; the convictions and the forward view are yours.
+
+## Practice Activity
+
+This week, write down the three principles about leading AI-augmented support that you will still hold a year from now. Pair each with one habit that puts it into practice — that is the seed of your framework, and the real close of this course.
